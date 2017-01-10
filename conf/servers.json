@@ -1,0 +1,5 @@
+[
+  { "server": "8.8.8.8", "provider": "Google"},
+  { "server": "8.8.4.4", "provider": "Google"}
+]
+
