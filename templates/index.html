@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+        <title>DNS Propagation</title>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <form method="post" action="/api/v1/query">
+            <input type="text" name="domain" value="caetsu.pt" required />
+
+            <select name="type" required>
+                <option value="a">A</option>
+                <option value="aaaa">AAAA</option>
+                <option value="mx">MX</option>
+                <option value="cname">CNAME</option>
+                <option value="ns">NS</option>
+                <option value="ptr">PTR</option>
+                <option value="soa">SOA</option>
+                <option value="srv">SRV</option>
+                <option value="txt">TXT</option>
+            </select>
+
+            <button type="submit">query!</button>
+        </form>
+    </body>
+</html>
