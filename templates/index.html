@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <form method="post" action="/api/v1/query">
+        <form id="dnsquery" method="post" action="/api/v1/query">
             <input type="text" name="domain" value="github.com" required />
 
             <select name="type" required>
@@ -27,5 +27,7 @@
 
             <button type="submit">query!</button>
         </form>
+
+        <script type="text/javascript" src="assets/javascript/app.js"></script>
     </body>
 </html>
