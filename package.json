@@ -1,0 +1,33 @@
+{
+  "name": "dnspropagation",
+  "version": "1.0.0",
+  "description": "Javascript for the DNS Propagation Checker Webapp",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rvelhote/dnspropagation.git"
+  },
+  "keywords": [
+    "dns",
+    "propagation"
+  ],
+  "author": "Ricardo Velhote <rvelhote@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rvelhote/dnspropagation/issues"
+  },
+  "homepage": "https://github.com/rvelhote/dnspropagation#readme",
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-env": "^1.1.8",
+    "webpack": "^2.2.0-rc.4"
+  },
+  "dependencies": {
+    "whatwg-fetch": "^2.0.1"
+  }
+}
