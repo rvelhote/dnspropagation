@@ -110,7 +110,7 @@ func queryServer(domain string, record uint16, server string) []string {
     m := dns.Msg{}
     m.SetQuestion(domain + ".", record)
 
-    r, t, err := c.Exchange(&m, server+":53")
+    r, t, err := c.Exchange(&m, server + ":53")
 
     if err != nil {
         log.Fatal(err)
@@ -132,7 +132,11 @@ func queryServer(domain string, record uint16, server string) []string {
 }
 
 func main() {
+    fs := http.FileServer(http.Dir("assets"))
+    http.Handle("/assets/", http.StripPrefix("/assets/", fs))
+
     http.HandleFunc("/", index)
     http.HandleFunc("/api/v1/query", query)
+
     http.ListenAndServe(":8080", nil)
 }
