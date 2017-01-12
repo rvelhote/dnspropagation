@@ -1,5 +1,5 @@
 [
-  { "server": "8.8.8.8", "provider": "Google"},
-  { "server": "8.8.4.4", "provider": "Google"}
+  { "server": "8.8.8.8", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA"},
+  { "server": "8.8.4.4", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA"}
 ]
 
