@@ -45,8 +45,10 @@ type DnsRecordsPayload struct {
 }
 
 type ServerReply struct {
-    Duration float64
+    Duration string
     Records []dns.RR
+    Status bool
+    Message string
 }
 
 // Load all the servers configured in the configuration file
@@ -88,11 +90,6 @@ func query(w http.ResponseWriter, req *http.Request) {
         log.Print("Invalid record specified")
     }
 
-    log.Print(req.Form.Get("type"))
-
-    log.Print(domain)
-    log.Print(configuration)
-
     dataset := make([]DnsRecordsPayload, 0)
 
     for _, server := range configuration {
@@ -118,30 +115,28 @@ func getRecordType(record string) uint16 {
     return recordTypes[record]
 }
 
+// Query a specific DNS server for information about a record that belongs to a domain name.
+// If there is a problem with the request the error message will be returned in the ServerReply struct as well as a
+// boolean flag that indicated the request's final outcome.
 func queryServer(domain string, record uint16, server string) ServerReply {
-    c := dns.Client{}
+    result := ServerReply{Duration: "", Records: []dns.RR{}, Message: "", Status: false}
+    client := dns.Client{}
 
-    m := dns.Msg{}
-    m.SetQuestion(domain + ".", record)
+    message := dns.Msg{}
+    message.SetQuestion(domain + ".", record)
 
-    r, t, err := c.Exchange(&m, server + ":53")
+    response, duration, err := client.Exchange(&message, server + ":53")
 
     if err != nil {
-        log.Fatal(err)
+        result.Message = err.Error()
+        return result
     }
 
-    log.Printf("Took %v from %s", t, server)
-    records := ServerReply{t.Seconds(), []dns.RR{}}
+    result.Status = true
+    result.Duration = duration.String()
+    result.Records = response.Answer
 
-    if len(r.Answer) == 0 {
-        log.Print("No results")
-    }
-
-    for _, ans := range r.Answer {
-        records.Records = append(records.Records, ans)
-    }
-
-    return records
+    return result
 }
 
 func main() {
