@@ -35,6 +35,18 @@ import (
 type Server struct {
     Server string `json:"server"`
     Provider string `json:"provider"`
+    Country string `json:"country"`
+    City string `json:"city"`
+}
+
+type DnsRecordsPayload struct {
+    Server Server
+    ServerReply ServerReply
+}
+
+type ServerReply struct {
+    Duration float64
+    Records []dns.RR
 }
 
 // Load all the servers configured in the configuration file
@@ -62,7 +74,7 @@ func index(w http.ResponseWriter, req *http.Request) {
 // TODO Missing validation of input
 // TODO Missing error checks for function calls
 func query(w http.ResponseWriter, req *http.Request) {
-    w.Header().Add("Content-Type", "text/html")
+    w.Header().Add("Content-Type", "application/json")
     req.ParseForm()
 
     domain := req.Form.Get("domain")
@@ -81,12 +93,14 @@ func query(w http.ResponseWriter, req *http.Request) {
     log.Print(domain)
     log.Print(configuration)
 
+    dataset := make([]DnsRecordsPayload, 0)
+
     for _, server := range configuration {
         records := queryServer(domain, record, server.Server)
-        for _, result := range records {
-            w.Write([]byte(result + "<br>"))
-        }
+        dataset = append(dataset, DnsRecordsPayload{server, records})
     }
+
+    json.NewEncoder(w).Encode(dataset)
 }
 
 func getRecordType(record string) uint16 {
@@ -104,7 +118,7 @@ func getRecordType(record string) uint16 {
     return recordTypes[record]
 }
 
-func queryServer(domain string, record uint16, server string) []string {
+func queryServer(domain string, record uint16, server string) ServerReply {
     c := dns.Client{}
 
     m := dns.Msg{}
@@ -117,17 +131,16 @@ func queryServer(domain string, record uint16, server string) []string {
     }
 
     log.Printf("Took %v from %s", t, server)
-    records := []string{}
+    records := ServerReply{t.Seconds(), []dns.RR{}}
 
     if len(r.Answer) == 0 {
         log.Print("No results")
     }
 
     for _, ans := range r.Answer {
-        records = append(records, ans.String())
+        records.Records = append(records.Records, ans)
     }
 
-    log.Printf("Records Found: %d", len(records))
     return records
 }
 
