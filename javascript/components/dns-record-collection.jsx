@@ -19,20 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'whatwg-fetch';
+import React from 'react';
+import DnsRecord from './dns-record';
 
-const dnsqueryForm = document.getElementById('dnsquery');
-dnsqueryForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+const DnsRecordCollection = props => (
+    <ul>
+        { props.records.map(record => <li key={record.Server.server}><DnsRecord record={record.ServerReply} /></li>) }
+    </ul>
+);
 
-    const domain = dnsqueryForm.querySelector('[name=domain]');
-    const type = dnsqueryForm.querySelector('[name=type]');
+DnsRecordCollection.displayName = 'DnsRecord';
 
-    fetch(dnsqueryForm.action, {
-        method: dnsqueryForm.method,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `domain=${domain.value}&type=${type.value}`
-    }).then((r) => console.log(r));
-});
+DnsRecordCollection.propTypes = {
+    records: React.PropTypes.arrayOf(
+        React.PropTypes.shape({
+            Server: React.PropTypes.object,
+            Record: React.PropTypes.object
+        })
+    )
+};
+
+export default DnsRecordCollection;

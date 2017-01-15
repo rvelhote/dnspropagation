@@ -10,24 +10,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <form id="dnsquery" method="post" action="/api/v1/query">
-            <input type="text" name="domain" value="github.com" required />
+        <main id="app"></main>
 
-            <select name="type" required>
-                <option value="a">A</option>
-                <option value="aaaa">AAAA</option>
-                <option value="mx">MX</option>
-                <option value="cname">CNAME</option>
-                <option value="ns">NS</option>
-                <option value="ptr">PTR</option>
-                <option value="soa">SOA</option>
-                <option value="srv">SRV</option>
-                <option value="txt">TXT</option>
-            </select>
-
-            <button type="submit">query!</button>
-        </form>
-
-        <script type="text/javascript" src="assets/javascript/app.js"></script>
+        <script type="text/javascript" src="assets/javascript/manifest.js"></script>
+        <script type="text/javascript" src="assets/javascript/vendor.js"></script>
+        <script type="text/javascript" src="assets/javascript/main.js"></script>
     </body>
 </html>
