@@ -1,11 +1,30 @@
+const webpack = require('webpack');
+
 module.exports = {
-    entry: './javascript/app.js',
-    output: {
-        filename: './assets/javascript/app.js'
+    entry: {
+        main: './javascript/app.jsx',
+        vendor: ['react', 'react-dom', 'whatwg-fetch']
     },
+    output: {
+        path: './assets/javascript',
+        filename: '[name].js'
+    },
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'manifest']
+        })
+    ],
     module: {
-        loaders: [
-            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
-        ]
-    }
+        loaders: [{
+            test: /\.(js|jsx)$/,
+            exclude: /node_modules/,
+            loader: "babel-loader",
+            query: { presets: ["es2015", "react"] }
+        }]
+    },
+    devtool: 'cheap-source-map',
+    watch: false
 };
