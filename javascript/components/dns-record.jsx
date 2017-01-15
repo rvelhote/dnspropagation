@@ -20,12 +20,34 @@
  * SOFTWARE.
  */
 import React from 'react';
+import ARecord from './record/a-record';
+import AAAARecord from './record/aaaa-record';
+import CnameRecord from './record/cname-record';
+import MxRecord from './record/mx-record';
+import NsRecord from './record/ns-record';
+import PtrRecord from './record/ptr-record';
+import SoaRecord from './record/soa-record';
+import SrvRecord from './record/srv-record';
+import TxtRecord from './record/txt-record';
 
-const DnsRecord = props => (
-    <div>
-        {JSON.stringify(props.record)}
-    </div>
-);
+const RecordTypes = {
+    'a': ARecord,
+    'aaaa': AAAARecord,
+    'cname': CnameRecord,
+    'mx': MxRecord,
+    'ns': NsRecord,
+    'ptr': PtrRecord,
+    'soa': SoaRecord,
+    'srv': SrvRecord,
+    'txt': TxtRecord,
+};
+
+class DnsRecord extends React.Component {
+    render() {
+        const RecordType = RecordTypes[this.props.type];
+        return <RecordType/>
+    }
+}
 
 DnsRecord.displayName = 'DnsRecord';
 

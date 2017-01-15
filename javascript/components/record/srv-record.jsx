@@ -20,23 +20,17 @@
  * SOFTWARE.
  */
 import React from 'react';
-import DnsRecord from './dns-record';
 
-const DnsRecordCollection = props => (
-    <ul>
-        { props.records.map(record => <li key={record.Server.server}><DnsRecord type={props.type} record={record.ServerReply} /></li>) }
-    </ul>
+const SrvRecord = props => (
+    <div>
+        Created an SrvRecord Record
+    </div>
 );
 
-DnsRecordCollection.displayName = 'DnsRecord';
+SrvRecord.displayName = 'SrvRecord';
 
-DnsRecordCollection.propTypes = {
-    records: React.PropTypes.arrayOf(
-        React.PropTypes.shape({
-            Server: React.PropTypes.object,
-            Record: React.PropTypes.object
-        })
-    )
+SrvRecord.propTypes = {
+
 };
 
-export default DnsRecordCollection;
+export default SrvRecord;

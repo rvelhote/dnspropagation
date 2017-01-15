@@ -38,12 +38,10 @@ class DnsPropagation extends React.Component {
     }
 
     handleDomainChange(event) {
-        console.log(event.target.value);
         this.setState({domain: event.target.value});
     }
 
     handleTypeChange(event) {
-        console.log(event.target.value);
         this.setState({type: event.target.value});
     }
 
@@ -74,8 +72,8 @@ class DnsPropagation extends React.Component {
                         <select value={this.state.record} onChange={this.handleTypeChange} name="type" required>
                             <option value="a">A</option>
                             <option value="aaaa">AAAA</option>
-                            <option value="mx">MX</option>
                             <option value="cname">CNAME</option>
+                            <option value="mx">MX</option>
                             <option value="ns">NS</option>
                             <option value="ptr">PTR</option>
                             <option value="soa">SOA</option>
@@ -87,7 +85,7 @@ class DnsPropagation extends React.Component {
                     </form>
                 </section>
 
-                <DnsRecordCollection records={this.state.records} />
+                <DnsRecordCollection type={this.state.type} records={this.state.records} />
 
                 <footer>footer</footer>
             </div>
