@@ -26,7 +26,8 @@ const DnsRecordCollection = props => (
   <ul> {
     props.records.map(record =>
       <li key={record.Server.server}>
-        <DnsRecord type={props.type} record={record.ServerReply}/>
+        {JSON.stringify(record.Server)}
+        <DnsRecord recordType={props.recordType} record={record.DnsRecords} />
       </li>)
   }
   </ul>
@@ -35,12 +36,13 @@ const DnsRecordCollection = props => (
 DnsRecordCollection.displayName = 'DnsRecord';
 
 DnsRecordCollection.propTypes = {
-  records: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      Server: React.PropTypes.object,
-      Record: React.PropTypes.object
-    })
-  )
+  recordType: React.PropTypes.string,
+  records: React.PropTypes.arrayOf(React.PropTypes.object)
+};
+
+DnsRecordCollection.defaultProps = {
+  recordType: 'A',
+  records: []
 };
 
 export default DnsRecordCollection;

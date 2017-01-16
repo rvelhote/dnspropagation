@@ -85,7 +85,11 @@ class DnsPropagation extends React.Component {
           </form>
         </section>
 
-        <DnsRecordCollection type={this.state.type} records={this.state.records} />
+        <div>
+          <div>{this.state.records.Domain}</div>
+          <div>{this.state.records.RecordType}</div>
+          <DnsRecordCollection recordType={this.state.records.RecordType} records={this.state.records.DnsServerData} />
+        </div>
 
         <footer>footer</footer>
       </div>
@@ -94,12 +98,5 @@ class DnsPropagation extends React.Component {
 }
 
 DnsPropagation.displayName = 'DnsPropagation';
-
-DnsPropagation.propTypes = {
-  domain: React.PropTypes.string,
-  type: React.PropTypes.string,
-  records: React.PropTypes.array,
-  onDnsQuery: React.PropTypes.func
-};
 
 export default DnsPropagation;
