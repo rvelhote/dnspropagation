@@ -45,18 +45,20 @@ const RecordTypes = {
 class DnsRecord extends React.Component {
   render() {
     const RecordType = RecordTypes[this.props.recordType];
-    return <RecordType />;
+    return <RecordType record={this.props.record} />;
   }
 }
 
 DnsRecord.displayName = 'DnsRecord';
 
 DnsRecord.propTypes = {
-  recordType: React.PropTypes.string
+  recordType: React.PropTypes.string,
+  record: React.PropTypes.shape
 };
 
 DnsRecord.defaultProps = {
-  recordType: ''
+  recordType: '',
+  record: {}
 };
 
 export default DnsRecord;

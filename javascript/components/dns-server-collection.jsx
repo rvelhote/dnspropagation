@@ -20,19 +20,28 @@
  * SOFTWARE.
  */
 import React from 'react';
+import DnsServer from './dns-server';
+import DnsRecordCollection from './dns-record-collection';
 
-const ARecord = props => <div>{props.record.A}</div>;
-
-ARecord.displayName = 'ARecord';
-
-ARecord.propTypes = {
-  record: React.PropTypes.shape
-};
-
-ARecord.defaultProps = {
-  record: {
-    A: ''
+const DnsServerCollection = props => (
+  <ul> {
+    props.servers.map(server =>
+      <li key={server.Server.server}>
+        <DnsServer server={server.Server} />
+        <DnsRecordCollection recordType={server.RecordType} server={server.Server.server} records={server.DnsRecords} />
+      </li>)
   }
+  </ul>
+);
+
+DnsServerCollection.displayName = 'DnsRecord';
+
+DnsServerCollection.propTypes = {
+  servers: React.PropTypes.arrayOf(React.PropTypes.object)
 };
 
-export default ARecord;
+DnsServerCollection.defaultProps = {
+  servers: []
+};
+
+export default DnsServerCollection;

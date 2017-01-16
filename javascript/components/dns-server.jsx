@@ -21,18 +21,16 @@
  */
 import React from 'react';
 
-const ARecord = props => <div>{props.record.A}</div>;
+const DnsServer = props => <div>{JSON.stringify(props.server)}</div>;
 
-ARecord.displayName = 'ARecord';
+DnsServer.displayName = 'DnsRecord';
 
-ARecord.propTypes = {
-  record: React.PropTypes.shape
+DnsServer.propTypes = {
+  server: React.PropTypes.shape
 };
 
-ARecord.defaultProps = {
-  record: {
-    A: ''
-  }
+DnsServer.defaultProps = {
+  server: {}
 };
 
-export default ARecord;
+export default DnsServer;

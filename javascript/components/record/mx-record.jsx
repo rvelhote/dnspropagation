@@ -21,16 +21,18 @@
  */
 import React from 'react';
 
-const MxRecord = props => (
-    <div>
-        Created an MX Record
-    </div>
-);
+const MxRecord = props => <div>{props.record.Mx}</div>;
 
 MxRecord.displayName = 'MxRecord';
 
 MxRecord.propTypes = {
+  record: React.PropTypes.shape
+};
 
+MxRecord.defaultProps = {
+  record: {
+    Mx: ''
+  }
 };
 
 export default MxRecord;

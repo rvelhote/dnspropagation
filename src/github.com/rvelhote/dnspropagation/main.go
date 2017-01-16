@@ -46,6 +46,7 @@ type ResponsePayload struct {
 }
 
 type DnsServerData struct {
+    RecordType string
     Server Server
     Duration string
     Message string
@@ -92,11 +93,12 @@ func query(w http.ResponseWriter, req *http.Request) {
         log.Print("Invalid record specified")
     }
 
-    dataset := ResponsePayload{ Domain: domain, RecordType: req.Form.Get("type"), DnsServerData: make([]DnsServerData, 0) };
+    dataset := ResponsePayload{ Domain: domain, RecordType: recordType, DnsServerData: make([]DnsServerData, 0) };
 
     for _, server := range configuration {
         serverData := queryServer(domain, record, server.Server)
         serverData.Server = server
+        serverData.RecordType = recordType
         dataset.DnsServerData = append(dataset.DnsServerData, serverData)
     }
 

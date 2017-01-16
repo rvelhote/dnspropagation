@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
-import DnsRecordCollection from './dns-record-collection';
+import DnsServerCollection from './dns-server-collection';
 
 class DnsPropagation extends React.Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class DnsPropagation extends React.Component {
     this.state = {
       domain: 'github.com',
       type: 'a',
-      records: []
+      servers: []
     };
   }
 
@@ -50,7 +50,7 @@ class DnsPropagation extends React.Component {
 
     fetch(event.target.action, params)
       .then(response => response.json())
-      .then(response => this.setState({ records: response }));
+      .then(response => this.setState({ servers: response }));
   }
 
   handleDomainChange(event) {
@@ -86,9 +86,9 @@ class DnsPropagation extends React.Component {
         </section>
 
         <div>
-          <div>{this.state.records.Domain}</div>
-          <div>{this.state.records.RecordType}</div>
-          <DnsRecordCollection recordType={this.state.records.RecordType} records={this.state.records.DnsServerData} />
+          <div>{this.state.servers.Domain}</div>
+          <div>{this.state.servers.RecordType}</div>
+          <DnsServerCollection servers={this.state.servers.DnsServerData} />
         </div>
 
         <footer>footer</footer>
