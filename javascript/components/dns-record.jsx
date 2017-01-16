@@ -31,28 +31,26 @@ import SrvRecord from './record/srv-record';
 import TxtRecord from './record/txt-record';
 
 const RecordTypes = {
-    'a': ARecord,
-    'aaaa': AAAARecord,
-    'cname': CnameRecord,
-    'mx': MxRecord,
-    'ns': NsRecord,
-    'ptr': PtrRecord,
-    'soa': SoaRecord,
-    'srv': SrvRecord,
-    'txt': TxtRecord,
+  a: ARecord,
+  aaaa: AAAARecord,
+  cname: CnameRecord,
+  mx: MxRecord,
+  ns: NsRecord,
+  ptr: PtrRecord,
+  soa: SoaRecord,
+  srv: SrvRecord,
+  txt: TxtRecord,
 };
 
 class DnsRecord extends React.Component {
-    render() {
-        const RecordType = RecordTypes[this.props.type];
-        return <RecordType/>
-    }
+  render() {
+    const RecordType = RecordTypes[this.props.type];
+    return <RecordType />;
+  }
 }
 
 DnsRecord.displayName = 'DnsRecord';
 
-DnsRecord.propTypes = {
-
-};
+DnsRecord.propTypes = {};
 
 export default DnsRecord;

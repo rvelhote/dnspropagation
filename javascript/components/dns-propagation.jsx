@@ -23,83 +23,83 @@ import React from 'react';
 import DnsRecordCollection from './dns-record-collection';
 
 class DnsPropagation extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.onDnsQuerySubmit = this.onDnsQuerySubmit.bind(this);
-        this.handleDomainChange = this.handleDomainChange.bind(this);
-        this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.onDnsQuerySubmit = this.onDnsQuerySubmit.bind(this);
+    this.handleDomainChange = this.handleDomainChange.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
 
-        this.state = {
-            domain: 'github.com',
-            type: 'a',
-            records: []
-        };
-    }
+    this.state = {
+      domain: 'github.com',
+      type: 'a',
+      records: []
+    };
+  }
 
-    handleDomainChange(event) {
-        this.setState({domain: event.target.value});
-    }
+  onDnsQuerySubmit(event) {
+    event.preventDefault();
 
-    handleTypeChange(event) {
-        this.setState({type: event.target.value});
-    }
+    const params = {
+      method: event.target.method,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `domain=${this.state.domain}&type=${this.state.type}`
+    };
 
-    onDnsQuerySubmit(event) {
-        event.preventDefault();
+    fetch(event.target.action, params)
+      .then(response => response.json())
+      .then(response => this.setState({ records: response }));
+  }
 
-        const params = {
-            method: event.target.method,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `domain=${this.state.domain}&type=${this.state.type}`
-        };
+  handleDomainChange(event) {
+    this.setState({ domain: event.target.value });
+  }
 
-        fetch(event.target.action, params)
-            .then(response => response.json())
-            .then(response => this.setState({ records: response }));
-    }
+  handleTypeChange(event) {
+    this.setState({ type: event.target.value });
+  }
 
-    render () {
-        return(
-            <div>
-                <header>HEADER</header>
-                <section>
-                    <form onSubmit={this.onDnsQuerySubmit} id="dnsquery" method="post" action="/api/v1/query">
-                        <input type="text" value={this.state.domain} onChange={this.handleDomainChange} name="domain" required />
+  render() {
+    return (
+      <div>
+        <header>HEADER</header>
+        <section>
+          <form onSubmit={this.onDnsQuerySubmit} id="dnsquery" method="post" action="/api/v1/query">
+            <input type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
 
-                        <select value={this.state.record} onChange={this.handleTypeChange} name="type" required>
-                            <option value="a">A</option>
-                            <option value="aaaa">AAAA</option>
-                            <option value="cname">CNAME</option>
-                            <option value="mx">MX</option>
-                            <option value="ns">NS</option>
-                            <option value="ptr">PTR</option>
-                            <option value="soa">SOA</option>
-                            <option value="srv">SRV</option>
-                            <option value="txt">TXT</option>
-                        </select>
+            <select value={this.state.record} onChange={this.handleTypeChange} required>
+              <option value="a">A</option>
+              <option value="aaaa">AAAA</option>
+              <option value="cname">CNAME</option>
+              <option value="mx">MX</option>
+              <option value="ns">NS</option>
+              <option value="ptr">PTR</option>
+              <option value="soa">SOA</option>
+              <option value="srv">SRV</option>
+              <option value="txt">TXT</option>
+            </select>
 
-                        <button type="submit">query!</button>
-                    </form>
-                </section>
+            <button type="submit">query!</button>
+          </form>
+        </section>
 
-                <DnsRecordCollection type={this.state.type} records={this.state.records} />
+        <DnsRecordCollection type={this.state.type} records={this.state.records} />
 
-                <footer>footer</footer>
-            </div>
-        );
-    }
+        <footer>footer</footer>
+      </div>
+    );
+  }
 }
 
 DnsPropagation.displayName = 'DnsPropagation';
 
 DnsPropagation.propTypes = {
-    domain: React.PropTypes.string,
-    type: React.PropTypes.string,
-    records: React.PropTypes.array,
-    onDnsQuery: React.PropTypes.func
+  domain: React.PropTypes.string,
+  type: React.PropTypes.string,
+  records: React.PropTypes.array,
+  onDnsQuery: React.PropTypes.func
 };
 
 export default DnsPropagation;

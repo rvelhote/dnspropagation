@@ -23,20 +23,24 @@ import React from 'react';
 import DnsRecord from './dns-record';
 
 const DnsRecordCollection = props => (
-    <ul>
-        { props.records.map(record => <li key={record.Server.server}><DnsRecord type={props.type} record={record.ServerReply} /></li>) }
-    </ul>
+  <ul> {
+    props.records.map(record =>
+      <li key={record.Server.server}>
+        <DnsRecord type={props.type} record={record.ServerReply}/>
+      </li>)
+  }
+  </ul>
 );
 
 DnsRecordCollection.displayName = 'DnsRecord';
 
 DnsRecordCollection.propTypes = {
-    records: React.PropTypes.arrayOf(
-        React.PropTypes.shape({
-            Server: React.PropTypes.object,
-            Record: React.PropTypes.object
-        })
-    )
+  records: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      Server: React.PropTypes.object,
+      Record: React.PropTypes.object
+    })
+  )
 };
 
 export default DnsRecordCollection;
