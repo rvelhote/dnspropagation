@@ -39,16 +39,17 @@ type Server struct {
     City string `json:"city"`
 }
 
-type DnsRecordsPayload struct {
-    Server Server
-    ServerReply ServerReply
+type ResponsePayload struct {
+    Domain string
+    RecordType string
+    DnsServerData []DnsServerData
 }
 
-type ServerReply struct {
+type DnsServerData struct {
+    Server Server
     Duration string
-    Records []dns.RR
-    Status bool
     Message string
+    DnsRecords []dns.RR
 }
 
 // Load all the servers configured in the configuration file
@@ -80,7 +81,8 @@ func query(w http.ResponseWriter, req *http.Request) {
     req.ParseForm()
 
     domain := req.Form.Get("domain")
-    record := getRecordType(strings.ToUpper(req.Form.Get("type")))
+    recordType := req.Form.Get("type");
+    record := getRecordType(strings.ToUpper(recordType))
 
     if len(domain) == 0 {
         log.Print("Empty domain")
@@ -90,11 +92,12 @@ func query(w http.ResponseWriter, req *http.Request) {
         log.Print("Invalid record specified")
     }
 
-    dataset := make([]DnsRecordsPayload, 0)
+    dataset := ResponsePayload{ Domain: domain, RecordType: req.Form.Get("type"), DnsServerData: make([]DnsServerData, 0) };
 
     for _, server := range configuration {
-        records := queryServer(domain, record, server.Server)
-        dataset = append(dataset, DnsRecordsPayload{server, records})
+        serverData := queryServer(domain, record, server.Server)
+        serverData.Server = server
+        dataset.DnsServerData = append(dataset.DnsServerData, serverData)
     }
 
     json.NewEncoder(w).Encode(dataset)
@@ -118,8 +121,8 @@ func getRecordType(record string) uint16 {
 // Query a specific DNS server for information about a record that belongs to a domain name.
 // If there is a problem with the request the error message will be returned in the ServerReply struct as well as a
 // boolean flag that indicated the request's final outcome.
-func queryServer(domain string, record uint16, server string) ServerReply {
-    result := ServerReply{Duration: "", Records: []dns.RR{}, Message: "", Status: false}
+func queryServer(domain string, record uint16, server string) DnsServerData {
+    serverData := DnsServerData{ DnsRecords: nil, Message: "", Duration: "" }
     client := dns.Client{}
 
     message := dns.Msg{}
@@ -128,15 +131,14 @@ func queryServer(domain string, record uint16, server string) ServerReply {
     response, duration, err := client.Exchange(&message, server + ":53")
 
     if err != nil {
-        result.Message = err.Error()
-        return result
+        serverData.Message = err.Error()
+        return serverData
     }
 
-    result.Status = true
-    result.Duration = duration.String()
-    result.Records = response.Answer
+    serverData.Duration = duration.String()
+    serverData.DnsRecords = response.Answer
 
-    return result
+    return serverData
 }
 
 func main() {
