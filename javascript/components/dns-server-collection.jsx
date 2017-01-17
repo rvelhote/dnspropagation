@@ -27,6 +27,7 @@ const DnsServerCollection = props => (
   <ul> {
     props.servers.map(server =>
       <li key={server.Server.server}>
+        <div>Duration: {server.Duration}</div>
         <DnsServer server={server.Server} />
         <DnsRecordCollection recordType={server.RecordType} server={server.Server.server} records={server.DnsRecords} />
       </li>)
@@ -34,7 +35,7 @@ const DnsServerCollection = props => (
   </ul>
 );
 
-DnsServerCollection.displayName = 'DnsRecord';
+DnsServerCollection.displayName = 'DnsServerCollection';
 
 DnsServerCollection.propTypes = {
   servers: React.PropTypes.arrayOf(React.PropTypes.object)

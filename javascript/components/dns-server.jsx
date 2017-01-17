@@ -21,12 +21,19 @@
  */
 import React from 'react';
 
-const DnsServer = props => <div>{JSON.stringify(props.server)}</div>;
+const DnsServer = props => (
+  <ul>
+    <li>IP Address: {props.server.server}</li>
+    <li>Provider: {props.server.provider}</li>
+    <li>Country: {props.server.country}</li>
+    <li>City: {props.server.city}</li>
+  </ul>
+);
 
-DnsServer.displayName = 'DnsRecord';
+DnsServer.displayName = 'DnsServer';
 
 DnsServer.propTypes = {
-  server: React.PropTypes.shape
+  server: React.PropTypes.object
 };
 
 DnsServer.defaultProps = {

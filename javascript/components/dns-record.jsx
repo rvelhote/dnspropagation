@@ -53,7 +53,7 @@ DnsRecord.displayName = 'DnsRecord';
 
 DnsRecord.propTypes = {
   recordType: React.PropTypes.string,
-  record: React.PropTypes.shape
+  record: React.PropTypes.object
 };
 
 DnsRecord.defaultProps = {

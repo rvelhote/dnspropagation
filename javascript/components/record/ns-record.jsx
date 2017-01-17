@@ -21,11 +21,7 @@
  */
 import React from 'react';
 
-const NsRecord = props => (
-    <div>
-        Created an NsRecord Record
-    </div>
-);
+const NsRecord = props => <div>{props.record.Ns}</div>;;
 
 NsRecord.displayName = 'NsRecord';
 

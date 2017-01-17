@@ -21,11 +21,7 @@
  */
 import React from 'react';
 
-const SoaRecord = props => (
-    <div>
-        Created an SoaRecord Record
-    </div>
-);
+const SoaRecord = props => <div>{props.record.Ns} {props.record.Mbox}</div>;
 
 SoaRecord.displayName = 'SoaRecord';
 

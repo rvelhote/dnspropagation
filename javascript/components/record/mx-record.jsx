@@ -21,12 +21,12 @@
  */
 import React from 'react';
 
-const MxRecord = props => <div>{props.record.Mx}</div>;
+const MxRecord = props => <div>{props.record.Mx} {props.record.Preference}</div>;
 
 MxRecord.displayName = 'MxRecord';
 
 MxRecord.propTypes = {
-  record: React.PropTypes.shape
+  record: React.PropTypes.object
 };
 
 MxRecord.defaultProps = {

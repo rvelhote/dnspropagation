@@ -21,11 +21,7 @@
  */
 import React from 'react';
 
-const PtrRecord = props => (
-    <div>
-        Created an PtrRecord Record
-    </div>
-);
+const PtrRecord = props => <div>{props.record.Ptr}</div>;;
 
 PtrRecord.displayName = 'PtrRecord';
 

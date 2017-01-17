@@ -21,11 +21,7 @@
  */
 import React from 'react';
 
-const TxtRecord = props => (
-    <div>
-        Created a TxtRecord
-    </div>
-);
+const TxtRecord = props => <div>{props.record.Txt.map(r => <div>{ r }</div>)}</div>;
 
 TxtRecord.displayName = 'TxtRecord';
 

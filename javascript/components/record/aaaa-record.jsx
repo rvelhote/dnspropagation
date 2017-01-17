@@ -21,16 +21,12 @@
  */
 import React from 'react';
 
-const AAAARecord = props => (
-    <div>
-        Created an AAAA Record
-    </div>
-);
+const AAAARecord = props => <div>{props.record.AAAA}</div>;
 
 AAAARecord.displayName = 'AAAARecord';
 
 AAAARecord.propTypes = {
-
+  record: React.PropTypes.object
 };
 
 export default AAAARecord;

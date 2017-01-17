@@ -32,7 +32,7 @@ const DnsRecordCollection = props => (
   </ul>
 );
 
-DnsRecordCollection.displayName = 'DnsRecord';
+DnsRecordCollection.displayName = 'DnsRecordCollection';
 
 DnsRecordCollection.propTypes = {
   recordType: React.PropTypes.string,

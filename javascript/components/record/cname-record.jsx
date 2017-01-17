@@ -21,11 +21,7 @@
  */
 import React from 'react';
 
-const CnameRecord = props => (
-    <div>
-        Created an CnameRecord Record
-    </div>
-);
+const CnameRecord = props => <div>{props.record.Target}</div>;
 
 CnameRecord.displayName = 'CnameRecord';
 

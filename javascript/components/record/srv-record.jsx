@@ -21,11 +21,7 @@
  */
 import React from 'react';
 
-const SrvRecord = props => (
-    <div>
-        Created an SrvRecord Record
-    </div>
-);
+const SrvRecord = props => <div>{props.record.Soa}</div>;;
 
 SrvRecord.displayName = 'SrvRecord';
 
