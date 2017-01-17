@@ -64,7 +64,6 @@ class DnsPropagation extends React.Component {
   render() {
     return (
       <div>
-        <header>HEADER</header>
         <section>
           <form onSubmit={this.onDnsQuerySubmit} id="dnsquery" method="post" action="/api/v1/query">
             <input type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
@@ -90,8 +89,6 @@ class DnsPropagation extends React.Component {
           <div>{this.state.servers.RecordType}</div>
           <DnsServerCollection servers={this.state.servers.DnsServerData} />
         </div>
-
-        <footer>footer</footer>
       </div>
     );
   }
