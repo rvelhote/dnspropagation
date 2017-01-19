@@ -25,7 +25,8 @@ const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 
 const sassOptions = {
-  outputStyle: 'compressed'
+  outputStyle: 'compressed',
+  includePaths: ['node_modules/foundation-sites/scss']
 };
 
 gulp.task('sass:development', function() {
@@ -38,5 +39,5 @@ gulp.task('sass:development', function() {
 });
 
 gulp.task('default',function() {
-  gulp.watch('sass/**.sass', ['sass:development']);
+  gulp.watch('sass/**/*.*', ['sass:development']);
 });
