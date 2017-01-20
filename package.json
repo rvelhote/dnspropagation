@@ -40,6 +40,7 @@
     "webpack": "^2.2.0-rc.4"
   },
   "dependencies": {
+    "flag-icon-css": "^2.8.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "whatwg-fetch": "^2.0.1"
