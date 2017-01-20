@@ -1,12 +1,12 @@
 [
-  { "server": "8.8.8.8", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA"},
-  { "server": "8.8.4.4", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA"},
-  { "server": "87.103.113.171", "provider": "Vodafone", "country": "Portugal", "city": "Lisbon" },
-  { "server": "77.88.8.8", "provider": "Yandex", "country": "Russian Federation", "city": "Moscow" },
-  { "server": "109.69.8.51", "provider": "puntCAT", "country": "Spain", "city": "Cardedeu" },
-  { "server": "91.239.100.100", "provider": "Thomas Steen Rasmussen", "country": "Denmark", "city": "Copenhagen" },
-  { "server": "211.5.230.84", "provider": "Japan Network Information Center", "country": "Japan", "city": "Tokyo" },
-  { "server": "200.45.253.50", "provider": "Telecom Argentina S.A.", "country": "Japan", "city": "Río Cuarto" },
-  { "server": "196.213.41.107 ", "provider": "Internet Solutions", "country": "South Africa", "city": "Johannesburg" }
+  { "server": "8.8.8.8", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA", "code": "us" },
+  { "server": "8.8.4.4", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA", "code": "us" },
+  { "server": "87.103.113.171", "provider": "Vodafone", "country": "Portugal", "city": "Lisbon", "code": "pt" },
+  { "server": "77.88.8.8", "provider": "Yandex", "country": "Russian Federation", "city": "Moscow", "code": "ru" },
+  { "server": "109.69.8.51", "provider": "puntCAT", "country": "Spain", "city": "Cardedeu", "code": "es" },
+  { "server": "91.239.100.100", "provider": "Thomas Steen Rasmussen", "country": "Denmark", "city": "Copenhagen", "code": "dk" },
+  { "server": "211.5.230.84", "provider": "Japan Network Information Center", "country": "Japan", "city": "Tokyo", "code": "jp" },
+  { "server": "200.45.253.50", "provider": "Telecom Argentina S.A.", "country": "Argentina", "city": "Río Cuarto", "code": "ar" },
+  { "server": "196.213.41.107 ", "provider": "Internet Solutions", "country": "South Africa", "city": "Johannesburg", "code": "za" }
 ]
 

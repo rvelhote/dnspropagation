@@ -37,6 +37,7 @@ type Server struct {
     Provider string `json:"provider"`
     Country string `json:"country"`
     City string `json:"city"`
+    Code string `json:"code"`
 }
 
 type ResponsePayload struct {
