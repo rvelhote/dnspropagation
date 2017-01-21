@@ -50,44 +50,65 @@ class DnsPropagation extends React.Component {
 
     fetch(event.target.action, params)
       .then(response => response.json())
-      .then(response => this.setState({ servers: response }));
+      .then(response => this.setState({servers: response}));
   }
 
   handleDomainChange(event) {
-    this.setState({ domain: event.target.value });
+    this.setState({domain: event.target.value});
   }
 
   handleTypeChange(event) {
-    this.setState({ type: event.target.value });
+    this.setState({type: event.target.value});
   }
 
   render() {
     return (
       <div>
-        <section>
-          <form onSubmit={this.onDnsQuerySubmit} id="dnsquery" method="post" action="/api/v1/query">
-            <input type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
+        <header className="navbar navbar-default navbar-fixed-top">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <div>
+                  <h1><img alt="DNS Propagation Logo" src="//i.imgur.com/rN1zILE.png"/>&nbsp;dnspropagation</h1>
+                  <small>&nbsp;Check a domain's DNS records. Check the propagation of your record changes and debug DNS related issues on the Internet.</small>
+                </div>
 
-            <select value={this.state.record} onChange={this.handleTypeChange} required>
-              <option value="a">A</option>
-              <option value="aaaa">AAAA</option>
-              <option value="cname">CNAME</option>
-              <option value="mx">MX</option>
-              <option value="ns">NS</option>
-              <option value="ptr">PTR</option>
-              <option value="soa">SOA</option>
-              <option value="srv">SRV</option>
-              <option value="txt">TXT</option>
-            </select>
+                <form onSubmit={this.onDnsQuerySubmit} method="post" action="/api/v1/query">
+                  <div className="row">
+                    <div className="col-lg-4">
+                      <input placeholder="What is the domain you want to check?" className="form-control" type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
+                    </div>
+                    <div className="col-lg-2">
+                      <select className="form-control" value={this.state.record} onChange={this.handleTypeChange} required>
+                        <option value="a">A</option>
+                        <option value="aaaa">AAAA</option>
+                        <option value="cname">CNAME</option>
+                        <option value="mx">MX</option>
+                        <option value="ns">NS</option>
+                        <option value="ptr">PTR</option>
+                        <option value="soa">SOA</option>
+                        <option value="srv">SRV</option>
+                        <option value="txt">TXT</option>
+                      </select>
+                    </div>
+                    <div className="col-lg-2">
+                      <button className="btn btn-primary" type="submit">Query</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </header>
 
-            <button type="submit">query!</button>
-          </form>
-        </section>
-
-        <div>
-          <div>{this.state.servers.Domain}</div>
-          <div>{this.state.servers.RecordType}</div>
-          <DnsServerCollection servers={this.state.servers.DnsServerData} />
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="results">
+                <DnsServerCollection servers={this.state.servers.DnsServerData} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

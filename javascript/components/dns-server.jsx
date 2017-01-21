@@ -22,12 +22,12 @@
 import React from 'react';
 
 const DnsServer = props => (
-  <ul>
-    <li>IP Address: {props.server.server}</li>
-    <li>Provider: {props.server.provider}</li>
-    <li>Country: {props.server.country}</li>
-    <li>City: {props.server.city}</li>
-  </ul>
+  <div className="server">
+    <div className="server__flag">
+      <span className={`flag-icon flag-icon-${props.server.code}`}>&nbsp;</span>
+    </div>
+    <div className="server__country">{props.server.country}</div>
+  </div>
 );
 
 DnsServer.displayName = 'DnsServer';

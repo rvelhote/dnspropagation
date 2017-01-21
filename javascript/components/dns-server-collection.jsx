@@ -23,17 +23,25 @@ import React from 'react';
 import DnsServer from './dns-server';
 import DnsRecordCollection from './dns-record-collection';
 
-const DnsServerCollection = props => (
-  <ul> {
+const DnsServerCollection = props =>
+  <ul className="row"> {
     props.servers.map(server =>
-      <li key={server.Server.server}>
-        <div>Duration: {server.Duration}</div>
-        <DnsServer server={server.Server} />
-        <DnsRecordCollection recordType={server.RecordType} server={server.Server.server} records={server.DnsRecords} />
-      </li>)
-  }
-  </ul>
-);
+      <li className="col-lg-4" key={server.Server.server}>
+        <div className={`panel ${(server.DnsRecords !== null && server.DnsRecords.length > 0 ? 'panel-default' : 'panel-danger')}`}>
+          <div className="panel-heading">
+            <DnsServer server={server.Server} />
+          </div>
+          <div className="panel-body">
+            { server.DnsRecords !== null && server.DnsRecords.length > 0 ? (
+                <DnsRecordCollection recordType={server.RecordType} server={server.Server.server} records={server.DnsRecords} />
+              ) : (
+                <div>{server.Message}</div>
+              )}
+          </div>
+        </div>
+      </li>
+    )}
+  </ul>;
 
 DnsServerCollection.displayName = 'DnsServerCollection';
 
