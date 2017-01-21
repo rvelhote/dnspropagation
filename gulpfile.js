@@ -26,7 +26,7 @@ const autoprefixer = require('gulp-autoprefixer');
 
 const sassOptions = {
   outputStyle: 'compressed',
-  includePaths: ['node_modules/flag-icon-css/sass']
+  includePaths: ['node_modules/flag-icon-css/sass', 'node_modules/bootstrap-sass/assets/stylesheets', 'node_modules/bootswatch']
 };
 
 gulp.task('sass:development', function() {
