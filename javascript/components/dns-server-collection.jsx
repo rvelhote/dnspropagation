@@ -33,7 +33,7 @@ const DnsServerCollection = props =>
           </div>
           <div className="panel-body">
             { server.DnsRecords !== null && server.DnsRecords.length > 0 ? (
-                <DnsRecordCollection recordType={server.RecordType} server={server.Server.server} records={server.DnsRecords} />
+                <DnsRecordCollection recordType={server.RecordType} country={server.Server.country} records={server.DnsRecords} />
               ) : (
                 <div>{server.Message}</div>
               )}

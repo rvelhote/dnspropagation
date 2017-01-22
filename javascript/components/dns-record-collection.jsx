@@ -25,7 +25,7 @@ import DnsRecord from './dns-record';
 const DnsRecordCollection = props => (
   <ul className="dns-record-collection"> {
     props.records.map((record, index) =>
-      <li className="dns-record-collection__dns-record" key={index}>
+      <li className="dns-record-collection__dns-record" key={props.country + index}>
         <DnsRecord recordType={props.recordType} record={record} />
       </li>)
   }
