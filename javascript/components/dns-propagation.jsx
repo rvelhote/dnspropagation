@@ -33,12 +33,14 @@ class DnsPropagation extends React.Component {
     this.state = {
       domain: 'github.com',
       type: 'a',
-      servers: []
+      servers: [],
+      working: false
     };
   }
 
   onDnsQuerySubmit(event) {
     event.preventDefault();
+    this.setState({ working: true });
 
     const params = {
       method: event.target.method,
@@ -50,7 +52,7 @@ class DnsPropagation extends React.Component {
 
     fetch(event.target.action, params)
       .then(response => response.json())
-      .then(response => this.setState({servers: response}));
+      .then(response => this.setState({ working: false, servers: response }));
   }
 
   handleDomainChange(event) {
@@ -79,7 +81,7 @@ class DnsPropagation extends React.Component {
                       <input placeholder="What is the domain you want to check?" className="form-control" type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
                     </div>
                     <div className="col-lg-2">
-                      <select className="form-control" value={this.state.record} onChange={this.handleTypeChange} required>
+                      <select className="form-control" value={this.state.type} onChange={this.handleTypeChange} required>
                         <option value="a">A</option>
                         <option value="aaaa">AAAA</option>
                         <option value="cname">CNAME</option>
@@ -92,7 +94,10 @@ class DnsPropagation extends React.Component {
                       </select>
                     </div>
                     <div className="col-lg-2">
-                      <button className="btn btn-primary" type="submit">Query</button>
+                      <button className="btn btn-primary" type="submit" disabled={this.state.working}>
+                        <span className="glyphicon glyphicon-search">&nbsp;</span>
+                        <span>Query {this.state.type} Record on {this.state.domain}</span>
+                      </button>
                     </div>
                   </div>
                 </form>
