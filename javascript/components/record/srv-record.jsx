@@ -21,7 +21,10 @@
  */
 import React from 'react';
 
-const SrvRecord = props => <div>{props.record.Soa}</div>;;
+const SrvRecord = props =>
+  <div className="dns-record">
+    <div className="dns-record__soa-record">{props.record.Soa}</div>
+  </div>;
 
 SrvRecord.displayName = 'SrvRecord';
 

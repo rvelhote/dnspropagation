@@ -21,7 +21,10 @@
  */
 import React from 'react';
 
-const AAAARecord = props => <div>{props.record.AAAA}</div>;
+const AAAARecord = props =>
+  <div className="dns-record">
+    <div className="dns-record__aaaa-record">{props.record.AAAA}</div>
+  </div>;
 
 AAAARecord.displayName = 'AAAARecord';
 

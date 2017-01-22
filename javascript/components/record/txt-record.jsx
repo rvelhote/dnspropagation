@@ -21,7 +21,10 @@
  */
 import React from 'react';
 
-const TxtRecord = props => <div>{props.record.Txt.map(r => <div>{ r }</div>)}</div>;
+const TxtRecord = props =>
+  <div className="dns-record">
+    {props.record.Txt.map(r => <div className="dns-record__txt-record">{ r }</div>)}
+  </div>;
 
 TxtRecord.displayName = 'TxtRecord';
 

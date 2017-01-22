@@ -21,7 +21,10 @@
  */
 import React from 'react';
 
-const PtrRecord = props => <div>{props.record.Ptr}</div>;;
+const PtrRecord = props =>
+  <div className="dns-record">
+    <div className="dns-record__ptr-record">{props.record.Ptr}</div>
+  </div>;
 
 PtrRecord.displayName = 'PtrRecord';
 

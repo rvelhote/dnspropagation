@@ -21,7 +21,10 @@
  */
 import React from 'react';
 
-const CnameRecord = props => <div>{props.record.Target}</div>;
+const CnameRecord = props =>
+  <div className="dns-record">
+    <div className="dns-record__cname-record">{props.record.target}</div>
+  </div>;
 
 CnameRecord.displayName = 'CnameRecord';
 

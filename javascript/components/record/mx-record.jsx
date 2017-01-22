@@ -21,7 +21,11 @@
  */
 import React from 'react';
 
-const MxRecord = props => <div>{props.record.Mx} {props.record.Preference}</div>;
+const MxRecord = props =>
+  <div className="dns-record">
+    <div className="dns-record__mx-record">{props.record.Mx}</div>
+    <div className="dns-record__preference">{props.record.Preference}</div>
+  </div>;
 
 MxRecord.displayName = 'MxRecord';
 
