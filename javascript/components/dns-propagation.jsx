@@ -40,7 +40,7 @@ class DnsPropagation extends React.Component {
 
   onDnsQuerySubmit(event) {
     event.preventDefault();
-    this.setState({ working: true });
+    //this.setState({ working: true });
 
     const params = {
       method: event.target.method,
@@ -50,9 +50,25 @@ class DnsPropagation extends React.Component {
       body: `domain=${this.state.domain}&type=${this.state.type}`
     };
 
-    fetch(event.target.action, params)
-      .then(response => response.json())
-      .then(response => this.setState({ working: false, servers: response }));
+    const serversocket = new WebSocket("ws://127.0.0.1:8080/api/v1/query");
+
+    serversocket.onopen = () => {
+      this.setState({ servers: [] });
+      serversocket.send(JSON.stringify({ domain: this.state.domain, type: this.state.type }));
+    };
+
+    const t = this;
+
+    serversocket.onmessage = (e) => {
+      const dataset = [JSON.parse(e.data)];
+      this.setState({ servers: this.state.servers.concat(dataset) });
+
+      console.log(this.state.servers);
+    };
+
+//    fetch(event.target.action, params)
+//      .then(response => response.json())
+//      .then(response => this.setState({ working: false, servers: response }));
   }
 
   handleDomainChange(event) {
@@ -110,7 +126,7 @@ class DnsPropagation extends React.Component {
           <div className="row">
             <div className="col-lg-12">
               <div className="results">
-                <DnsServerCollection servers={this.state.servers.DnsServerData} />
+                <DnsServerCollection type={this.state.type} domain={this.state.domain} servers={this.state.servers} />
               </div>
             </div>
           </div>

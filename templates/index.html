@@ -14,6 +14,8 @@
     <body>
         <main id="app"></main>
 
+        <button id="xxx" type="button">button</button>
+
         <footer class="container">
             <div><small>Press <code>Q</code> to refresh the URL in text box and <code>A</code> focus on the textbox. Source Code is available in <a target="_blank" href="https://github.com/rvelhote/dnspropagation">GitHub</a> under the <a target="_blank" href="https://opensource.org/licenses/MIT/">MIT</a> license.</small></div>
         </footer>
@@ -21,5 +23,23 @@
         <script type="text/javascript" src="assets/javascript/manifest.js"></script>
         <script type="text/javascript" src="assets/javascript/vendor.js"></script>
         <script type="text/javascript" src="assets/javascript/main.js"></script>
+
+        <!--<script>-->
+          <!--var serversocket = new WebSocket("ws://127.0.0.1:8080/api/v1/websocket");-->
+
+          <!--serversocket.onopen = function() {-->
+            <!--console.log("hehehehe");-->
+            <!--serversocket.send("Connection init");-->
+          <!--};-->
+
+          <!--serversocket.onmessage = function(e) {-->
+            <!--console.log(e);-->
+          <!--};-->
+
+          <!--document.getElementById("xxx").addEventListener('click', function() {-->
+            <!--console.log("seinding")-->
+            <!--serversocket.send("Message"+Date.now());-->
+          <!--});-->
+        <!--</script>-->
     </body>
 </html>

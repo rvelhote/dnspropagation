@@ -22,13 +22,14 @@
 package main
 
 import (
-    "strings"
     "net/http"
     "html/template"
     "github.com/miekg/dns"
     "log"
     "io/ioutil"
     "encoding/json"
+    "github.com/gorilla/websocket"
+    "strings"
 )
 
 // This struct will hold each of the servers in the configuration file
@@ -54,6 +55,11 @@ type DnsServerData struct {
     DnsRecords []dns.RR
 }
 
+type WebsocketRequest struct {
+    Domain string `json:"domain"`
+    RecordType string `json:"type"`
+}
+
 // Load all the servers configured in the configuration file
 var configuration = LoadServerConfiguration("conf/servers.json")
 
@@ -75,16 +81,32 @@ func index(w http.ResponseWriter, req *http.Request) {
     t.Execute(w, map[string] string {"Title": "Check DNS Propagation Worldwide", "Body": "Hi this is my body"})
 }
 
+var upgrader = websocket.Upgrader{}
+
 // Query a DNS record for a specific domain
 // TODO Missing validation of input
 // TODO Missing error checks for function calls
 func query(w http.ResponseWriter, req *http.Request) {
-    w.Header().Add("Content-Type", "application/json")
-    req.ParseForm()
+    //w.Header().Add("Content-Type", "application/json")
 
-    domain := req.Form.Get("domain")
+        log.Println("xxx")
+
+    conn, _ := upgrader.Upgrade(w, req, nil)
+
+    websocketreq := WebsocketRequest{}
+    conn.ReadJSON(&websocketreq)
+
+    log.Println(websocketreq.Domain)
+    log.Println(websocketreq.RecordType)
+
+
+
+    //err := conn.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome 2"))
+    //log.Println(err)
+
+    domain := websocketreq.Domain
     recordType := req.Form.Get("type");
-    record := getRecordType(strings.ToUpper(recordType))
+    record := getRecordType(strings.ToUpper(websocketreq.RecordType))
 
     if len(domain) == 0 {
         log.Print("Empty domain")
@@ -94,16 +116,34 @@ func query(w http.ResponseWriter, req *http.Request) {
         log.Print("Invalid record specified")
     }
 
-    dataset := ResponsePayload{ Domain: domain, RecordType: recordType, DnsServerData: make([]DnsServerData, 0) };
+    //dataset := ResponsePayload{ Domain: domain, RecordType: recordType, DnsServerData: make([]DnsServerData, 0) };
+
+    sem := make(chan DnsServerData, len(configuration))
 
     for _, server := range configuration {
-        serverData := queryServer(domain, record, server.Server)
-        serverData.Server = server
-        serverData.RecordType = recordType
-        dataset.DnsServerData = append(dataset.DnsServerData, serverData)
+
+        go func (server Server, conn *websocket.Conn) {
+            serverData := queryServer(domain, record, server.Server)
+            serverData.Server = server
+            serverData.RecordType = recordType
+            sem <- serverData
+        } (server, conn);
+
+
+
+        //dataset.DnsServerData = append(dataset.DnsServerData, serverData)
+
+
     }
 
-    json.NewEncoder(w).Encode(dataset)
+    for _, server := range configuration { log.Println(server); conn.WriteJSON(<-sem); }
+
+
+
+    //globalconnection.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome"))
+    //json.NewEncoder(w).Encode(dataset)
+
+    //w.WriteHeader(202)
 }
 
 func getRecordType(record string) uint16 {
@@ -144,12 +184,51 @@ func queryServer(domain string, record uint16, server string) DnsServerData {
     return serverData
 }
 
+//var upgrader = websocket.Upgrader{}
+
+
+
+//func responseWebsocket(w http.ResponseWriter, req *http.Request) {
+//    conn, _ := upgrader.Upgrade(w, req, nil)
+//
+//    log.Println("i'm here")
+//    //log.Println(globalconnection.LocalAddr().String())
+//
+//    conn.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome 1"))
+//    clients = append(clients, Client{conn})
+//
+//    //globalconnection.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome 2"))
+//
+//    //log.Println(globalconnection)
+//
+//    //if err != nil {
+//    //    log.Println("upgrade:", err)
+//    //    return
+//    //}
+//    //
+//    //for {
+//    //    //messageType, r, err := conn.NextReader()
+//    //    //if err != nil {
+//    //    //    return
+//    //    //}
+//    //
+//    //    w, err := conn.NextWriter(websocket.TextMessage)
+//    //    if err != nil {
+//    //        log.Println(err)
+//    //    }
+//    //
+//    //    w.Write([]byte("Hey there"))
+//    //
+//    //}
+//}
+
 func main() {
     fs := http.FileServer(http.Dir("assets"))
     http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
     http.HandleFunc("/", index)
     http.HandleFunc("/api/v1/query", query)
+    //http.HandleFunc("/api/v1/websocket", responseWebsocket);
 
     http.ListenAndServe(":8080", nil)
 }
