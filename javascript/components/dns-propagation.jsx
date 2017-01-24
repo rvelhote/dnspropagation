@@ -35,13 +35,14 @@ class DnsPropagation extends React.Component {
       domain: 'github.com',
       type: 'a',
       servers: [],
-      working: false
+      working: false,
+      percentage: 0
     };
   }
 
   onDnsQuerySubmit(event) {
     event.preventDefault();
-    //this.setState({ working: true });
+    this.setState({ working: true, percentage: 0 });
 
     const params = {
       method: event.target.method,
@@ -58,13 +59,10 @@ class DnsPropagation extends React.Component {
       serversocket.send(JSON.stringify({ domain: this.state.domain, type: this.state.type }));
     };
 
-    const t = this;
-
     serversocket.onmessage = (e) => {
       const dataset = [JSON.parse(e.data)];
-      this.setState({ servers: this.state.servers.concat(dataset) });
-
-      console.log(this.state.servers);
+      const percentage = ((this.state.servers.length + 1) / 9) * 100;
+      this.setState({ servers: this.state.servers.concat(dataset), percentage: percentage, working: percentage !== 100 });
     };
 
 //    fetch(event.target.action, params)
@@ -121,6 +119,7 @@ class DnsPropagation extends React.Component {
               </div>
             </div>
           </div>
+          <progress max="100" value={this.state.percentage} />
         </header>
 
         <div className="container results">

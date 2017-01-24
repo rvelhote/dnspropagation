@@ -73,3 +73,28 @@ ul
 
 footer.main
   text-align: center
+
+progress[value]
+  appearance: none
+  display: block
+  width: 100%
+  height: 4px
+  position: absolute
+  left: 0
+  bottom: -4px
+  border: none
+  opacity: 1
+  transition: opacity 750ms
+
+progress::-moz-progress-bar
+  background: #127ba3
+
+progress::-webkit-progress-value
+  background: #127ba3
+
+progress[value="0"]
+  opacity: 1
+  transition: none
+
+progress[value="100"]
+  opacity: 0
