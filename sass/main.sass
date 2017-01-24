@@ -51,8 +51,13 @@ ul
     list-style-type: none
 
 .dns-record
-  display: inline-block
+  font-size: 18px
   font-family: $font-family-monospace
+
+  div
+    cursor: pointer
+    &:hover
+      font-weight: bold
 
 .server__flag
   display: inline-block
@@ -66,5 +71,5 @@ ul
   display: inline-block
   font-weight: bold
 
-footer
+footer.main
   text-align: center
