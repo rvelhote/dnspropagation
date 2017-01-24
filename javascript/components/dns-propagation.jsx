@@ -32,7 +32,7 @@ class DnsPropagation extends React.Component {
     this.handleTypeChange = this.handleTypeChange.bind(this);
 
     this.state = {
-      domain: 'github.com',
+      domain: 'golang.org',
       type: 'a',
       servers: [],
       working: false,
