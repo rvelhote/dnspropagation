@@ -88,22 +88,10 @@ var upgrader = websocket.Upgrader{}
 // TODO Missing validation of input
 // TODO Missing error checks for function calls
 func query(w http.ResponseWriter, req *http.Request) {
-    //w.Header().Add("Content-Type", "application/json")
-
-        log.Println("xxx")
-
     conn, _ := upgrader.Upgrade(w, req, nil)
 
     websocketreq := WebsocketRequest{}
     conn.ReadJSON(&websocketreq)
-
-    log.Println(websocketreq.Domain)
-    log.Println(websocketreq.RecordType)
-
-
-
-    //err := conn.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome 2"))
-    //log.Println(err)
 
     domain := websocketreq.Domain
     recordType := req.Form.Get("type");
@@ -117,34 +105,20 @@ func query(w http.ResponseWriter, req *http.Request) {
         log.Print("Invalid record specified")
     }
 
-    //dataset := ResponsePayload{ Domain: domain, RecordType: recordType, DnsServerData: make([]DnsServerData, 0) };
-
     sem := make(chan DnsServerData, len(configuration))
 
     for _, server := range configuration {
-
         go func (server Server, conn *websocket.Conn) {
             serverData := queryServer(domain, record, server.Server)
             serverData.Server = server
             serverData.RecordType = recordType
             sem <- serverData
         } (server, conn);
-
-
-
-        //dataset.DnsServerData = append(dataset.DnsServerData, serverData)
-
-
     }
 
-    for _, server := range configuration { log.Println(server); conn.WriteJSON(<-sem); }
-
-
-
-    //globalconnection.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome"))
-    //json.NewEncoder(w).Encode(dataset)
-
-    //w.WriteHeader(202)
+    for i := 0; i < len(configuration); i++ {
+        conn.WriteJSON(<-sem)
+    }
 }
 
 func getRecordType(record string) uint16 {
@@ -185,44 +159,6 @@ func queryServer(domain string, record uint16, server string) DnsServerData {
 
     return serverData
 }
-
-//var upgrader = websocket.Upgrader{}
-
-
-
-//func responseWebsocket(w http.ResponseWriter, req *http.Request) {
-//    conn, _ := upgrader.Upgrade(w, req, nil)
-//
-//    log.Println("i'm here")
-//    //log.Println(globalconnection.LocalAddr().String())
-//
-//    conn.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome 1"))
-//    clients = append(clients, Client{conn})
-//
-//    //globalconnection.WriteMessage(websocket.TextMessage, []byte("You are connected. Welcome 2"))
-//
-//    //log.Println(globalconnection)
-//
-//    //if err != nil {
-//    //    log.Println("upgrade:", err)
-//    //    return
-//    //}
-//    //
-//    //for {
-//    //    //messageType, r, err := conn.NextReader()
-//    //    //if err != nil {
-//    //    //    return
-//    //    //}
-//    //
-//    //    w, err := conn.NextWriter(websocket.TextMessage)
-//    //    if err != nil {
-//    //        log.Println(err)
-//    //    }
-//    //
-//    //    w.Write([]byte("Hey there"))
-//    //
-//    //}
-//}
 
 func main() {
     fs := http.FileServer(http.Dir("assets"))
