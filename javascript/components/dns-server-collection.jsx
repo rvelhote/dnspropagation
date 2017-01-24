@@ -26,7 +26,7 @@ import DnsRecordCollection from './dns-record-collection';
 const DnsServerCollection = props =>
   <ul className="row"> {
     props.servers.map(server =>
-      <li className="col-lg-4" key={server.Server.server}>
+      <li className={(props.type === 'txt' ? 'col-lg-12' : 'col-lg-4')} key={server.Server.server}>
         <div className={`panel ${(server.DnsRecords !== null && server.DnsRecords.length > 0 ? 'panel-default' : 'panel-danger')}`}>
           <div className="panel-heading">
             <DnsServer server={server.Server} />
