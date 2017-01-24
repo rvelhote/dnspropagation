@@ -21,6 +21,7 @@
  */
 import React from 'react';
 import DnsServerCollection from './dns-server-collection';
+import DnsRecordInformation from './dns-record-information';
 
 class DnsPropagation extends React.Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class DnsPropagation extends React.Component {
       body: `domain=${this.state.domain}&type=${this.state.type}`
     };
 
-    const serversocket = new WebSocket("ws://127.0.0.1:8080/api/v1/query");
+    const serversocket = new WebSocket('ws://127.0.0.1:8080/api/v1/query');
 
     serversocket.onopen = () => {
       this.setState({ servers: [] });
@@ -122,12 +123,13 @@ class DnsPropagation extends React.Component {
           </div>
         </header>
 
-        <div className="container">
+        <div className="container results">
           <div className="row">
             <div className="col-lg-12">
-              <div className="results">
-                <DnsServerCollection type={this.state.type} domain={this.state.domain} servers={this.state.servers} />
-              </div>
+             <DnsRecordInformation record={this.state.type} />
+            </div>
+            <div className="col-lg-12">
+              <DnsServerCollection type={this.state.type} domain={this.state.domain} servers={this.state.servers} />
             </div>
           </div>
         </div>
