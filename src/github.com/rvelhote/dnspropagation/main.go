@@ -30,6 +30,7 @@ import (
     "encoding/json"
     "github.com/gorilla/websocket"
     "strings"
+    "time"
 )
 
 // This struct will hold each of the servers in the configuration file
@@ -167,6 +168,7 @@ func getRecordType(record string) uint16 {
 func queryServer(domain string, record uint16, server string) DnsServerData {
     serverData := DnsServerData{ DnsRecords: nil, Message: "", Duration: "" }
     client := dns.Client{}
+    client.Timeout = time.Second * 10
 
     message := dns.Msg{}
     message.SetQuestion(domain + ".", record)
