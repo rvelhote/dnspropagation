@@ -45,19 +45,23 @@ class DnsPropagation extends React.Component {
   }
 
   componentDidMount() {
-    this.node.parentNode.parentNode.addEventListener('keyup', (event) => {
+    window.addEventListener('keyup', (event) => {
       const input = document.getElementById('domain');
       const focused = document.activeElement;
 
       if (focused.type !== 'text' && focused.type !== 'select') {
-        if (event.key.toLowerCase() === 'r') {
+        if (event.key.toLowerCase() === 'q') {
           this.onDnsQuerySubmit(event);
-        } else if (event.key.toLowerCase() === 'd') {
+        } else if (event.key.toLowerCase() === 'a') {
           input.focus();
           input.selectionStart = input.selectionEnd = input.value.length;
         }
       }
     });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keyup');
   }
 
   onDnsQuerySubmit(event) {
@@ -89,7 +93,7 @@ class DnsPropagation extends React.Component {
 
   render() {
     return (
-      <div ref={(node) => { this.node = node; }}>
+      <div>
         <header className="navbar navbar-default navbar-fixed-top">
           <div className="container">
             <div className="row">
