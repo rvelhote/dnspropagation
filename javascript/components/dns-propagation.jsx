@@ -44,6 +44,28 @@ class DnsPropagation extends React.Component {
     this.websocket.onWebSocketReply = this.onWebsocketReply.bind(this);
   }
 
+  componentDidMount() {
+    this.node.parentNode.parentNode.addEventListener('keyup', (event) => {
+      const input = document.getElementById('domain');
+      const focused = document.activeElement;
+
+      if (focused.type !== 'text' && focused.type !== 'select') {
+        if (event.key.toLowerCase() === 'r') {
+          this.onDnsQuerySubmit(event);
+        } else if (event.key.toLowerCase() === 'd') {
+          input.focus();
+          input.selectionStart = input.selectionEnd = input.value.length;
+        }
+      }
+    });
+  }
+
+  onDnsQuerySubmit(event) {
+    event.preventDefault();
+    this.setState({ working: true, percentage: 0, servers: [] });
+    this.websocket.fetch(this.state.domain, this.state.type);
+  }
+
   onWebsocketReply(event) {
     const dataset = [JSON.parse(event.data)];
     const percentage = ((this.state.servers.length + 1) / 9) * 100;
@@ -57,23 +79,17 @@ class DnsPropagation extends React.Component {
     this.setState(state);
   }
 
-  onDnsQuerySubmit(event) {
-    event.preventDefault();
-    this.setState({ working: true, percentage: 0, servers: [] });
-    this.websocket.fetch(this.state.domain, this.state.type);
-  }
-
   handleDomainChange(event) {
-    this.setState({domain: event.target.value});
+    this.setState({ domain: event.target.value });
   }
 
   handleTypeChange(event) {
-    this.setState({type: event.target.value});
+    this.setState({ type: event.target.value });
   }
 
   render() {
     return (
-      <div>
+      <div ref={(node) => { this.node = node; }}>
         <header className="navbar navbar-default navbar-fixed-top">
           <div className="container">
             <div className="row">
@@ -89,7 +105,7 @@ class DnsPropagation extends React.Component {
                 <form onSubmit={this.onDnsQuerySubmit} method="post" action="/api/v1/query">
                   <div className="row">
                     <div className="col-lg-4">
-                      <input placeholder="What is the domain you want to check?" className="form-control" type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
+                      <input id="domain" placeholder="What is the domain you want to check?" className="form-control" type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
                     </div>
                     <div className="col-lg-2">
                       <select className="form-control" value={this.state.type} onChange={this.handleTypeChange} required>
