@@ -82,7 +82,14 @@ func index(w http.ResponseWriter, req *http.Request) {
     t.Execute(w, map[string] string {"Title": "Check DNS Propagation Worldwide", "Body": "Hi this is my body"})
 }
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+    ReadBufferSize: 4096,
+    WriteBufferSize: 4096,
+    EnableCompression: true,
+    CheckOrigin: func(r *http.Request) bool {
+        return true
+    },
+}
 
 // Query a DNS record for a specific domain
 // Right now the connection is closed after each request. The goal in the future is to maintain connections open.
