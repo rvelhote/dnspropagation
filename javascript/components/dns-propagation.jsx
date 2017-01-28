@@ -72,7 +72,7 @@ class DnsPropagation extends React.Component {
 
   onWebsocketReply(event) {
     const dataset = [JSON.parse(event.data)];
-    const percentage = ((this.state.servers.length + 1) / 9) * 100;
+    const percentage = ((this.state.servers.length + 1) / 15) * 100;
 
     const state = {
       servers: this.state.servers.concat(dataset),
