@@ -79,7 +79,7 @@ func LoadServerConfiguration(path string) []Server {
 func index(w http.ResponseWriter, req *http.Request) {
     w.Header().Add("Content-Type", "text/html")
     t, _ := template.New("index.html").ParseFiles("templates/index.html")
-    t.Execute(w, map[string] string {"Title": "Check DNS Propagation Worldwide", "Body": "Hi this is my body"})
+    t.Execute(w, map[string] string {"Title": "Check DNS Propagation Worldwide"})
 }
 
 var upgrader = websocket.Upgrader{
