@@ -22,6 +22,7 @@
 import React from 'react';
 import DnsServerCollection from './dns-server-collection';
 import DnsRecordInformation from './dns-record-information';
+import DnsWebSocket from '../websocket/websocket';
 
 class DnsPropagation extends React.Component {
   constructor(props) {
@@ -38,36 +39,28 @@ class DnsPropagation extends React.Component {
       working: false,
       percentage: 0
     };
+
+    this.websocket = new DnsWebSocket('ws://127.0.0.1:8080/api/v1/query');
+    this.websocket.onWebSocketReply = this.onWebsocketReply.bind(this);
+  }
+
+  onWebsocketReply(event) {
+    const dataset = [JSON.parse(event.data)];
+    const percentage = ((this.state.servers.length + 1) / 9) * 100;
+
+    const state = {
+      servers: this.state.servers.concat(dataset),
+      percentage,
+      working: percentage !== 100
+    };
+
+    this.setState(state);
   }
 
   onDnsQuerySubmit(event) {
     event.preventDefault();
-    this.setState({ working: true, percentage: 0 });
-
-    const params = {
-      method: event.target.method,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `domain=${this.state.domain}&type=${this.state.type}`
-    };
-
-    const serversocket = new WebSocket('ws://127.0.0.1:8080/api/v1/query');
-
-    serversocket.onopen = () => {
-      this.setState({ servers: [] });
-      serversocket.send(JSON.stringify({ domain: this.state.domain, type: this.state.type }));
-    };
-
-    serversocket.onmessage = (e) => {
-      const dataset = [JSON.parse(e.data)];
-      const percentage = ((this.state.servers.length + 1) / 9) * 100;
-      this.setState({ servers: this.state.servers.concat(dataset), percentage: percentage, working: percentage !== 100 });
-    };
-
-//    fetch(event.target.action, params)
-//      .then(response => response.json())
-//      .then(response => this.setState({ working: false, servers: response }));
+    this.setState({ working: true, percentage: 0, servers: [] });
+    this.websocket.fetch(this.state.domain, this.state.type);
   }
 
   handleDomainChange(event) {
@@ -86,8 +79,11 @@ class DnsPropagation extends React.Component {
             <div className="row">
               <div className="col-lg-12">
                 <div>
-                  <h1><img alt="DNS Propagation Logo" src="//i.imgur.com/rN1zILE.png"/>&nbsp;dnspropagation</h1>
-                  <small>&nbsp;Check a domain's DNS records. Check the propagation of your record changes and debug DNS related issues on the Internet.</small>
+                  <h1><img alt="DNS Propagation Logo" src="//i.imgur.com/rN1zILE.png" />&nbsp;
+                    dnspropagation</h1>
+                  <small>&nbsp;Check a domain's DNS records. Check the propagation of your record
+                    changes and debug DNS related issues on the Internet.
+                  </small>
                 </div>
 
                 <form onSubmit={this.onDnsQuerySubmit} method="post" action="/api/v1/query">
@@ -125,7 +121,7 @@ class DnsPropagation extends React.Component {
         <div className="container results">
           <div className="row">
             <div className="col-lg-12">
-             <DnsRecordInformation record={this.state.type} />
+              <DnsRecordInformation record={this.state.type} />
             </div>
             <div className="col-lg-12">
               <DnsServerCollection type={this.state.type} domain={this.state.domain} servers={this.state.servers} />
