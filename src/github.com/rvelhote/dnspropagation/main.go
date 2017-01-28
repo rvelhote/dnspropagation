@@ -85,8 +85,7 @@ func index(w http.ResponseWriter, req *http.Request) {
 var upgrader = websocket.Upgrader{}
 
 // Query a DNS record for a specific domain
-// TODO Missing validation of input
-// TODO Missing error checks for function calls
+// Right now the connection is closed after each request. The goal in the future is to maintain connections open.
 func query(w http.ResponseWriter, req *http.Request) {
     conn, _ := upgrader.Upgrade(w, req, nil)
 
@@ -119,6 +118,8 @@ func query(w http.ResponseWriter, req *http.Request) {
     for i := 0; i < len(configuration); i++ {
         conn.WriteJSON(<-sem)
     }
+
+    conn.Close()
 }
 
 func getRecordType(record string) uint16 {
