@@ -162,6 +162,10 @@ func queryServer(domain string, record uint16, server string) DnsServerData {
         return serverData
     }
 
+    if len(response.Answer) == 0 {
+        serverData.Message = "This server has no records for the type you specified."
+    }
+
     serverData.Duration = duration.String()
     serverData.DnsRecords = response.Answer
 
