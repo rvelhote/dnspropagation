@@ -23,6 +23,11 @@ import React from 'react';
 import DnsServer from './dns-server';
 import DnsRecordCollection from './dns-record-collection';
 
+/**
+ * FIXME Perhaps this component should be further subdivided?
+ * FIXME The record type should be in a structure with the list of records (avoid passing it down)
+ * FIXME The Duration should be a value set inside the server?
+ */
 const DnsServerCollection = props =>
   <ul className="row"> {
     props.servers.map(server =>
@@ -32,11 +37,7 @@ const DnsServerCollection = props =>
             <DnsServer server={server.Server} duration={server.Duration} />
           </div>
           <div className="panel-body">
-            { server.DnsRecords !== null && server.DnsRecords.length > 0 ? (
-                <DnsRecordCollection recordType={props.type} country={server.Server.country} records={server.DnsRecords} />
-              ) : (
-                <div>{server.Message}</div>
-              )}
+            <DnsRecordCollection recordType={props.type} server={server.Server} records={server.DnsRecords} message={server.Message} />
           </div>
         </div>
       </li>

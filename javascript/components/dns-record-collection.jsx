@@ -22,26 +22,34 @@
 import React from 'react';
 import DnsRecord from './dns-record';
 
-const DnsRecordCollection = props => (
-  <ul className="dns-record-collection"> {
-    props.records.map((record, index) =>
-      <li className="dns-record-collection__dns-record" key={props.country + index}>
-        <DnsRecord recordType={props.recordType} record={record} />
-      </li>)
+const DnsRecordCollection = (props) => {
+  const hasRecords = props.records !== null && props.records.length > 0;
+
+  if (hasRecords) {
+    return (
+      <ul className="dns-record-collection"> { props.records.map((record, index) =>
+        <li className="dns-record-collection__dns-record" key={props.server.country + index}>
+          <DnsRecord recordType={props.recordType} record={record} />
+        </li>)}
+      </ul>
+    );
   }
-  </ul>
-);
+
+  return <div>{ props.message }</div>;
+};
 
 DnsRecordCollection.displayName = 'DnsRecordCollection';
 
 DnsRecordCollection.propTypes = {
   recordType: React.PropTypes.string,
-  records: React.PropTypes.arrayOf(React.PropTypes.object)
+  records: React.PropTypes.arrayOf(React.PropTypes.object),
+  message: React.PropTypes.string
 };
 
 DnsRecordCollection.defaultProps = {
   recordType: 'A',
-  records: []
+  records: [],
+  message: ''
 };
 
 export default DnsRecordCollection;
