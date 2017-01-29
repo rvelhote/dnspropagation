@@ -29,7 +29,7 @@ const DnsServerCollection = props =>
       <li className={(props.type === 'txt' ? 'col-lg-12' : 'col-lg-4')} key={server.Server.server}>
         <div className={`panel ${(server.DnsRecords !== null && server.DnsRecords.length > 0 ? 'panel-default' : 'panel-danger')}`}>
           <div className="panel-heading">
-            <DnsServer server={server.Server} />
+            <DnsServer server={server.Server} duration={server.Duration} />
           </div>
           <div className="panel-body">
             { server.DnsRecords !== null && server.DnsRecords.length > 0 ? (
