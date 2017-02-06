@@ -140,6 +140,7 @@ func getRecordType(record string) uint16 {
         "TXT": dns.TypeTXT,
         "PTR": dns.TypePTR,
         "NS": dns.TypeNS,
+        "CAA": dns.TypeCAA,
     }
     return recordTypes[record]
 }

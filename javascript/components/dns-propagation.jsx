@@ -115,6 +115,7 @@ class DnsPropagation extends React.Component {
                       <select className="form-control" value={this.state.type} onChange={this.handleTypeChange} required>
                         <option value="a">A</option>
                         <option value="aaaa">AAAA</option>
+                        <option value="caa">CAA</option>
                         <option value="cname">CNAME</option>
                         <option value="mx">MX</option>
                         <option value="ns">NS</option>

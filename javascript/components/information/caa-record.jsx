@@ -20,47 +20,13 @@
  * SOFTWARE.
  */
 import React from 'react';
-import ARecord from './record/a-record';
-import AAAARecord from './record/aaaa-record';
-import CaaRecord from './record/caa-record';
-import CnameRecord from './record/cname-record';
-import MxRecord from './record/mx-record';
-import NsRecord from './record/ns-record';
-import PtrRecord from './record/ptr-record';
-import SoaRecord from './record/soa-record';
-import SrvRecord from './record/srv-record';
-import TxtRecord from './record/txt-record';
 
-const RecordTypes = {
-  a: ARecord,
-  aaaa: AAAARecord,
-  caa: CaaRecord,
-  cname: CnameRecord,
-  mx: MxRecord,
-  ns: NsRecord,
-  ptr: PtrRecord,
-  soa: SoaRecord,
-  srv: SrvRecord,
-  txt: TxtRecord,
-};
+const CaaRecord = () =>
+  <blockquote>
+    <p>A Certification Authority Authorization (CAA) record is used to specify which certificate authorities (CAs) are allowed to issue certificates for a domain.</p>
+    <footer>https://support.dnsimple.com/articles/caa-record</footer>
+  </blockquote>;
 
-class DnsRecord extends React.Component {
-  render() {
-    const RecordType = RecordTypes[this.props.recordType];
-    return <RecordType record={this.props.record} />;
-  }
-}
+CaaRecord.displayName = 'CaaRecord';
 
-DnsRecord.displayName = 'DnsRecord';
-
-DnsRecord.propTypes = {
-  recordType: React.PropTypes.string,
-  record: React.PropTypes.object
-};
-
-DnsRecord.defaultProps = {
-  recordType: '',
-  record: {}
-};
-
-export default DnsRecord;
+export default CaaRecord;

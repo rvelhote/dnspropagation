@@ -20,47 +20,22 @@
  * SOFTWARE.
  */
 import React from 'react';
-import ARecord from './information/a-record';
-import AAAARecord from './information/aaaa-record';
-import CaaRecord from './information/caa-record';
-import CnameRecord from './information/cname-record';
-import MxRecord from './information/mx-record';
-import NsRecord from './information/ns-record';
-import PtrRecord from './information/ptr-record';
-import SoaRecord from './information/soa-record';
-import SrvRecord from './information/srv-record';
-import TxtRecord from './information/txt-record';
 
-const RecordTypes = {
-  a: ARecord,
-  aaaa: AAAARecord,
-  caa: CaaRecord,
-  cname: CnameRecord,
-  mx: MxRecord,
-  ns: NsRecord,
-  ptr: PtrRecord,
-  soa: SoaRecord,
-  srv: SrvRecord,
-  txt: TxtRecord,
+const CaaRecord = props =>
+  <div className="dns-record">
+    <div className="dns-record__caa-record">{props.record.Value}</div>
+  </div>;
+
+CaaRecord.displayName = 'CaaRecord';
+
+CaaRecord.propTypes = {
+  record: React.PropTypes.shape
 };
 
-const DnsRecordInformation = (props) => {
-  const RecordType = RecordTypes[props.record];
-  return (
-    <div className="block__dns-record-information">
-      <RecordType record={props.record} />
-    </div>
-  );
+CaaRecord.defaultProps = {
+  record: {
+    Value: ''
+  }
 };
 
-DnsRecordInformation.displayName = 'DnsRecordInformation';
-
-DnsRecordInformation.propTypes = {
-  record: React.PropTypes.string
-};
-
-DnsRecordInformation.defaultProps = {
-  record: 'A'
-};
-
-export default DnsRecordInformation;
+export default CaaRecord;
