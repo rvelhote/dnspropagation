@@ -26,21 +26,13 @@ import (
     "html/template"
     "github.com/miekg/dns"
     "log"
-    "io/ioutil"
-    "encoding/json"
     "github.com/gorilla/websocket"
     "strings"
     "time"
+    "github.com/rvelhote/dnspropagation"
 )
 
-// This struct will hold each of the servers in the configuration file
-type Server struct {
-    Server string `json:"server"`
-    Provider string `json:"provider"`
-    Country string `json:"country"`
-    City string `json:"city"`
-    Code string `json:"code"`
-}
+
 
 type ResponsePayload struct {
     Domain string
@@ -50,7 +42,7 @@ type ResponsePayload struct {
 
 type DnsServerData struct {
     RecordType string
-    Server Server
+    Server dnspropagation.Server
     Duration string
     Message string
     DnsRecords []dns.RR
@@ -62,18 +54,18 @@ type WebsocketRequest struct {
 }
 
 // Load all the servers configured in the configuration file
-var configuration = LoadServerConfiguration("conf/servers.json")
+//var configuration = LoadServerConfiguration("conf/servers.json")
 
-// Load the configured servers from a specific path. It should return an array of servers to be used in queries.
-// TODO Missing error handling and path checking
-func LoadServerConfiguration(path string) []Server {
-    servers := make([]Server, 0)
-
-    file, _ := ioutil.ReadFile(path)
-    json.Unmarshal(file, &servers)
-
-    return servers
-}
+//// Load the configured servers from a specific path. It should return an array of servers to be used in queries.
+//// TODO Missing error handling and path checking
+//func LoadServerConfiguration(path string) []Server {
+//    servers := make([]Server, 0)
+//
+//    file, _ := ioutil.ReadFile(path)
+//    json.Unmarshal(file, &servers)
+//
+//    return servers
+//}
 
 // Displays the index page with the form that will allow users to make queries
 func index(w http.ResponseWriter, req *http.Request) {
@@ -93,7 +85,7 @@ var upgrader = websocket.Upgrader{
 
 // Query a DNS record for a specific domain
 // Right now the connection is closed after each request. The goal in the future is to maintain connections open.
-func query(w http.ResponseWriter, req *http.Request) {
+func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagation.Server) {
     conn, _ := upgrader.Upgrade(w, req, nil)
 
     websocketreq := WebsocketRequest{}
@@ -101,7 +93,7 @@ func query(w http.ResponseWriter, req *http.Request) {
 
     domain := websocketreq.Domain
     recordType := req.Form.Get("type");
-    record := getRecordType(strings.ToUpper(websocketreq.RecordType))
+    record := dnspropagation.RecordTypes[strings.ToUpper(websocketreq.RecordType)]
 
     if len(domain) == 0 {
         log.Print("Empty domain")
@@ -114,7 +106,7 @@ func query(w http.ResponseWriter, req *http.Request) {
     sem := make(chan DnsServerData, len(configuration))
 
     for _, server := range configuration {
-        go func (server Server, conn *websocket.Conn) {
+        go func (server dnspropagation.Server, conn *websocket.Conn) {
             serverData := queryServer(domain, record, server.Server)
             serverData.Server = server
             serverData.RecordType = recordType
@@ -129,21 +121,7 @@ func query(w http.ResponseWriter, req *http.Request) {
     conn.Close()
 }
 
-func getRecordType(record string) uint16 {
-    recordTypes := map[string]uint16{
-        "A": dns.TypeA,
-        "AAAA": dns.TypeAAAA,
-        "MX": dns.TypeMX,
-        "CNAME": dns.TypeCNAME,
-        "SRV": dns.TypeSRV,
-        "SOA": dns.TypeSOA,
-        "TXT": dns.TypeTXT,
-        "PTR": dns.TypePTR,
-        "NS": dns.TypeNS,
-        "CAA": dns.TypeCAA,
-    }
-    return recordTypes[record]
-}
+
 
 // Query a specific DNS server for information about a record that belongs to a domain name.
 // If there is a problem with the request the error message will be returned in the ServerReply struct as well as a
@@ -174,11 +152,16 @@ func queryServer(domain string, record uint16, server string) DnsServerData {
 }
 
 func main() {
+    servers, _ := dnspropagation.Configuration{}.LoadConfiguration("conf/servers.json")
+
     fs := http.FileServer(http.Dir("assets"))
     http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
     http.HandleFunc("/", index)
-    http.HandleFunc("/api/v1/query", query)
+
+    http.HandleFunc("/api/v1/query", func (w http.ResponseWriter, req *http.Request) {
+        query(w, req, servers)
+    })
     //http.HandleFunc("/api/v1/websocket", responseWebsocket);
 
     http.ListenAndServe(":8080", nil)
