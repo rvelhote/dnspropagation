@@ -1,7 +1,7 @@
 [
   { "server": "8.8.8.8", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA", "code": "us" },
   { "server": "8.8.4.4", "provider": "Google", "country": "United States of America", "city": "Mountain View, CA", "code": "us" },
-  { "server": "87.103.113.171", "provider": "Vodafone", "country": "Portugal", "city": "Lisbon", "code": "pt" },
+  { "server": "192.199.18.65", "provider": "Vodafone", "country": "Portugal", "city": "Lisbon", "code": "pt" },
   { "server": "77.88.8.8", "provider": "Yandex", "country": "Russian Federation", "city": "Moscow", "code": "ru" },
   { "server": "212.8.98.215", "provider": "puntCAT", "country": "Spain", "city": "Cardedeu", "code": "es" },
   { "server": "91.239.100.100", "provider": "Thomas Steen Rasmussen", "country": "Denmark", "city": "Copenhagen", "code": "dk" },
