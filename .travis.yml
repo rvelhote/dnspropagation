@@ -3,4 +3,4 @@ go:
   - 1.6
   - 1.7
 script:
-  - go test dnspropagation -v -cover
+  - go test github.com/rvelhote/dnspropagation -v -cover
