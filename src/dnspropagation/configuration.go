@@ -47,6 +47,10 @@ func (c Configuration) LoadConfiguration(path string) ([]Server, error) {
         return servers, err
     }
 
-    json.Unmarshal(file, &servers)
+    err = json.Unmarshal(file, &servers)
+    if err != nil {
+        return servers, err
+    }
+
     return servers, nil
 }
