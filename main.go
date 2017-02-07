@@ -22,7 +22,6 @@
 package main
 
 import (
-	"dnspropagation"
 	"github.com/gorilla/websocket"
 	"github.com/miekg/dns"
 	"html/template"
@@ -30,6 +29,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"github.com/rvelhote/dnspropagation"
 )
 
 type ResponsePayload struct {
