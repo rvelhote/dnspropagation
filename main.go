@@ -29,7 +29,7 @@ import (
     "github.com/gorilla/websocket"
     "strings"
     "time"
-    "github.com/rvelhote/dnspropagation"
+    "dnspropagation"
 )
 
 
