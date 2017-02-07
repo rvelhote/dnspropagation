@@ -22,41 +22,41 @@
 package dnspropagation
 
 import (
-    "testing"
+	"testing"
 )
 
 func TestConfiguration_LoadConfiguration_Success(t *testing.T) {
-    servers, err := Configuration{}.LoadConfiguration("../../conf/servers.json")
+	servers, err := Configuration{}.LoadConfiguration("../../conf/servers.json")
 
-    if err != nil {
-        t.Errorf("Loading the configuration file caused the error: %s", err.Error())
-    }
+	if err != nil {
+		t.Errorf("Loading the configuration file caused the error: %s", err.Error())
+	}
 
-    if len(servers) != 15 {
-        t.Errorf("The configuration file should have %d servers but it only has %d", 15, len(servers))
-    }
+	if len(servers) != 15 {
+		t.Errorf("The configuration file should have %d servers but it only has %d", 15, len(servers))
+	}
 }
 
 func TestConfiguration_LoadConfiguration_Failure(t *testing.T) {
-    servers, err := Configuration{}.LoadConfiguration("conf/servers-does-not-exist.json")
+	servers, err := Configuration{}.LoadConfiguration("conf/servers-does-not-exist.json")
 
-    if err == nil {
-        t.Error("Loading the configuration of a non-existing directory should have caused an error")
-    }
+	if err == nil {
+		t.Error("Loading the configuration of a non-existing directory should have caused an error")
+	}
 
-    if len(servers) != 0 {
-        t.Error("There should be no servers while loading a configuration from a non-existing directory")
-    }
+	if len(servers) != 0 {
+		t.Error("There should be no servers while loading a configuration from a non-existing directory")
+	}
 }
 
 func TestConfiguration_LoadConfiguration_BadJSON(t *testing.T) {
-    servers, err := Configuration{}.LoadConfiguration("../../conf/bad-servers.json")
+	servers, err := Configuration{}.LoadConfiguration("../../conf/bad-servers.json")
 
-    if err == nil {
-        t.Error("Loading the configuration of a non-existing directory should have caused an error")
-    }
+	if err == nil {
+		t.Error("Loading the configuration of a non-existing directory should have caused an error")
+	}
 
-    if len(servers) != 0 {
-        t.Error("There should be no servers while loading a configuration from a non-existing directory")
-    }
+	if len(servers) != 0 {
+		t.Error("There should be no servers while loading a configuration from a non-existing directory")
+	}
 }

@@ -24,18 +24,17 @@ package dnspropagation
 import "github.com/miekg/dns"
 
 var RecordTypes = map[string]uint16{
-"A": dns.TypeA,
-"AAAA": dns.TypeAAAA,
-"MX": dns.TypeMX,
-"CNAME": dns.TypeCNAME,
-"SRV": dns.TypeSRV,
-"SOA": dns.TypeSOA,
-"TXT": dns.TypeTXT,
-"PTR": dns.TypePTR,
-"NS": dns.TypeNS,
-"CAA": dns.TypeCAA,
+	"A":     dns.TypeA,
+	"AAAA":  dns.TypeAAAA,
+	"MX":    dns.TypeMX,
+	"CNAME": dns.TypeCNAME,
+	"SRV":   dns.TypeSRV,
+	"SOA":   dns.TypeSOA,
+	"TXT":   dns.TypeTXT,
+	"PTR":   dns.TypePTR,
+	"NS":    dns.TypeNS,
+	"CAA":   dns.TypeCAA,
 }
 
 type Dns struct {
-
 }

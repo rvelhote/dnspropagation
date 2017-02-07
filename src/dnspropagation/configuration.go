@@ -22,35 +22,34 @@
 package dnspropagation
 
 import (
-    "io/ioutil"
-    "encoding/json"
+	"encoding/json"
+	"io/ioutil"
 )
 
 // This struct will hold each of the servers in the configuration file
 type Server struct {
-    Server string `json:"server"`
-    Provider string `json:"provider"`
-    Country string `json:"country"`
-    City string `json:"city"`
-    Code string `json:"code"`
+	Server   string `json:"server"`
+	Provider string `json:"provider"`
+	Country  string `json:"country"`
+	City     string `json:"city"`
+	Code     string `json:"code"`
 }
 
 type Configuration struct {
-
 }
 
 func (c Configuration) LoadConfiguration(path string) ([]Server, error) {
-    servers := make([]Server, 0)
-    file, err := ioutil.ReadFile(path)
+	servers := make([]Server, 0)
+	file, err := ioutil.ReadFile(path)
 
-    if err != nil {
-        return servers, err
-    }
+	if err != nil {
+		return servers, err
+	}
 
-    err = json.Unmarshal(file, &servers)
-    if err != nil {
-        return servers, err
-    }
+	err = json.Unmarshal(file, &servers)
+	if err != nil {
+		return servers, err
+	}
 
-    return servers, nil
+	return servers, nil
 }
