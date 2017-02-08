@@ -40,6 +40,18 @@ var RecordTypes = map[string]uint16{
 	"caa":   dns.TypeCAA,
 }
 
+type DnsRecord struct {
+	Type string
+	Data []dns.RR
+}
+
+type Response struct {
+	Server Server
+	Duration string
+	Message string
+	Records DnsRecord
+}
+
 type DnsQuery struct {
 	Domain string
 	Record string
@@ -62,4 +74,18 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 	}
 
 	return response.Answer, duration, nil
+}
+
+func (d *DnsQuery) GetResponse() Response {
+	answers, duration, err := d.Query()
+
+	response := Response{ Server: d.Server, Duration: duration.String() }
+	response.Records.Type = d.Record
+	response.Records.Data = answers
+
+	if err != nil {
+		response.Message = err.Error()
+	}
+
+	return response
 }

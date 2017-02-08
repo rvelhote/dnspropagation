@@ -27,7 +27,6 @@ import (
 	"log"
 	"net/http"
 	"github.com/rvelhote/dnspropagation"
-    "github.com/miekg/dns"
 )
 
 type WebsocketRequest struct {
@@ -35,17 +34,7 @@ type WebsocketRequest struct {
     RecordType string `json:"type"`
 }
 
-type DnsRecord struct {
-    Type string
-    Data []dns.RR
-}
 
-type DnsServerData struct {
-    Server dnspropagation.Server
-    Duration string
-    Message string
-    Records DnsRecord
-}
 
 func index(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
@@ -76,25 +65,12 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 		log.Print("Invalid DNS record specified")
 	}
 
-	sem := make(chan DnsServerData, len(configuration))
+	sem := make(chan dnspropagation.Response, len(configuration))
 
 	for _, server := range configuration {
 		go func(server dnspropagation.Server, conn *websocket.Conn) {
-            response := DnsServerData{}
-            response.Server = server
-
-			dnsRequest := dnspropagation.DnsQuery{ Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server }
-			answers, duration, err := dnsRequest.Query()
-
-            response.Duration = duration.String()
-            response.Records.Type = websocketreq.RecordType
-            response.Records.Data = answers
-
-            if err != nil {
-                response.Message = err.Error()
-            }
-
-			sem <- response
+			request := dnspropagation.DnsQuery{ Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server }
+			sem <- request.GetResponse()
 		}(server, conn)
 	}
 
