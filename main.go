@@ -57,6 +57,8 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 	websocketreq := WebsocketRequest{}
 	conn.ReadJSON(&websocketreq)
 
+	defer conn.Close()
+
 	if len(websocketreq.Domain) == 0 {
 		log.Print("Empty domain")
 	}
@@ -77,8 +79,6 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 	for i := 0; i < len(configuration); i++ {
 		conn.WriteJSON(<-sem)
 	}
-
-	conn.Close()
 }
 
 func main() {
