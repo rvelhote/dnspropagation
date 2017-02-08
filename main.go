@@ -68,10 +68,10 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 	sem := make(chan dnspropagation.Response, len(configuration))
 
 	for _, server := range configuration {
-		go func(server dnspropagation.Server, conn *websocket.Conn) {
+		go func(server dnspropagation.Server) {
 			request := dnspropagation.DnsQuery{ Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server }
 			sem <- request.GetResponse()
-		}(server, conn)
+		}(server)
 	}
 
 	for i := 0; i < len(configuration); i++ {
