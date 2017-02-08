@@ -29,7 +29,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"dnspropagation"
+	"github.com/rvelhote/dnspropagation"
 )
 
 type ResponsePayload struct {
