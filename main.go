@@ -83,6 +83,7 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 
 func main() {
 	servers, _ := dnspropagation.LoadConfiguration("conf/servers.json")
+    log.Println("Server list loaded!")
 
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -93,5 +94,6 @@ func main() {
 		query(w, req, servers)
 	})
 
+    log.Println("Ready to server requests!")
 	http.ListenAndServe(":8080", nil)
 }
