@@ -145,7 +145,7 @@ class DnsPropagation extends React.Component {
               <DnsRecordInformation record={this.state.type} />
             </div>
             <div className="col-lg-12">
-              <DnsServerCollection type={this.state.type} domain={this.state.domain} servers={this.state.servers} />
+              <DnsServerCollection servers={this.state.servers} />
             </div>
           </div>
         </div>

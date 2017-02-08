@@ -24,67 +24,42 @@ package dnspropagation
 import (
 	"github.com/miekg/dns"
 	"time"
+	"errors"
 )
 
-type ResponsePayload struct {
-	Domain        string
-	RecordType    string
-	DnsServerData []DnsServerData
-}
-
-type DnsServerData struct {
-	RecordType string
-	Server     Server
-	Duration   string
-	Message    string
-	DnsRecords []dns.RR
-}
-
-type WebsocketRequest struct {
-	Domain     string `json:"domain"`
-	RecordType string `json:"type"`
-}
-
 var RecordTypes = map[string]uint16{
-	"A":     dns.TypeA,
-	"AAAA":  dns.TypeAAAA,
-	"MX":    dns.TypeMX,
-	"CNAME": dns.TypeCNAME,
-	"SRV":   dns.TypeSRV,
-	"SOA":   dns.TypeSOA,
-	"TXT":   dns.TypeTXT,
-	"PTR":   dns.TypePTR,
-	"NS":    dns.TypeNS,
-	"CAA":   dns.TypeCAA,
+	"a":     dns.TypeA,
+	"aaaa":  dns.TypeAAAA,
+	"mx":    dns.TypeMX,
+	"cname": dns.TypeCNAME,
+	"srv":   dns.TypeSRV,
+	"soa":   dns.TypeSOA,
+	"txt":   dns.TypeTXT,
+	"ptr":   dns.TypePTR,
+	"ns":    dns.TypeNS,
+	"caa":   dns.TypeCAA,
 }
 
 type DnsQuery struct {
 	Domain string
-	Record uint16
-	Server string
+	Record string
+	Server Server
 }
 
-func (d *DnsQuery) Query() DnsServerData {
-	serverData := DnsServerData{DnsRecords: nil, Message: "", Duration: ""}
-	client := dns.Client{}
-	client.Timeout = time.Second * 10
+func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
+	message := dns.Msg{ }
+	message.SetQuestion(d.Domain + ".", RecordTypes[d.Record])
 
-	message := dns.Msg{}
-	message.SetQuestion(d.Domain + ".", d.Record)
-
-	response, duration, err := client.Exchange(&message, d.Server + ":53")
+	client := dns.Client{ Timeout: time.Second * 10 }
+	response, duration, err := client.Exchange(&message, d.Server.Server + ":53")
 
 	if err != nil {
-		serverData.Message = err.Error()
-		return serverData
+		return []dns.RR{}, duration, err
 	}
 
 	if len(response.Answer) == 0 {
-		serverData.Message = "This server has no records for the type you specified."
+		return []dns.RR{}, duration, errors.New("This server has no records for the type you specified")
 	}
 
-	serverData.Duration = duration.String()
-	serverData.DnsRecords = response.Answer
-
-	return serverData
+	return response.Answer, duration, nil
 }

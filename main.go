@@ -26,11 +26,26 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strings"
 	"github.com/rvelhote/dnspropagation"
+    "github.com/miekg/dns"
 )
 
+type WebsocketRequest struct {
+    Domain     string `json:"domain"`
+    RecordType string `json:"type"`
+}
 
+type DnsRecord struct {
+    Type string
+    Data []dns.RR
+}
+
+type DnsServerData struct {
+    Server dnspropagation.Server
+    Duration string
+    Message string
+    Records DnsRecord
+}
 
 // Displays the index page with the form that will allow users to make queries
 func index(w http.ResponseWriter, req *http.Request) {
@@ -53,32 +68,36 @@ var upgrader = websocket.Upgrader{
 func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagation.Server) {
 	conn, _ := upgrader.Upgrade(w, req, nil)
 
-	websocketreq := dnspropagation.WebsocketRequest{}
+	websocketreq := WebsocketRequest{}
 	conn.ReadJSON(&websocketreq)
 
-	domain := websocketreq.Domain
-	recordType := req.Form.Get("type")
-	record := dnspropagation.RecordTypes[strings.ToUpper(websocketreq.RecordType)]
-
-	if len(domain) == 0 {
+	if len(websocketreq.Domain) == 0 {
 		log.Print("Empty domain")
 	}
 
-	if record == 0 {
-		log.Print("Invalid record specified")
+	if len(websocketreq.RecordType) == 0 || dnspropagation.RecordTypes[websocketreq.RecordType] == 0 {
+		log.Print("Invalid DNS record specified")
 	}
 
-	sem := make(chan dnspropagation.DnsServerData, len(configuration))
+	sem := make(chan DnsServerData, len(configuration))
 
 	for _, server := range configuration {
 		go func(server dnspropagation.Server, conn *websocket.Conn) {
+            response := DnsServerData{}
+            response.Server = server
 
-			dnsRequest := dnspropagation.DnsQuery{ Domain: domain, Record: record, Server: server.Server }
+			dnsRequest := dnspropagation.DnsQuery{ Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server }
+			answers, duration, err := dnsRequest.Query()
 
-			serverData := dnsRequest.Query()
-			serverData.Server = server
-			serverData.RecordType = recordType
-			sem <- serverData
+            response.Duration = duration.String()
+            response.Records.Type = websocketreq.RecordType
+            response.Records.Data = answers
+
+            if err != nil {
+                response.Message = err.Error()
+            }
+
+			sem <- response
 		}(server, conn)
 	}
 

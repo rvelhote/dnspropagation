@@ -31,13 +31,13 @@ import DnsRecordCollection from './dns-record-collection';
 const DnsServerCollection = props =>
   <ul className="row"> {
     props.servers.map(server =>
-      <li className={(props.type === 'txt' ? 'col-lg-12' : 'col-lg-4')} key={server.Server.server}>
-        <div className={`panel ${(server.DnsRecords !== null && server.DnsRecords.length > 0 ? 'panel-default' : 'panel-danger')}`}>
+      <li className={(server.Records.Type === 'txt' ? 'col-lg-12' : 'col-lg-4')} key={server.Server.server}>
+        <div className={`panel ${(server.Records.Data !== null && server.Records.Data.length > 0 ? 'panel-default' : 'panel-danger')}`}>
           <div className="panel-heading">
             <DnsServer server={server.Server} duration={server.Duration} />
           </div>
           <div className="panel-body">
-            <DnsRecordCollection recordType={props.type} server={server.Server} records={server.DnsRecords} message={server.Message} />
+            <DnsRecordCollection records={server.Records} message={server.Message} />
           </div>
         </div>
       </li>
