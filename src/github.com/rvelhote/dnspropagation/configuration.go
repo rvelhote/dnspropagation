@@ -26,7 +26,6 @@ import (
 	"io/ioutil"
 )
 
-// This struct will hold each of the servers in the configuration file
 type Server struct {
 	Server   string `json:"server"`
 	Provider string `json:"provider"`
