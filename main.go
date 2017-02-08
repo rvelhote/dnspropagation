@@ -29,13 +29,6 @@ import (
 	"github.com/rvelhote/dnspropagation"
 )
 
-type WebsocketRequest struct {
-    Domain     string `json:"domain"`
-    RecordType string `json:"type"`
-}
-
-
-
 func index(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
 	t, _ := template.New("index.html").ParseFiles("templates/index.html")
@@ -54,18 +47,13 @@ var upgrader = websocket.Upgrader{
 func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagation.Server) {
 	conn, _ := upgrader.Upgrade(w, req, nil)
 
-	websocketreq := WebsocketRequest{}
+	websocketreq := dnspropagation.WebsocketRequest{}
 	conn.ReadJSON(&websocketreq)
 
 	defer conn.Close()
 
-	if len(websocketreq.Domain) == 0 {
-		log.Print("Empty domain")
-	}
-
-	if len(websocketreq.RecordType) == 0 || dnspropagation.RecordTypes[websocketreq.RecordType] == 0 {
-		log.Print("Invalid DNS record specified")
-	}
+	err := websocketreq.Validate()
+	log.Println(err)
 
 	sem := make(chan dnspropagation.Response, len(configuration))
 
