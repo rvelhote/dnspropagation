@@ -148,7 +148,7 @@ func queryServer(domain string, record uint16, server string) DnsServerData {
 }
 
 func main() {
-	servers, _ := dnspropagation.Configuration{}.LoadConfiguration("conf/servers.json")
+	servers, _ := dnspropagation.LoadConfiguration("conf/servers.json")
 
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))

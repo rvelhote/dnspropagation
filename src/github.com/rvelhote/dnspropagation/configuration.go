@@ -35,10 +35,7 @@ type Server struct {
 	Code     string `json:"code"`
 }
 
-type Configuration struct {
-}
-
-func (c Configuration) LoadConfiguration(path string) ([]Server, error) {
+func LoadConfiguration(path string) ([]Server, error) {
 	servers := make([]Server, 0)
 	file, err := ioutil.ReadFile(path)
 

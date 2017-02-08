@@ -26,7 +26,7 @@ import (
 )
 
 func TestConfiguration_LoadConfiguration_Success(t *testing.T) {
-	servers, err := Configuration{}.LoadConfiguration("../../../../conf/servers.json")
+	servers, err := LoadConfiguration("../../../../conf/servers.json")
 
 	if err != nil {
 		t.Errorf("Loading the configuration file caused the error: %s", err.Error())
@@ -38,7 +38,7 @@ func TestConfiguration_LoadConfiguration_Success(t *testing.T) {
 }
 
 func TestConfiguration_LoadConfiguration_Failure(t *testing.T) {
-	servers, err := Configuration{}.LoadConfiguration("conf/servers-does-not-exist.json")
+	servers, err := LoadConfiguration("conf/servers-does-not-exist.json")
 
 	if err == nil {
 		t.Error("Loading the configuration of a non-existing directory should have caused an error")
@@ -50,7 +50,7 @@ func TestConfiguration_LoadConfiguration_Failure(t *testing.T) {
 }
 
 func TestConfiguration_LoadConfiguration_BadJSON(t *testing.T) {
-	servers, err := Configuration{}.LoadConfiguration("../../../../conf/bad-servers.json")
+	servers, err := LoadConfiguration("../../../../conf/bad-servers.json")
 
 	if err == nil {
 		t.Error("Loading the configuration of a non-existing directory should have caused an error")
