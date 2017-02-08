@@ -23,47 +23,14 @@ package main
 
 import (
 	"github.com/gorilla/websocket"
-	"github.com/miekg/dns"
 	"html/template"
 	"log"
 	"net/http"
 	"strings"
-	"time"
 	"github.com/rvelhote/dnspropagation"
 )
 
-type ResponsePayload struct {
-	Domain        string
-	RecordType    string
-	DnsServerData []DnsServerData
-}
 
-type DnsServerData struct {
-	RecordType string
-	Server     dnspropagation.Server
-	Duration   string
-	Message    string
-	DnsRecords []dns.RR
-}
-
-type WebsocketRequest struct {
-	Domain     string `json:"domain"`
-	RecordType string `json:"type"`
-}
-
-// Load all the servers configured in the configuration file
-//var configuration = LoadServerConfiguration("conf/servers.json")
-
-//// Load the configured servers from a specific path. It should return an array of servers to be used in queries.
-//// TODO Missing error handling and path checking
-//func LoadServerConfiguration(path string) []Server {
-//    servers := make([]Server, 0)
-//
-//    file, _ := ioutil.ReadFile(path)
-//    json.Unmarshal(file, &servers)
-//
-//    return servers
-//}
 
 // Displays the index page with the form that will allow users to make queries
 func index(w http.ResponseWriter, req *http.Request) {
@@ -86,7 +53,7 @@ var upgrader = websocket.Upgrader{
 func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagation.Server) {
 	conn, _ := upgrader.Upgrade(w, req, nil)
 
-	websocketreq := WebsocketRequest{}
+	websocketreq := dnspropagation.WebsocketRequest{}
 	conn.ReadJSON(&websocketreq)
 
 	domain := websocketreq.Domain
@@ -101,11 +68,14 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 		log.Print("Invalid record specified")
 	}
 
-	sem := make(chan DnsServerData, len(configuration))
+	sem := make(chan dnspropagation.DnsServerData, len(configuration))
 
 	for _, server := range configuration {
 		go func(server dnspropagation.Server, conn *websocket.Conn) {
-			serverData := queryServer(domain, record, server.Server)
+
+			dnsRequest := dnspropagation.DnsQuery{ Domain: domain, Record: record, Server: server.Server }
+
+			serverData := dnsRequest.Query()
 			serverData.Server = server
 			serverData.RecordType = recordType
 			sem <- serverData
@@ -119,33 +89,33 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 	conn.Close()
 }
 
-// Query a specific DNS server for information about a record that belongs to a domain name.
-// If there is a problem with the request the error message will be returned in the ServerReply struct as well as a
-// boolean flag that indicated the request's final outcome.
-func queryServer(domain string, record uint16, server string) DnsServerData {
-	serverData := DnsServerData{DnsRecords: nil, Message: "", Duration: ""}
-	client := dns.Client{}
-	client.Timeout = time.Second * 10
-
-	message := dns.Msg{}
-	message.SetQuestion(domain+".", record)
-
-	response, duration, err := client.Exchange(&message, server+":53")
-
-	if err != nil {
-		serverData.Message = err.Error()
-		return serverData
-	}
-
-	if len(response.Answer) == 0 {
-		serverData.Message = "This server has no records for the type you specified."
-	}
-
-	serverData.Duration = duration.String()
-	serverData.DnsRecords = response.Answer
-
-	return serverData
-}
+//// Query a specific DNS server for information about a record that belongs to a domain name.
+//// If there is a problem with the request the error message will be returned in the ServerReply struct as well as a
+//// boolean flag that indicated the request's final outcome.
+//func queryServer(domain string, record uint16, server string) DnsServerData {
+//	serverData := DnsServerData{DnsRecords: nil, Message: "", Duration: ""}
+//	client := dns.Client{}
+//	client.Timeout = time.Second * 10
+//
+//	message := dns.Msg{}
+//	message.SetQuestion(domain+".", record)
+//
+//	response, duration, err := client.Exchange(&message, server+":53")
+//
+//	if err != nil {
+//		serverData.Message = err.Error()
+//		return serverData
+//	}
+//
+//	if len(response.Answer) == 0 {
+//		serverData.Message = "This server has no records for the type you specified."
+//	}
+//
+//	serverData.Duration = duration.String()
+//	serverData.DnsRecords = response.Answer
+//
+//	return serverData
+//}
 
 func main() {
 	servers, _ := dnspropagation.LoadConfiguration("conf/servers.json")

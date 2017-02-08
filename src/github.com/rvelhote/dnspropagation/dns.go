@@ -21,7 +21,29 @@
  */
 package dnspropagation
 
-import "github.com/miekg/dns"
+import (
+	"github.com/miekg/dns"
+	"time"
+)
+
+type ResponsePayload struct {
+	Domain        string
+	RecordType    string
+	DnsServerData []DnsServerData
+}
+
+type DnsServerData struct {
+	RecordType string
+	Server     Server
+	Duration   string
+	Message    string
+	DnsRecords []dns.RR
+}
+
+type WebsocketRequest struct {
+	Domain     string `json:"domain"`
+	RecordType string `json:"type"`
+}
 
 var RecordTypes = map[string]uint16{
 	"A":     dns.TypeA,
@@ -36,5 +58,33 @@ var RecordTypes = map[string]uint16{
 	"CAA":   dns.TypeCAA,
 }
 
-type Dns struct {
+type DnsQuery struct {
+	Domain string
+	Record uint16
+	Server string
+}
+
+func (d *DnsQuery) Query() DnsServerData {
+	serverData := DnsServerData{DnsRecords: nil, Message: "", Duration: ""}
+	client := dns.Client{}
+	client.Timeout = time.Second * 10
+
+	message := dns.Msg{}
+	message.SetQuestion(d.Domain + ".", d.Record)
+
+	response, duration, err := client.Exchange(&message, d.Server + ":53")
+
+	if err != nil {
+		serverData.Message = err.Error()
+		return serverData
+	}
+
+	if len(response.Answer) == 0 {
+		serverData.Message = "This server has no records for the type you specified."
+	}
+
+	serverData.Duration = duration.String()
+	serverData.DnsRecords = response.Answer
+
+	return serverData
 }
