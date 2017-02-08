@@ -76,7 +76,7 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 		}(server)
 	}
 
-	for i := 0; i < len(configuration); i++ {
+	for _, _ = range configuration {
 		conn.WriteJSON(<-sem)
 	}
 }
