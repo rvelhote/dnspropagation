@@ -23,6 +23,7 @@ class DnsWebSocket {
   constructor(address) {
     this.address = address;
     this.onWebSocketReply = null;
+    this.onWebSocketError = null;
   }
 
   fetch(domain, type) {
@@ -30,6 +31,7 @@ class DnsWebSocket {
 
     this.websocket = new WebSocket(this.address);
     this.websocket.onopen = () => this.websocket.send(params);
+    this.websocket.onerror = this.onWebSocketError;
     this.websocket.onmessage = this.onWebSocketReply;
   }
 }

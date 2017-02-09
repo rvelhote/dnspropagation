@@ -46,7 +46,8 @@ class DnsPropagation extends React.Component {
     };
 
     this.websocket = new DnsWebSocket('ws://127.0.0.1:8080/api/v1/query');
-    this.websocket.onWebSocketReply = this.onWebsocketReply.bind(this);
+    this.websocket.onWebSocketReply = this.onWebSocketReply.bind(this);
+    this.websocket.onWebSocketError = this.onWebSocketError.bind(this);
   }
 
   componentDidMount() {
@@ -75,7 +76,11 @@ class DnsPropagation extends React.Component {
     this.websocket.fetch(this.state.domain, this.state.type);
   }
 
-  onWebsocketReply(event) {
+  onWebSocketError() {
+    this.setState({ working: false, message: { message: 'Connection error. Please try again!', type: 'danger' } });
+  }
+
+  onWebSocketReply(event) {
     const dataset = JSON.parse(event.data);
 
     if (dataset.Error) {
