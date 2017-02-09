@@ -25,10 +25,6 @@ import (
     "errors"
 )
 
-type InputValidation interface {
-    Validate() error
-}
-
 var (
     ErrInvalidDomain = errors.New("You have sent an invalid domain. Please check your input.")
     ErrInvalidRecord = errors.New("You have specified an invalid DNS record type. Please check your input.")
