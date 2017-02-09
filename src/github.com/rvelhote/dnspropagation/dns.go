@@ -69,7 +69,7 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 	}
 
 	message := dns.Msg{ }
-	message.SetQuestion(d.Domain + ".", RecordTypes[d.Record])
+	message.SetQuestion(dns.Fqdn(d.Domain), RecordTypes[d.Record])
 
 	client := dns.Client{ Timeout: time.Second * 10 }
 	response, duration, err := client.Exchange(&message, d.Server.Server + ":53")
