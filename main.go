@@ -23,10 +23,10 @@ package main
 
 import (
 	"github.com/gorilla/websocket"
+	"github.com/rvelhote/dnspropagation"
 	"html/template"
 	"log"
 	"net/http"
-	"github.com/rvelhote/dnspropagation"
 )
 
 func index(w http.ResponseWriter, req *http.Request) {
@@ -55,15 +55,15 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 	err := websocketreq.Validate()
 
 	if err != nil {
-		conn.WriteJSON(dnspropagation.ResponseError{ Error: err.Error() })
-		return;
+		conn.WriteJSON(dnspropagation.ResponseError{Error: err.Error()})
+		return
 	}
 
 	sem := make(chan dnspropagation.Response, len(configuration))
 
 	for _, server := range configuration {
 		go func(server dnspropagation.Server) {
-			request := dnspropagation.DnsQuery{ Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server }
+			request := dnspropagation.DnsQuery{Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server}
 			sem <- request.GetResponse()
 		}(server)
 	}
@@ -75,7 +75,7 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 
 func main() {
 	servers, _ := dnspropagation.LoadConfiguration("conf/servers.json")
-    log.Println("Server list loaded!")
+	log.Println("Server list loaded!")
 
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -86,6 +86,6 @@ func main() {
 		query(w, req, servers)
 	})
 
-    log.Println("Ready to server requests!")
+	log.Println("Ready to server requests!")
 	http.ListenAndServe(":8080", nil)
 }

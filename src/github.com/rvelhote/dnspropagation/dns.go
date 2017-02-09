@@ -22,10 +22,10 @@
 package dnspropagation
 
 import (
-	"github.com/miekg/dns"
-	"time"
 	"errors"
+	"github.com/miekg/dns"
 	"strings"
+	"time"
 )
 
 var RecordTypes = map[string]uint16{
@@ -51,10 +51,10 @@ type ResponseError struct {
 }
 
 type Response struct {
-	Server Server
+	Server   Server
 	Duration string
-	Message string
-	Records DnsRecord
+	Message  string
+	Records  DnsRecord
 }
 
 type DnsQuery struct {
@@ -68,11 +68,11 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 		d.Domain, _ = dns.ReverseAddr(d.Domain)
 	}
 
-	message := dns.Msg{ }
+	message := dns.Msg{}
 	message.SetQuestion(dns.Fqdn(d.Domain), RecordTypes[d.Record])
 
-	client := dns.Client{ Timeout: time.Second * 10 }
-	response, duration, err := client.Exchange(&message, d.Server.Server + ":53")
+	client := dns.Client{Timeout: time.Second * 10}
+	response, duration, err := client.Exchange(&message, d.Server.Server+":53")
 
 	if err != nil {
 		return []dns.RR{}, duration, err
@@ -88,7 +88,7 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 func (d *DnsQuery) GetResponse() Response {
 	answers, duration, err := d.Query()
 
-	response := Response{ Server: d.Server, Duration: duration.String() }
+	response := Response{Server: d.Server, Duration: duration.String()}
 	response.Records.Type = d.Record
 	response.Records.Data = answers
 

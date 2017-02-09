@@ -22,27 +22,27 @@
 package dnspropagation
 
 import (
-    "errors"
+	"errors"
 )
 
 var (
-    ErrInvalidDomain = errors.New("You have sent an invalid domain. Please check your input.")
-    ErrInvalidRecord = errors.New("You have specified an invalid DNS record type. Please check your input.")
+	ErrInvalidDomain = errors.New("You have sent an invalid domain. Please check your input.")
+	ErrInvalidRecord = errors.New("You have specified an invalid DNS record type. Please check your input.")
 )
 
 type WebsocketRequest struct {
-    Domain     string `json:"domain"`
-    RecordType string `json:"type"`
+	Domain     string `json:"domain"`
+	RecordType string `json:"type"`
 }
 
 func (r *WebsocketRequest) Validate() error {
-    if len(r.Domain) == 0 {
-        return ErrInvalidDomain
-    }
+	if len(r.Domain) == 0 {
+		return ErrInvalidDomain
+	}
 
-    if len(r.RecordType) == 0 || RecordTypes[r.RecordType] == 0 {
-        return ErrInvalidRecord
-    }
+	if len(r.RecordType) == 0 || RecordTypes[r.RecordType] == 0 {
+		return ErrInvalidRecord
+	}
 
-    return nil
+	return nil
 }
