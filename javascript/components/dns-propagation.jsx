@@ -79,7 +79,7 @@ class DnsPropagation extends React.Component {
     const dataset = JSON.parse(event.data);
 
     if (dataset.Error) {
-      this.setState({ message: { message: dataset.Error, type: 'danger' } });
+      this.setState({ working: false, message: { message: dataset.Error, type: 'danger' } });
       return;
     }
 
