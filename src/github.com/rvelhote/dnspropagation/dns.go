@@ -45,6 +45,10 @@ type DnsRecord struct {
 	Data []dns.RR
 }
 
+type ResponseError struct {
+	Error string
+}
+
 type Response struct {
 	Server Server
 	Duration string

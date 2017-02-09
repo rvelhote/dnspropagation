@@ -23,6 +23,7 @@ import React from 'react';
 import DnsServerCollection from './dns-server-collection';
 import DnsRecordInformation from './dns-record-information';
 import DnsWebSocket from '../websocket/websocket';
+import DnsMessage from './dns-message';
 
 class DnsPropagation extends React.Component {
   constructor(props) {
@@ -37,7 +38,11 @@ class DnsPropagation extends React.Component {
       type: 'a',
       servers: [],
       working: false,
-      percentage: 0
+      percentage: 0,
+      message: {
+        message: '',
+        type: 'info'
+      }
     };
 
     this.websocket = new DnsWebSocket('ws://127.0.0.1:8080/api/v1/query');
@@ -66,16 +71,21 @@ class DnsPropagation extends React.Component {
 
   onDnsQuerySubmit(event) {
     event.preventDefault();
-    this.setState({ working: true, percentage: 0, servers: [] });
+    this.setState({ working: true, percentage: 0, servers: [], message: { message: '', type: 'info' } });
     this.websocket.fetch(this.state.domain, this.state.type);
   }
 
   onWebsocketReply(event) {
-    const dataset = [JSON.parse(event.data)];
-    const percentage = ((this.state.servers.length + 1) / 15) * 100;
+    const dataset = JSON.parse(event.data);
 
+    if (dataset.Error) {
+      this.setState({ message: { message: dataset.Error, type: 'danger' } });
+      return;
+    }
+
+    const percentage = ((this.state.servers.length + 1) / 15) * 100;
     const state = {
-      servers: this.state.servers.concat(dataset),
+      servers: this.state.servers.concat(JSON.parse(event.data)),
       percentage,
       working: percentage !== 100
     };
@@ -145,7 +155,9 @@ class DnsPropagation extends React.Component {
               <DnsRecordInformation record={this.state.type} />
             </div>
             <div className="col-lg-12">
-              <DnsServerCollection servers={this.state.servers} />
+              { this.state.message.message.length > 0 ?
+                <DnsMessage message={this.state.message.message} type={this.state.message.type} /> :
+                <DnsServerCollection servers={this.state.servers} /> }
             </div>
           </div>
         </div>

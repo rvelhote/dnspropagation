@@ -53,7 +53,11 @@ func query(w http.ResponseWriter, req *http.Request, configuration []dnspropagat
 	defer conn.Close()
 
 	err := websocketreq.Validate()
-	log.Println(err)
+
+	if err != nil {
+		conn.WriteJSON(dnspropagation.ResponseError{ Error: err.Error() })
+		return;
+	}
 
 	sem := make(chan dnspropagation.Response, len(configuration))
 
