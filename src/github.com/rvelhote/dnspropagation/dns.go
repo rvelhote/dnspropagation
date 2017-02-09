@@ -25,6 +25,8 @@ import (
 	"github.com/miekg/dns"
 	"time"
 	"errors"
+	"strings"
+	"fmt"
 )
 
 var RecordTypes = map[string]uint16{
@@ -63,6 +65,10 @@ type DnsQuery struct {
 }
 
 func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
+	if d.Record == "ptr" && !strings.Contains(d.Domain, "in-addr.arpa") {
+		d.Domain = fmt.Sprintf("%s.%s", d.Domain, "in-addr.arpa")
+	}
+
 	message := dns.Msg{ }
 	message.SetQuestion(d.Domain + ".", RecordTypes[d.Record])
 
