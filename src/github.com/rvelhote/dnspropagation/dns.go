@@ -26,7 +26,6 @@ import (
 	"time"
 	"errors"
 	"strings"
-	"fmt"
 )
 
 var RecordTypes = map[string]uint16{
@@ -65,8 +64,8 @@ type DnsQuery struct {
 }
 
 func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
-	if d.Record == "ptr" && !strings.Contains(d.Domain, "in-addr.arpa") {
-		d.Domain = fmt.Sprintf("%s.%s", d.Domain, "in-addr.arpa")
+	if d.Record == "ptr" && !strings.Contains(d.Domain, ".arpa") {
+		d.Domain, _ = dns.ReverseAddr(d.Domain)
 	}
 
 	message := dns.Msg{ }
