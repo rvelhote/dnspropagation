@@ -26,7 +26,7 @@ import (
 )
 
 func TestConfiguration_LoadConfiguration_Success(t *testing.T) {
-	servers, err := LoadConfiguration("../../../../conf/servers.json")
+	servers, err := LoadConfiguration("../conf/servers.json")
 
 	if err != nil {
 		t.Errorf("Loading the configuration file caused the error: %s", err.Error())
