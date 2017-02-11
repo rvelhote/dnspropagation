@@ -42,6 +42,9 @@ var RecordTypes = map[string]uint16{
 	"caa":   dns.TypeCAA,
 }
 
+var ErrNoRecords = errors.New("This server has no records for the type you specified")
+var ErrBadRecordType = errors.New("You have specified a record type that does not exist")
+
 type DnsRecord struct {
 	Type string
 	Data []dns.RR
@@ -64,13 +67,29 @@ type DnsQuery struct {
 	Server Server
 }
 
+func normalizeRecord(record string) string {
+	return strings.ToLower(record)
+}
+
+func IsRecordValid(record string) bool {
+	return RecordTypes[normalizeRecord(record)] != 0
+}
+
+func GetRecordType(record string) uint16 {
+	return RecordTypes[normalizeRecord(record)]
+}
+
 func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
+	if !IsRecordValid(d.Record) {
+		return []dns.RR{}, time.Second, ErrBadRecordType
+	}
+
 	if d.Record == "ptr" && !strings.Contains(d.Domain, ".arpa") {
 		d.Domain, _ = dns.ReverseAddr(d.Domain)
 	}
 
 	message := dns.Msg{}
-	message.SetQuestion(dns.Fqdn(d.Domain), RecordTypes[d.Record])
+	message.SetQuestion(dns.Fqdn(d.Domain), GetRecordType(d.Record))
 
 	client := dns.Client{Timeout: time.Second * 10}
 	response, duration, err := client.Exchange(&message, d.Server.Server+":53")
@@ -80,7 +99,7 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 	}
 
 	if len(response.Answer) == 0 {
-		return []dns.RR{}, duration, errors.New("This server has no records for the type you specified")
+		return []dns.RR{}, duration, ErrNoRecords
 	}
 
 	return response.Answer, duration, nil
