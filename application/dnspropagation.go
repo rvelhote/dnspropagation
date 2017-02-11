@@ -1,4 +1,4 @@
-package dnspropagation
+package application
 
 import (
     "github.com/gorilla/websocket"

@@ -22,9 +22,9 @@
 package main
 
 import (
-	"github.com/rvelhote/dnspropagation"
+	"github.com/rvelhote/dnspropagation/application"
 )
 
 func main() {
-	dnspropagation.Init()
+	application.Init()
 }
