@@ -49,5 +49,9 @@
     "react-dom": "^15.4.2",
     "react-test-renderer": "^15.4.2",
     "whatwg-fetch": "^2.0.1"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true
   }
 }
