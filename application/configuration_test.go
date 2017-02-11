@@ -51,13 +51,13 @@ func TestConfiguration_LoadConfiguration_Failure(t *testing.T) {
 }
 
 func TestConfiguration_LoadConfiguration_BadJSON(t *testing.T) {
-	servers, err := LoadConfiguration("../../../../conf/bad-servers.json")
+	servers, err := LoadConfiguration("../conf/bad-servers.json")
 
 	if err == nil {
-		t.Error("Loading the configuration of a non-existing directory should have caused an error")
+		t.Error("Loading the configuration of an invalid JSON file should have caused an error")
 	}
 
 	if len(servers) != 0 {
-		t.Error("There should be no servers while loading a configuration from a non-existing directory")
+		t.Error("There should be no servers while loading a configuration from an invalid JSON file")
 	}
 }
