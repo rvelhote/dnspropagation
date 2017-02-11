@@ -22,3 +22,30 @@ package application
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import (
+    "testing"
+    "net/http"
+    "net/http/httptest"
+    "strings"
+)
+
+func TestIndexHandler(t *testing.T) {
+    req, err := http.NewRequest("GET", "/", nil)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(index)
+
+    handler.ServeHTTP(rr, req)
+
+    if status := rr.Code; status != http.StatusOK {
+        t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusOK)
+    }
+
+    expected := `<main id="app"></main>`
+    if strings.Contains(expected, rr.Body.String()) {
+        t.Error("the response should contain a <main> html tag")
+    }
+}
