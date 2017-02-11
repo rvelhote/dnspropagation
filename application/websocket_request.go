@@ -1,3 +1,6 @@
+// Package application contains the server-side application code.
+package application
+
 /*
  * The MIT License (MIT)
  *
@@ -19,8 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package application
-
 import (
 	"errors"
 )
