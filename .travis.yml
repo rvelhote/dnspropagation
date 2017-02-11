@@ -3,5 +3,9 @@ go:
   - 1.6
   - 1.7
 go_import_path: github.com/rvelhote/dnspropagation/application
+install:
+  - go get github.com/gorilla/websocket
+  - go get github.com/miekg/dns
+  - go get github.com/rvelhote/dnspropagation/application
 script:
   - go test github.com/rvelhote/dnspropagation/application -v -cover
