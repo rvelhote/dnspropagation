@@ -1,3 +1,6 @@
+// Package main is the entry point for the DNS Propagation checker application.
+package main
+
 /*
  * The MIT License (MIT)
  *
@@ -19,12 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package main
-
 import (
 	"github.com/rvelhote/dnspropagation/application"
 )
 
+// This is the main entry point of the webapp. All the actual application code is under the application directory.
 func main() {
 	application.Init()
 }
