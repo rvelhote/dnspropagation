@@ -2,6 +2,6 @@ language: go
 go:
   - 1.6
   - 1.7
-go_import_path: github.com/rvelhote/dnspropagation
+go_import_path: github.com/rvelhote/dnspropagation/application
 script:
   - go test github.com/rvelhote/dnspropagation/application -v -cover
