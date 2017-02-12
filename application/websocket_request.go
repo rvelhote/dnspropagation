@@ -24,11 +24,17 @@ package application
  */
 import (
 	"errors"
+	"net/url"
+	"net"
+	"net/http"
+	"log"
 )
 
 var (
 	ErrInvalidDomain = errors.New("You have sent an invalid domain. Please check your input.")
 	ErrInvalidRecord = errors.New("You have specified an invalid DNS record type. Please check your input.")
+	ErrInvalidHost = errors.New("You have made your request from an unknown Origin.")
+	ErrMissingOriginHeader = errors.New("Missing 'Origin' HTTP header")
 )
 
 type WebsocketRequest struct {
@@ -46,4 +52,38 @@ func (r *WebsocketRequest) Validate() error {
 	}
 
 	return nil
+}
+
+func ValidateOrigin(origin string) (bool, error) {
+	if len(origin) == 0 {
+		return false, ErrMissingOriginHeader
+	}
+
+	parsedURL, parserr := url.Parse(origin)
+	if parserr != nil {
+		return false, parserr
+	}
+
+	host, _, spliterr := net.SplitHostPort(parsedURL.Host)
+
+	if spliterr != nil {
+		return false, spliterr
+	}
+
+	// TODO Make this value configurable in a file or something!
+	if host != "127.0.0.1" {
+		return false, ErrInvalidHost
+	}
+
+	return true, nil
+}
+
+func CheckOrigin(req *http.Request) bool {
+	validated, err := ValidateOrigin(req.Header.Get("Origin"))
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return validated;
 }

@@ -44,13 +44,16 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:    4096,
 	WriteBufferSize:   4096,
 	EnableCompression: true,
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
+	CheckOrigin: CheckOrigin,
 }
 
 func query(w http.ResponseWriter, req *http.Request, configuration []Server) {
-	conn, _ := upgrader.Upgrade(w, req, nil)
+	conn, upgraderr := upgrader.Upgrade(w, req, nil)
+
+	if upgraderr != nil {
+		log.Println(upgraderr)
+		return
+	}
 
 	websocketreq := WebsocketRequest{}
 	conn.ReadJSON(&websocketreq)
