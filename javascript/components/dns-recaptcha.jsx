@@ -19,21 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-class DnsWebSocket {
-  constructor(address) {
-    this.address = address;
-    this.onWebSocketReply = null;
-    this.onWebSocketError = null;
-  }
+import React from 'react';
 
-  fetch(domain, type, challenge) {
-    const params = JSON.stringify({ domain, type });
+const DnsRecaptcha = props => <div className="g-recaptcha" data-sitekey={props.publickey} />;
 
-    this.websocket = new WebSocket(this.address + "?c=" + challenge);
-    this.websocket.onopen = () => this.websocket.send(params);
-    this.websocket.onerror = this.onWebSocketError;
-    this.websocket.onmessage = this.onWebSocketReply;
-  }
-}
+DnsRecaptcha.displayName = 'DnsRecaptcha';
 
-export default DnsWebSocket;
+DnsRecaptcha.propTypes = {
+  publickey: React.PropTypes.string,
+  recaptchaCallback: React.PropTypes.func
+};
+
+DnsRecaptcha.defaultProps = {
+  publickey: '',
+  recaptchaCallback: null
+};
+
+export default DnsRecaptcha;

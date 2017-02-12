@@ -24,6 +24,7 @@ import DnsServerCollection from './dns-server-collection';
 import DnsRecordInformation from './dns-record-information';
 import DnsWebSocket from '../websocket/websocket';
 import DnsMessage from './dns-message';
+import DnsRecaptcha from './dns-recaptcha';
 
 class DnsPropagation extends React.Component {
   constructor(props) {
@@ -42,6 +43,10 @@ class DnsPropagation extends React.Component {
       message: {
         message: '',
         type: 'info'
+      },
+      recatpcha: {
+        challenge: '',
+        display: true
       }
     };
 
@@ -73,7 +78,7 @@ class DnsPropagation extends React.Component {
   onDnsQuerySubmit(event) {
     event.preventDefault();
     this.setState({ working: true, percentage: 0, servers: [], message: { message: '', type: 'info' } });
-    this.websocket.fetch(this.state.domain, this.state.type);
+    this.websocket.fetch(this.state.domain, this.state.type, window.grecaptcha.getResponse());
   }
 
   onWebSocketError() {
@@ -159,6 +164,11 @@ class DnsPropagation extends React.Component {
             <div className="col-lg-12">
               <DnsRecordInformation record={this.state.type} />
             </div>
+
+            <div className="col-lg-12">
+              <DnsRecaptcha publickey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" />
+            </div>
+
             <div className="col-lg-12">
               { this.state.message.message.length > 0 ?
                 <DnsMessage message={this.state.message.message} type={this.state.message.type} /> :

@@ -24,6 +24,7 @@ package application
  */
 import (
 	"github.com/gorilla/websocket"
+    "github.com/rvelhote/go-recaptcha"
 	"html/template"
 	"log"
 	"net/http"
@@ -48,7 +49,23 @@ var upgrader = websocket.Upgrader{
 }
 
 func query(w http.ResponseWriter, req *http.Request, configuration []Server) {
-	conn, upgraderr := upgrader.Upgrade(w, req, nil)
+    recaptchaCookie, _ := req.Cookie("reCAPTCHA")
+
+    if recaptchaCookie == nil {
+        challenge := req.URL.Query().Get("c")
+
+        catpcha := recaptcha.Recaptcha{ PrivateKey: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe" }
+        recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
+
+        if recaptchaResponse.Success == false {
+            w.WriteHeader(403)
+            return
+        }
+
+        recaptchaCookie = &http.Cookie{ Name: "reCAPTCHA", Value: "1", HttpOnly: true, Path: "/" }
+    }
+
+	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {recaptchaCookie.String()}})
 
 	if upgraderr != nil {
 		log.Println(upgraderr)
@@ -60,8 +77,7 @@ func query(w http.ResponseWriter, req *http.Request, configuration []Server) {
 
 	defer conn.Close()
 
-	err := websocketreq.Validate()
-
+    err := websocketreq.Validate()
 	if err != nil {
 		conn.WriteJSON(ResponseError{Error: err.Error()})
 		return
