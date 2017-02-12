@@ -8,7 +8,7 @@
   { "server": "202.238.58.67", "provider": "Japan Network Information Center", "country": "Japan", "city": "Tokyo", "code": "jp" },
   { "server": "200.45.253.50", "provider": "Telecom Argentina S.A.", "country": "Argentina", "city": "Río Cuarto", "code": "ar" },
   { "server": "196.213.41.107 ", "provider": "Internet Solutions", "country": "South Africa", "city": "Johannesburg", "code": "za" },
-  { "server": "41.205.31.79", "provider": "-", "country": "Cameroon", "city": "--", "code": "cm" },
+  { "server": "41.67.236.42", "provider": "-", "country": "Cameroon", "city": "--", "code": "cm" },
   { "server": "200.194.198.76", "provider": "-", "country": "Brasil", "city": "--", "code": "br" },
   { "server": "187.174.84.104 ", "provider": "-", "country": "Mexico", "city": "--", "code": "mx" },
   { "server": "114.114.115.110", "provider": "-", "country": "China", "city": "--", "code": "cn" },
