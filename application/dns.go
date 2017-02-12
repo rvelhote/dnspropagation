@@ -27,6 +27,7 @@ import (
 	"github.com/miekg/dns"
 	"strings"
 	"time"
+	"github.com/miekg/dns/idn"
 )
 
 var RecordTypes = map[string]uint16{
@@ -83,6 +84,8 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 	if !IsRecordValid(d.Record) {
 		return []dns.RR{}, time.Second, ErrBadRecordType
 	}
+
+	d.Domain = idn.ToPunycode(strings.ToLower(d.Domain))
 
 	if d.Record == "ptr" && !strings.Contains(d.Domain, ".arpa") {
 		d.Domain, _ = dns.ReverseAddr(d.Domain)
