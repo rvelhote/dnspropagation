@@ -32,12 +32,7 @@ import (
 
 func index(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
-
-	t, err := template.New("index.html").ParseFiles("templates/index.html")
-	if err != nil {
-		t, _ = template.New("index.html").ParseFiles("../templates/index.html")
-	}
-
+	t, _ := template.New("index.html").ParseFiles("../templates/index.html")
 	t.Execute(w, map[string]string{"Title": "Check DNS Propagation Worldwide"})
 }
 
