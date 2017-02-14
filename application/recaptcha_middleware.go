@@ -27,13 +27,16 @@ import (
     "github.com/rvelhote/go-recaptcha"
 )
 
+const cookieName = "reCAPTCHA"
+var Cookie = &http.Cookie{ Name: cookieName, Value: "1", HttpOnly: true, Path: "/" }
+
 type RecaptchaMiddleware struct {
     Configuration Configuration
 }
 
 func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        recaptchaCookie, _ := r.Cookie("reCAPTCHA")
+        recaptchaCookie, _ := r.Cookie(cookieName)
 
         if recaptchaCookie == nil {
             challenge := r.URL.Query().Get("c")
@@ -45,8 +48,6 @@ func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
                 w.WriteHeader(403)
                 return
             }
-
-            recaptchaCookie = &http.Cookie{ Name: "reCAPTCHA", Value: "1", HttpOnly: true, Path: "/" }
         }
 
         next.ServeHTTP(w, r)

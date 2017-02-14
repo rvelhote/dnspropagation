@@ -52,23 +52,8 @@ type QueryRequestHandler struct {
 }
 
 func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-    //recaptchaCookie, _ := req.Cookie("reCAPTCHA")
-    //
-    //if recaptchaCookie == nil {
-    //    challenge := req.URL.Query().Get("c")
-    //
-    //    catpcha := recaptcha.Recaptcha{ PrivateKey: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe" }
-    //    recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
-    //
-    //    if recaptchaResponse.Success == false {
-    //        w.WriteHeader(403)
-    //        return
-    //    }
-    //
-    //    recaptchaCookie = &http.Cookie{ Name: "reCAPTCHA", Value: "1", HttpOnly: true, Path: "/" }
-    //}
-
-	conn, upgraderr := upgrader.Upgrade(w, req, nil)
+	// TODO Use context with Go 1.7 to pass the cookie here and upgrade the connection. This is a bit dirty
+	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {Cookie.String()}})
 
 	if upgraderr != nil {
 		log.Println(upgraderr)
