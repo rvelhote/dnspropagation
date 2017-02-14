@@ -34,8 +34,7 @@ func index(w http.ResponseWriter, req *http.Request) {
 	t, err := template.New("index.html").ParseFiles("templates/index.html")
 
 	if err != nil {
-		log.Println(err)
-		return
+        t, _ = template.New("index.html").ParseFiles("../templates/index.html")
 	}
 
 	t.Execute(w, map[string]string{"Title": "Check DNS Propagation Worldwide"})
