@@ -31,7 +31,13 @@ import (
 
 func index(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
-	t, _ := template.New("index.html").ParseFiles("./templates/index.html")
+	t, err := template.New("index.html").ParseFiles("templates/index.html")
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	t.Execute(w, map[string]string{"Title": "Check DNS Propagation Worldwide"})
 }
 
@@ -43,7 +49,7 @@ var upgrader = websocket.Upgrader{
 }
 
 type QueryRequestHandler struct {
-	Conf []Server
+	Configuration Configuration
 }
 
 func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -81,26 +87,26 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	sem := make(chan Response, len(q.Conf))
+	sem := make(chan Response, len(q.Configuration.Servers))
 
-	for _, server := range q.Conf {
+	for _, server := range q.Configuration.Servers {
 		go func(server Server) {
 			request := DnsQuery{Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server}
 			sem <- request.GetResponse()
 		}(server)
 	}
 
-	for _, _ = range q.Conf {
+	for _, _ = range q.Configuration.Servers {
 		conn.WriteJSON(<-sem)
 	}
 }
 
 func Init() {
 
-	servers, _ := LoadConfiguration("conf/servers.json")
+	configuration, _ := LoadConfiguration("conf/configuration.json")
 
-	queryHandler := QueryRequestHandler{ Conf: servers }
-	captchaHandler := RecaptchaMiddleware{ Conf: servers }
+	queryHandler := QueryRequestHandler{ Configuration: configuration }
+	captchaHandler := RecaptchaMiddleware{ Configuration: configuration }
 
 	log.Println("Server list loaded!")
 

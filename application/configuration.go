@@ -27,6 +27,16 @@ import (
 	"io/ioutil"
 )
 
+type Configuration struct {
+	Recaptcha Recaptcha `json:"recaptcha"`
+	Servers []Server `json:"servers"`
+}
+
+type Recaptcha struct {
+	PublicKey string `json:"publickey"`
+	PrivateKey string `json:"privatekey"`
+}
+
 type Server struct {
 	Server   string `json:"server"`
 	Provider string `json:"provider"`
@@ -35,18 +45,18 @@ type Server struct {
 	Code     string `json:"code"`
 }
 
-func LoadConfiguration(path string) ([]Server, error) {
-	servers := make([]Server, 0)
+func LoadConfiguration(path string) (Configuration, error) {
+	configuration := Configuration{}
 	file, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		return servers, err
+		return configuration, err
 	}
 
-	err = json.Unmarshal(file, &servers)
+	err = json.Unmarshal(file, &configuration)
 	if err != nil {
-		return servers, err
+		return configuration, err
 	}
 
-	return servers, nil
+	return configuration, nil
 }

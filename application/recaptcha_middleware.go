@@ -28,7 +28,7 @@ import (
 )
 
 type RecaptchaMiddleware struct {
-    Conf []Server
+    Configuration Configuration
 }
 
 func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
@@ -38,7 +38,7 @@ func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
         if recaptchaCookie == nil {
             challenge := r.URL.Query().Get("c")
 
-            catpcha := recaptcha.Recaptcha{ PrivateKey: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe" }
+            catpcha := recaptcha.Recaptcha{ PrivateKey: middle.Configuration.Recaptcha.PrivateKey }
             recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
 
             if recaptchaResponse.Success == false {
