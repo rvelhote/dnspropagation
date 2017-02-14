@@ -24,7 +24,6 @@ package application
  */
 import (
 	"github.com/gorilla/websocket"
-    "github.com/rvelhote/go-recaptcha"
 	"html/template"
 	"log"
 	"net/http"
@@ -32,7 +31,7 @@ import (
 
 func index(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
-	t, _ := template.New("index.html").ParseFiles("../templates/index.html")
+	t, _ := template.New("index.html").ParseFiles("./templates/index.html")
 	t.Execute(w, map[string]string{"Title": "Check DNS Propagation Worldwide"})
 }
 
@@ -43,24 +42,28 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: CheckOrigin,
 }
 
-func query(w http.ResponseWriter, req *http.Request, configuration []Server) {
-    recaptchaCookie, _ := req.Cookie("reCAPTCHA")
+type QueryRequestHandler struct {
+	Conf []Server
+}
 
-    if recaptchaCookie == nil {
-        challenge := req.URL.Query().Get("c")
+func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+    //recaptchaCookie, _ := req.Cookie("reCAPTCHA")
+    //
+    //if recaptchaCookie == nil {
+    //    challenge := req.URL.Query().Get("c")
+    //
+    //    catpcha := recaptcha.Recaptcha{ PrivateKey: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe" }
+    //    recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
+    //
+    //    if recaptchaResponse.Success == false {
+    //        w.WriteHeader(403)
+    //        return
+    //    }
+    //
+    //    recaptchaCookie = &http.Cookie{ Name: "reCAPTCHA", Value: "1", HttpOnly: true, Path: "/" }
+    //}
 
-        catpcha := recaptcha.Recaptcha{ PrivateKey: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe" }
-        recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
-
-        if recaptchaResponse.Success == false {
-            w.WriteHeader(403)
-            return
-        }
-
-        recaptchaCookie = &http.Cookie{ Name: "reCAPTCHA", Value: "1", HttpOnly: true, Path: "/" }
-    }
-
-	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {recaptchaCookie.String()}})
+	conn, upgraderr := upgrader.Upgrade(w, req, nil)
 
 	if upgraderr != nil {
 		log.Println(upgraderr)
@@ -78,22 +81,27 @@ func query(w http.ResponseWriter, req *http.Request, configuration []Server) {
 		return
 	}
 
-	sem := make(chan Response, len(configuration))
+	sem := make(chan Response, len(q.Conf))
 
-	for _, server := range configuration {
+	for _, server := range q.Conf {
 		go func(server Server) {
 			request := DnsQuery{Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server}
 			sem <- request.GetResponse()
 		}(server)
 	}
 
-	for _, _ = range configuration {
+	for _, _ = range q.Conf {
 		conn.WriteJSON(<-sem)
 	}
 }
 
 func Init() {
+
 	servers, _ := LoadConfiguration("conf/servers.json")
+
+	queryHandler := QueryRequestHandler{ Conf: servers }
+	captchaHandler := RecaptchaMiddleware{ Conf: servers }
+
 	log.Println("Server list loaded!")
 
 	fs := http.FileServer(http.Dir("assets"))
@@ -101,9 +109,7 @@ func Init() {
 
 	http.HandleFunc("/", index)
 
-	http.HandleFunc("/api/v1/query", func(w http.ResponseWriter, req *http.Request) {
-		query(w, req, servers)
-	})
+	http.Handle("/api/v1/query", captchaHandler.Middleware(queryHandler))
 
 	log.Println("Ready to server requests!")
 	http.ListenAndServe(":8080", nil)
