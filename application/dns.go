@@ -88,7 +88,7 @@ func normalizeDomain(domain string, record string) string {
 	domain = strings.ToLower(domain)
 	domain = idn.ToPunycode(domain)
 
-	if record == "ptr" && !strings.Contains(domain, ".arpa") {
+	if record == "ptr" {
 		domain, _ = dns.ReverseAddr(domain)
 	}
 
