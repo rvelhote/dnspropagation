@@ -38,7 +38,7 @@ type Recaptcha struct {
 }
 
 type Server struct {
-	Server   string `json:"server"`
+	IpAddress   string `json:"ipaddress"`
 	Provider string `json:"provider"`
 	Country  string `json:"country"`
 	City     string `json:"city"`

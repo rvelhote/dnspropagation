@@ -102,7 +102,7 @@ func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Durat
 	message.SetQuestion(domain, GetRecordType(record))
 
 	client := dns.Client{Timeout: time.Second * 10}
-	response, duration, err := client.Exchange(&message, server.Server+":53")
+	response, duration, err := client.Exchange(&message, server.IpAddress+":53")
 
 	if err != nil {
 		return []dns.RR{}, duration, err
