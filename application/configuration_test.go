@@ -26,7 +26,7 @@ import (
 	"testing"
 )
 
-func TestConfiguration_LoadConfiguration_Success(t *testing.T) {
+func TestLoadConfigurationSuccess(t *testing.T) {
 	configuration, err := LoadConfiguration("../conf/configuration.json")
 
 	if err != nil {
@@ -38,7 +38,7 @@ func TestConfiguration_LoadConfiguration_Success(t *testing.T) {
 	}
 }
 
-func TestConfiguration_LoadConfiguration_Failure(t *testing.T) {
+func TestLoadConfigurationFailureNoFile(t *testing.T) {
 	configuration, err := LoadConfiguration("conf/servers-does-not-exist.json")
 
 	if err == nil {
@@ -48,9 +48,11 @@ func TestConfiguration_LoadConfiguration_Failure(t *testing.T) {
 	if len(configuration.Servers) != 0 {
 		t.Error("There should be no servers while loading a configuration from a non-existing directory")
 	}
+
+	t.Log(err)
 }
 
-func TestConfiguration_LoadConfiguration_BadJSON(t *testing.T) {
+func TestLoadConfigurationFailureBadJSON(t *testing.T) {
 	configuration, err := LoadConfiguration("../conf/bad-configuration.json")
 
 	if err == nil {
@@ -60,4 +62,6 @@ func TestConfiguration_LoadConfiguration_BadJSON(t *testing.T) {
 	if len(configuration.Servers) != 0 {
 		t.Error("There should be no servers while loading a configuration from an invalid JSON file")
 	}
+
+	t.Log(err)
 }

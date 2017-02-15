@@ -27,16 +27,19 @@ import (
 	"io/ioutil"
 )
 
+// Configuration holds the application configuration settings. Configuration files should be created in the conf folder.
 type Configuration struct {
 	Recaptcha Recaptcha `json:"recaptcha"`
 	Servers   []Server  `json:"servers"`
 }
 
+// Recaptcha holds the Google reCAPTCHA settings mainly the public and private keys.
 type Recaptcha struct {
 	PublicKey  string `json:"publickey"`
 	PrivateKey string `json:"privatekey"`
 }
 
+// Server holds the list of DNS servers that the application is allowed to query.
 type Server struct {
 	IpAddress string `json:"ipaddress"`
 	Provider  string `json:"provider"`
@@ -45,6 +48,8 @@ type Server struct {
 	Code      string `json:"code"`
 }
 
+// LoadConfiguration loads a configuration file from the specified path. It will return the configuration in the JSON
+// file or an error with details if the operation fails (e.g. file does not exist, invalid JSON)
 func LoadConfiguration(path string) (Configuration, error) {
 	configuration := Configuration{}
 	file, err := ioutil.ReadFile(path)
