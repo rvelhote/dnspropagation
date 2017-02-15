@@ -73,7 +73,7 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 
 	query := DnsQuery{ Servers: q.Configuration.Servers }
 
-	c := query.QueryAll(websocketreq.Domain, websocketreq.RecordType)
+	c := query.QueryAllAsync(websocketreq.Domain, websocketreq.RecordType)
 	for _, _ = range q.Configuration.Servers {
 		conn.WriteJSON(<-c)
 	}
