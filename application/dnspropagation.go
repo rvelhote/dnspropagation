@@ -71,7 +71,7 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	query := DnsQuery{Servers: q.Configuration.Servers}
+	query := DNSQuery{Servers: q.Configuration.Servers}
 
 	c := query.QueryAllAsync(websocketreq.Domain, websocketreq.RecordType)
 	for _, _ = range q.Configuration.Servers {

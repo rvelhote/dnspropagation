@@ -41,7 +41,7 @@ type Recaptcha struct {
 
 // Server holds the list of DNS servers that the application is allowed to query.
 type Server struct {
-	IpAddress string `json:"ipaddress"`
+	IPAddress string `json:"ipaddress"`
 	Provider  string `json:"provider"`
 	Country   string `json:"country"`
 	City      string `json:"city"`

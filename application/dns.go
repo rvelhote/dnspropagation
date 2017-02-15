@@ -57,9 +57,9 @@ var (
 // Defines the standard DNS port for concatenation with the DNS IP Address
 const port = "53"
 
-// DnsRecord stores the records returned from querying a single DNS Server.
+// DNSRecord stores the records returned from querying a single DNS Server.
 // It also stores the record type for the frontend.
-type DnsRecord struct {
+type DNSRecord struct {
 	Type string
 	Data []dns.RR
 }
@@ -76,11 +76,11 @@ type Response struct {
 	Server   Server
 	Duration string
 	Message  string
-	Records  DnsRecord
+	Records  DNSRecord
 }
 
-// DnsQuery allows us to query multiple DNS servers at the same time. It currently supports Sync and Async requests.
-type DnsQuery struct {
+// DNSQuery allows us to query multiple DNS servers at the same time. It currently supports Sync and Async requests.
+type DNSQuery struct {
 	Servers []Server
 }
 
@@ -132,7 +132,7 @@ func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Durat
 	message.SetQuestion(domain, GetRecordType(record))
 
 	client := dns.Client{Timeout: time.Second * 10}
-	response, duration, err := client.Exchange(&message, net.JoinHostPort(server.IpAddress, port))
+	response, duration, err := client.Exchange(&message, net.JoinHostPort(server.IPAddress, port))
 
 	if err != nil {
 		return []dns.RR{}, duration, err
@@ -169,7 +169,7 @@ func Query(domain string, record string, server Server) Response {
 //   for _, _ = range servers {
 //     log.Println(<-c)
 //   }
-func (d *DnsQuery) QueryAllAsync(domain string, record string) <-chan Response {
+func (d *DNSQuery) QueryAllAsync(domain string, record string) <-chan Response {
 	queryChannel := make(chan Response, len(d.Servers))
 
 	for _, server := range d.Servers {
@@ -182,7 +182,7 @@ func (d *DnsQuery) QueryAllAsync(domain string, record string) <-chan Response {
 }
 
 // QueryAll queries all the servers passed in the constructor, synchronously and returns an array of Response objects-
-func (d *DnsQuery) QueryAll(domain string, record string) []Response {
+func (d *DNSQuery) QueryAll(domain string, record string) []Response {
 	responses := []Response{}
 
 	for _, server := range d.Servers {

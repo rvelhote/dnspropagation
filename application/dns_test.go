@@ -36,8 +36,8 @@ const testPTR = "ptr"
 const testPTRIPv4Address = "1.0.0.127.in-addr.arpa."
 const testPTRIPv6Address = "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.f.2.1.b.0.a.0.8.b.d.0.1.0.0.2.ip6.arpa."
 
-var testBadServer = Server{IpAddress: "127.0.0.1"}
-var testServer = Server{IpAddress: "8.8.4.4"}
+var testBadServer = Server{IPAddress: "127.0.0.1"}
+var testServer = Server{IPAddress: "8.8.4.4"}
 var testServers = []Server{testServer}
 var testAsyncServers = []Server{testServer, testServer}
 
@@ -142,7 +142,7 @@ func TestRecordValidationAndNormalization(t *testing.T) {
 }
 
 func TestQueryAll(t *testing.T) {
-	query := DnsQuery{Servers: testServers}
+	query := DNSQuery{Servers: testServers}
 	responses := query.QueryAll(testDomain, testRecordType)
 
 	if len(responses) != 1 {
@@ -152,7 +152,7 @@ func TestQueryAll(t *testing.T) {
 }
 
 func TestQueryAllErrorMessageNoRecords(t *testing.T) {
-	query := DnsQuery{Servers: testServers}
+	query := DNSQuery{Servers: testServers}
 	responses := query.QueryAll(testBadDomain, testRecordType)
 
 	if len(responses) != 1 {
@@ -167,7 +167,7 @@ func TestQueryAllErrorMessageNoRecords(t *testing.T) {
 }
 
 func TestQueryAllErrorMessageBadRecordType(t *testing.T) {
-	query := DnsQuery{Servers: testServers}
+	query := DNSQuery{Servers: testServers}
 	responses := query.QueryAll(testDomain, testBadRecordType)
 
 	if len(responses) != 1 {
@@ -182,7 +182,7 @@ func TestQueryAllErrorMessageBadRecordType(t *testing.T) {
 }
 
 func TestQueryAllAsync(t *testing.T) {
-	query := DnsQuery{Servers: testAsyncServers}
+	query := DNSQuery{Servers: testAsyncServers}
 	responses := query.QueryAllAsync(testDomain, testRecordType)
 
 	total := 0
