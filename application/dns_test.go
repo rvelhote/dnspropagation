@@ -27,75 +27,87 @@ import (
 	"testing"
 )
 
-const badDomain = "goooolang.org"
-const domain = "golang.org"
-const record = "a"
+const testBadDomain = "goooolang.org"
+const testDomain = "golang.org"
+const testFQDNDomain = "golang.org."
+const testRecordType = "a"
+const testBadRecordType = "AaAaAaA"
+const testPTR = "ptr"
+const testPTRIPv4Address = "1.0.0.127.in-addr.arpa."
+const testPTRIPv6Address = "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.f.2.1.b.0.a.0.8.b.d.0.1.0.0.2.ip6.arpa."
 
-var server = Server{Server: "8.8.4.4"}
+var testBadServer = Server{IpAddress: "127.0.0.1"}
+var testServer = Server{IpAddress: "8.8.4.4"}
+var testServers = []Server{testServer}
+var testAsyncServers = []Server{testServer, testServer}
 
 // TODO Mock the DNS requests!
 // TODO Test for the content of the DNS answer
-func TestDnsQuery_Query(t *testing.T) {
-	instance := DnsQuery{Domain: domain, Record: record, Server: server}
-	records, _, err := instance.Query()
+func TestRawQuery(t *testing.T) {
+	answers, _, err := rawQuery(testDomain, testRecordType, testServer)
 
 	if err != nil {
-		t.Error("There should be no errors in this request (unless of course the server is down)")
+		t.Error(err)
 	}
 
-	if len(records) != 1 {
-		t.Errorf("Response should have returned a single record. It returned %d", len(records))
+	if len(answers) != 1 {
+		t.Errorf("Response should have returned a single record. It returned %d", len(answers))
 	}
 }
 
-func TestDnsQuery_QueryBadDomain(t *testing.T) {
-	instance := DnsQuery{Domain: badDomain, Record: record, Server: server}
-	records, _, err := instance.Query()
+func TestRawQueryError(t *testing.T) {
+	answers, _, err := rawQuery(testBadDomain, testRecordType, testServer)
 
 	if err == nil {
-		t.Error("There should be an errors in this request")
+		t.Error("There should be at least an error in this request")
 	}
 
 	if err != nil && err != ErrNoRecords {
-		t.Errorf("The function should have returned -- %s -- but it returned -- %s --", ErrNoRecords.Error(), err.Error())
+		t.Errorf("The function should have returned -- %s -- but it returned -- %s --", ErrNoRecords, err)
 	}
 
-	if len(records) != 0 {
-		t.Errorf("Response should have returned a single record. It returned %d", len(records))
-	}
-}
-
-func TestDnsQuery_GetResponse(t *testing.T) {
-	query := DnsQuery{Domain: domain, Record: record, Server: server}
-	response := query.GetResponse()
-
-	if len(response.Message) != 0 {
-		t.Error("There should be no errors in this valid request")
-	}
-
-	if response.Server != server {
-		t.Error("The server returned in the response shouldn't be different from the original")
-	}
-
-	if response.Records.Type != record {
-		t.Errorf("The record returned in the response -- %s -- is different from the one that should have been sent -- %s --", response.Records.Type, record)
-	}
-
-	if len(response.Records.Data) != 1 {
-		t.Errorf("There are %d record in the response when there should only be 1 -- %s", len(response.Records.Data), response.Records)
+	if len(answers) != 0 {
+		t.Errorf("Response should have returned a single record. It returned %d", len(answers))
 	}
 }
 
-func TestDnsQuery_GetResponseWithMessage(t *testing.T) {
-	query := DnsQuery{Domain: domain, Record: "PTR", Server: server}
-	response := query.GetResponse()
+func TestRawQueryBadDnsServer(t *testing.T) {
+	answers, _, err := rawQuery(testDomain, testRecordType, testBadServer)
 
-	if len(response.Message) == 0 {
-		t.Error("There should be a message in this request but nothing was returned")
+	if err == nil {
+		t.Error("There should be at least an error in this request")
+	}
+
+	if len(answers) != 0 {
+		t.Error("There should be no answers with a bad DNS server")
+		t.Log(answers)
+	}
+
+	t.Log(err)
+}
+
+func TestNormalizeDomain(t *testing.T) {
+	domains := []string{"goLANG.ORG", "GOLANG.ORG", "golang.org", "  golang.ORG   ", "golaNG.oRg."}
+
+	for _, domainToNormalize := range domains {
+		normalized := normalizeDomain(domainToNormalize, testRecordType)
+		if normalized != testFQDNDomain {
+			t.Errorf("Normalized domain should have been -- %s -- and we got -- %s --", testFQDNDomain, normalized)
+		}
+	}
+
+	normalizedIPv4 := normalizeDomain("127.0.0.1", testPTR)
+	if normalizedIPv4 != testPTRIPv4Address {
+		t.Errorf("Normalized domain should have been -- %s -- and we got -- %s --", testPTRIPv4Address, normalizedIPv4)
+	}
+
+	normalizedIPv6 := normalizeDomain("2001:db8:a0b:12f0::1", testPTR)
+	if normalizedIPv6 != testPTRIPv6Address {
+		t.Errorf("Normalized domain should have been -- %s -- and we got -- %s --", testPTRIPv6Address, normalizedIPv6)
 	}
 }
 
-func TestDnsQuery_RecordValidation(t *testing.T) {
+func TestRecordValidationAndNormalization(t *testing.T) {
 	if IsRecordValid("A") != true {
 		t.Error("Uppercase 'A' is a valid record type")
 	}
@@ -118,5 +130,69 @@ func TestDnsQuery_RecordValidation(t *testing.T) {
 
 	if GetRecordType("AAAAA") != 0 {
 		t.Error("Record 'AAAAA' does not exist and the return type should be zero")
+	}
+
+	if normalizeRecord("A") != testRecordType {
+		t.Errorf("Record type not normalized correctly. It should be -- %s -- and it was -- %s --", testRecordType, normalizeRecord("A"))
+	}
+
+	if normalizeRecord("   AAAA     ") != "aaaa" {
+		t.Errorf("Record type not normalized correctly. It should be -- %s -- and it was -- %s --", "aaaa", normalizeRecord("   AAAA     "))
+	}
+}
+
+func TestQueryAll(t *testing.T) {
+	query := DnsQuery{Servers: testServers}
+	responses := query.QueryAll(testDomain, testRecordType)
+
+	if len(responses) != 1 {
+		t.Errorf("There should have been two responses. We got -- %d --", len(responses))
+		t.Log(responses)
+	}
+}
+
+func TestQueryAllErrorMessageNoRecords(t *testing.T) {
+	query := DnsQuery{Servers: testServers}
+	responses := query.QueryAll(testBadDomain, testRecordType)
+
+	if len(responses) != 1 {
+		t.Errorf("There should have been ONE response. We got -- %d --", len(responses))
+		t.Log(responses)
+	}
+
+	if len(responses) == 1 && len(responses[0].Message) != 0 && responses[0].Message != ErrNoRecords.Error() {
+		t.Errorf("There should have been the following error message -- %s -- instead we got -- %s --", ErrNoRecords, responses[0].Message)
+		t.Log(responses[0].Message)
+	}
+}
+
+func TestQueryAllErrorMessageBadRecordType(t *testing.T) {
+	query := DnsQuery{Servers: testServers}
+	responses := query.QueryAll(testDomain, testBadRecordType)
+
+	if len(responses) != 1 {
+		t.Errorf("There should have been ONE response. We got -- %d --", len(responses))
+		t.Log(responses)
+	}
+
+	if len(responses) == 1 && len(responses[0].Message) != 0 && responses[0].Message != ErrBadRecordType.Error() {
+		t.Errorf("There should have been the following error message -- %s -- instead we got -- %s --", ErrBadRecordType, responses[0].Message)
+		t.Log(responses[0].Message)
+	}
+}
+
+func TestQueryAllAsync(t *testing.T) {
+	query := DnsQuery{Servers: testAsyncServers}
+	responses := query.QueryAllAsync(testDomain, testRecordType)
+
+	total := 0
+
+	for _ = range testAsyncServers {
+		<-responses
+		total = total + 1
+	}
+
+	if total != 2 {
+		t.Error("There should have been two channels returning the responses")
 	}
 }
