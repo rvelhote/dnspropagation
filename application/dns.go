@@ -28,6 +28,7 @@ import (
 	"strings"
 	"time"
 	"github.com/miekg/dns/idn"
+	"net"
 )
 
 var RecordTypes = map[string]uint16{
@@ -45,6 +46,8 @@ var RecordTypes = map[string]uint16{
 
 var ErrNoRecords = errors.New("This server has no records for the type you specified")
 var ErrBadRecordType = errors.New("You have specified a record type that does not exist")
+
+const port = "53"
 
 type DnsRecord struct {
 	Type string
@@ -102,7 +105,7 @@ func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Durat
 	message.SetQuestion(domain, GetRecordType(record))
 
 	client := dns.Client{Timeout: time.Second * 10}
-	response, duration, err := client.Exchange(&message, server.IpAddress+":53")
+	response, duration, err := client.Exchange(&message, net.JoinHostPort(server.IpAddress, port))
 
 	if err != nil {
 		return []dns.RR{}, duration, err
