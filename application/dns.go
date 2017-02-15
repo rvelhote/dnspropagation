@@ -70,7 +70,7 @@ type DnsQuery struct {
 }
 
 func normalizeRecord(record string) string {
-	return strings.ToLower(record)
+	return strings.TrimSpace(strings.ToLower(record))
 }
 
 func IsRecordValid(record string) bool {
@@ -84,6 +84,7 @@ func GetRecordType(record string) uint16 {
 func normalizeDomain(domain string, record string) string {
 	record = normalizeRecord(record)
 
+	domain = strings.TrimSpace(domain)
 	domain = strings.ToLower(domain)
 	domain = idn.ToPunycode(domain)
 
