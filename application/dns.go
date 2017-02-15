@@ -146,7 +146,7 @@ func (d *DnsQuery) QueryAllAsync(domain string, record string) <-chan Response {
 }
 
 func (d *DnsQuery) QueryAll(domain string, record string) []Response {
-	responses := make([]Response, len(d.Servers))
+	responses := []Response{}
 
 	for _, server := range d.Servers {
 		responses = append(responses, Query(domain, record, server))
