@@ -71,17 +71,11 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	sem := make(chan Response, len(q.Configuration.Servers))
+	query := DnsQuery{ Servers: q.Configuration.Servers }
 
-	for _, server := range q.Configuration.Servers {
-		go func(server Server) {
-			request := DnsQuery{Domain: websocketreq.Domain, Record: websocketreq.RecordType, Server: server}
-			sem <- request.GetResponse()
-		}(server)
-	}
-
+	c := query.QueryAll(websocketreq.Domain, websocketreq.RecordType)
 	for _, _ = range q.Configuration.Servers {
-		conn.WriteJSON(<-sem)
+		conn.WriteJSON(<-c)
 	}
 }
 

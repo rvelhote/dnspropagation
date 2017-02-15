@@ -63,9 +63,7 @@ type Response struct {
 }
 
 type DnsQuery struct {
-	Domain string
-	Record string
-	Server Server
+	Servers []Server
 }
 
 func normalizeRecord(record string) string {
@@ -80,22 +78,22 @@ func GetRecordType(record string) uint16 {
 	return RecordTypes[normalizeRecord(record)]
 }
 
-func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
-	if !IsRecordValid(d.Record) {
+func query(domain string, record string, server Server) ([]dns.RR, time.Duration, error) {
+	if !IsRecordValid(record) {
 		return []dns.RR{}, time.Second, ErrBadRecordType
 	}
 
-	d.Domain = idn.ToPunycode(strings.ToLower(d.Domain))
+	domain = idn.ToPunycode(strings.ToLower(domain))
 
-	if d.Record == "ptr" && !strings.Contains(d.Domain, ".arpa") {
-		d.Domain, _ = dns.ReverseAddr(d.Domain)
+	if record == "ptr" && !strings.Contains(domain, ".arpa") {
+		domain, _ = dns.ReverseAddr(domain)
 	}
 
 	message := dns.Msg{}
-	message.SetQuestion(dns.Fqdn(d.Domain), GetRecordType(d.Record))
+	message.SetQuestion(dns.Fqdn(domain), GetRecordType(record))
 
 	client := dns.Client{Timeout: time.Second * 10}
-	response, duration, err := client.Exchange(&message, d.Server.Server+":53")
+	response, duration, err := client.Exchange(&message, server.Server+":53")
 
 	if err != nil {
 		return []dns.RR{}, duration, err
@@ -108,11 +106,11 @@ func (d *DnsQuery) Query() ([]dns.RR, time.Duration, error) {
 	return response.Answer, duration, nil
 }
 
-func (d *DnsQuery) GetResponse() Response {
-	answers, duration, err := d.Query()
+func querySingle(domain string, record string, server Server) Response {
+	answers, duration, err := query(domain, record, server)
 
-	response := Response{Server: d.Server, Duration: duration.String()}
-	response.Records.Type = d.Record
+	response := Response{Server: server, Duration: duration.String()}
+	response.Records.Type = record
 	response.Records.Data = answers
 
 	if err != nil {
@@ -120,4 +118,16 @@ func (d *DnsQuery) GetResponse() Response {
 	}
 
 	return response
+}
+
+func (d *DnsQuery) QueryAll(domain string, record string) <-chan Response {
+	queryChannel := make(chan Response, len(d.Servers))
+
+	for _, server := range d.Servers {
+		go func(qc chan Response, server Server) {
+			qc <- querySingle(domain, strings.ToLower(record), server)
+		}(queryChannel, server)
+	}
+
+	return queryChannel
 }
