@@ -23,29 +23,29 @@ package application
  * SOFTWARE.
  */
 import (
-    "testing"
-    "net/http"
-    "net/http/httptest"
-    "strings"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
 )
 
 func TestIndexHandler(t *testing.T) {
-    req, err := http.NewRequest("GET", "/", nil)
-    if err != nil {
-        t.Fatal(err)
-    }
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-    rr := httptest.NewRecorder()
-    handler := http.HandlerFunc(index)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(index)
 
-    handler.ServeHTTP(rr, req)
+	handler.ServeHTTP(rr, req)
 
-    if status := rr.Code; status != http.StatusOK {
-        t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusOK)
-    }
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusOK)
+	}
 
-    expected := `<main id="app"></main>`
-    if strings.Contains(expected, rr.Body.String()) {
-        t.Error("the response should contain a <main> html tag")
-    }
+	expected := `<main id="app"></main>`
+	if strings.Contains(expected, rr.Body.String()) {
+		t.Error("the response should contain a <main> html tag")
+	}
 }

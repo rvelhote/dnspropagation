@@ -23,33 +23,34 @@ package application
  * SOFTWARE.
  */
 import (
-    "net/http"
-    "github.com/rvelhote/go-recaptcha"
+	"github.com/rvelhote/go-recaptcha"
+	"net/http"
 )
 
 const cookieName = "reCAPTCHA"
-var Cookie = &http.Cookie{ Name: cookieName, Value: "1", HttpOnly: true, Path: "/" }
+
+var Cookie = &http.Cookie{Name: cookieName, Value: "1", HttpOnly: true, Path: "/"}
 
 type RecaptchaMiddleware struct {
-    Configuration Configuration
+	Configuration Configuration
 }
 
 func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        recaptchaCookie, _ := r.Cookie(cookieName)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		recaptchaCookie, _ := r.Cookie(cookieName)
 
-        if recaptchaCookie == nil {
-            challenge := r.URL.Query().Get("c")
+		if recaptchaCookie == nil {
+			challenge := r.URL.Query().Get("c")
 
-            catpcha := recaptcha.Recaptcha{ PrivateKey: middle.Configuration.Recaptcha.PrivateKey }
-            recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
+			catpcha := recaptcha.Recaptcha{PrivateKey: middle.Configuration.Recaptcha.PrivateKey}
+			recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
 
-            if recaptchaResponse.Success == false {
-                w.WriteHeader(403)
-                return
-            }
-        }
+			if recaptchaResponse.Success == false {
+				w.WriteHeader(403)
+				return
+			}
+		}
 
-        next.ServeHTTP(w, r)
-    })
+		next.ServeHTTP(w, r)
+	})
 }

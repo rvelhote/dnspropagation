@@ -24,16 +24,16 @@ package application
  */
 import (
 	"errors"
-	"net/url"
+	"log"
 	"net"
 	"net/http"
-	"log"
+	"net/url"
 )
 
 var (
-	ErrInvalidDomain = errors.New("You have sent an invalid domain. Please check your input.")
-	ErrInvalidRecord = errors.New("You have specified an invalid DNS record type. Please check your input.")
-	ErrInvalidHost = errors.New("You have made your request from an unknown Origin.")
+	ErrInvalidDomain       = errors.New("You have sent an invalid domain. Please check your input.")
+	ErrInvalidRecord       = errors.New("You have specified an invalid DNS record type. Please check your input.")
+	ErrInvalidHost         = errors.New("You have made your request from an unknown Origin.")
 	ErrMissingOriginHeader = errors.New("Missing 'Origin' HTTP header")
 )
 
@@ -85,5 +85,5 @@ func CheckOrigin(req *http.Request) bool {
 		log.Println(err)
 	}
 
-	return validated;
+	return validated
 }

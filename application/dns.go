@@ -25,10 +25,10 @@ package application
 import (
 	"errors"
 	"github.com/miekg/dns"
-	"strings"
-	"time"
 	"github.com/miekg/dns/idn"
 	"net"
+	"strings"
+	"time"
 )
 
 var RecordTypes = map[string]uint16{
@@ -82,16 +82,16 @@ func GetRecordType(record string) uint16 {
 }
 
 func normalizeDomain(domain string, record string) string {
-    record = normalizeRecord(record)
+	record = normalizeRecord(record)
 
-    domain = strings.ToLower(domain);
-    domain = idn.ToPunycode(domain)
+	domain = strings.ToLower(domain)
+	domain = idn.ToPunycode(domain)
 
-    if record == "ptr" && !strings.Contains(domain, ".arpa") {
-        domain, _ = dns.ReverseAddr(domain)
-    }
+	if record == "ptr" && !strings.Contains(domain, ".arpa") {
+		domain, _ = dns.ReverseAddr(domain)
+	}
 
-    return dns.Fqdn(domain);
+	return dns.Fqdn(domain)
 }
 
 func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Duration, error) {
@@ -99,7 +99,7 @@ func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Durat
 		return []dns.RR{}, time.Second, ErrBadRecordType
 	}
 
-    domain = normalizeDomain(domain, record)
+	domain = normalizeDomain(domain, record)
 
 	message := dns.Msg{}
 	message.SetQuestion(domain, GetRecordType(record))
@@ -145,11 +145,11 @@ func (d *DnsQuery) QueryAllAsync(domain string, record string) <-chan Response {
 }
 
 func (d *DnsQuery) QueryAll(domain string, record string) []Response {
-    responses := make([]Response, len(d.Servers))
+	responses := make([]Response, len(d.Servers))
 
-    for _, server := range d.Servers {
-        responses = append(responses, Query(domain, record, server))
-    }
+	for _, server := range d.Servers {
+		responses = append(responses, Query(domain, record, server))
+	}
 
-    return responses
+	return responses
 }

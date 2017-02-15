@@ -29,20 +29,20 @@ import (
 
 type Configuration struct {
 	Recaptcha Recaptcha `json:"recaptcha"`
-	Servers []Server `json:"servers"`
+	Servers   []Server  `json:"servers"`
 }
 
 type Recaptcha struct {
-	PublicKey string `json:"publickey"`
+	PublicKey  string `json:"publickey"`
 	PrivateKey string `json:"privatekey"`
 }
 
 type Server struct {
-	IpAddress   string `json:"ipaddress"`
-	Provider string `json:"provider"`
-	Country  string `json:"country"`
-	City     string `json:"city"`
-	Code     string `json:"code"`
+	IpAddress string `json:"ipaddress"`
+	Provider  string `json:"provider"`
+	Country   string `json:"country"`
+	City      string `json:"city"`
+	Code      string `json:"code"`
 }
 
 func LoadConfiguration(path string) (Configuration, error) {
