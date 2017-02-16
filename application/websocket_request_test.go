@@ -30,7 +30,7 @@ const testEmptyOrigin = ""
 const testBadOrigin = "...golang.org"
 const testBadOriginSplit = "http://127.0.0.1::8080"
 const testUnauthorizedOrigin = "golang.org"
-const testValidAndAuthorizedOriginUrl = "http://127.0.0.1:80/"
+const testValidAndAuthorizedOriginURL = "http://127.0.0.1:80/"
 const testValidAndAuthorizedOriginDomain = "http://127.0.0.1:80"
 
 func TestWebsocketRequest_Validate(t *testing.T) {
@@ -86,7 +86,7 @@ func TestWebsocketRequestOriginValidation(t *testing.T) {
 		t.Error("An unauthorized origin should result in an error")
 	}
 
-	if ok, err := ValidateOrigin(testValidAndAuthorizedOriginUrl); ok != true {
+	if ok, err := ValidateOrigin(testValidAndAuthorizedOriginURL); ok != true {
 		t.Log(err)
 		t.Error("A valid and authorized URL should not result in an error")
 	}
