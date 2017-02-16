@@ -27,14 +27,22 @@ import (
 	"net/http"
 )
 
+// cookieName specifies the cookie name that will hold the verification of wether the reCAPTCHA passed or not.
 const cookieName = "reCAPTCHA"
 
+// Cookie is a single instance of the reCAPTCHA cookie to avoid instantiation
+// FIXME We will want to set an expire date so clearly this won't work :P
 var Cookie = &http.Cookie{Name: cookieName, Value: "1", HttpOnly: true, Path: "/"}
 
+// RecaptchaMiddleware will allow us to chain the reCAPTCHA validation into the request processing
 type RecaptchaMiddleware struct {
+	// Configuration holds the application configuration. In this context only the reCAPTCHA configuration is used
 	Configuration Configuration
 }
 
+// Middleware will perform the validation of reCAPTCHA challenge that the user should solve before passing
+// control to the actual function that processes the full request and returns the result.
+// TODO Don't hardcode the IPAddress when verifying the challenge
 func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		recaptchaCookie, _ := r.Cookie(cookieName)
