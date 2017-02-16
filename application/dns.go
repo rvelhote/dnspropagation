@@ -92,7 +92,8 @@ func normalizeRecord(record string) string {
 // IsRecordValid checks if the record type passed as parameter is in the RecordTypes list
 // The record name passed as parameter is normalized before trying to get it from RecordTypes.
 func IsRecordValid(record string) bool {
-	return RecordTypes[normalizeRecord(record)] != 0
+	_, exists := RecordTypes[normalizeRecord(record)]
+	return exists
 }
 
 // GetRecordType obtains the equivalent value from the DNS library by passing a string with the record name.
