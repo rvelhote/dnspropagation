@@ -43,11 +43,12 @@ type WebsocketRequest struct {
 }
 
 func (r *WebsocketRequest) Validate() error {
+	// TODO Improve domain validation!
 	if len(r.Domain) == 0 {
 		return ErrInvalidDomain
 	}
 
-	if len(r.RecordType) == 0 || RecordTypes[r.RecordType] == 0 {
+	if !IsRecordValid(r.RecordType) {
 		return ErrInvalidRecord
 	}
 
