@@ -32,13 +32,13 @@ import (
 
 var (
 	// ErrInvalidDomain is the error message that specifies an invalid input domain
-	ErrInvalidDomain       = errors.New("You have sent an invalid domain. Please check your input.")
+	ErrInvalidDomain = errors.New("You have sent an invalid domain. Please check your input.")
 
 	// ErrInvalidRecord is the error message that specifies that an invalid DNS record type was used
-	ErrInvalidRecord       = errors.New("You have specified an invalid DNS record type. Please check your input.")
+	ErrInvalidRecord = errors.New("You have specified an invalid DNS record type. Please check your input.")
 
 	// ErrInvalidHost is the error message that specified that an invalid host was set in the Origin Header
-	ErrInvalidHost         = errors.New("You have made your request from an unknown Origin.")
+	ErrInvalidHost = errors.New("You have made your request from an unknown Origin.")
 
 	// ErrMissingOriginHeader is the error message that specified that an empty/missing origin header was sent
 	ErrMissingOriginHeader = errors.New("Missing 'Origin' HTTP header")

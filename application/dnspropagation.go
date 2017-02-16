@@ -47,10 +47,15 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin:       CheckOrigin,
 }
 
+// QueryRequestHandler handles the requests made through the WebSocket.
 type QueryRequestHandler struct {
+	// Configuration contains the app configuration. In this context only the server list is used.
 	Configuration Configuration
 }
 
+// ServeHTTP handles the request made by the user through the WebSocket. It will upgrade the connection from HTTP to
+// WebSocket, read the request variables, validate them and perform the queries to the list of DNS servers in the
+// configuration file.
 func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// TODO Use context with Go 1.7 to pass the cookie here and upgrade the connection. This is a bit dirty
 	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {Cookie.String()}})
@@ -74,13 +79,13 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	query := DNSQuery{Servers: q.Configuration.Servers}
 
 	c := query.QueryAllAsync(websocketreq.Domain, websocketreq.RecordType)
-	for _, _ = range q.Configuration.Servers {
+	for _ = range q.Configuration.Servers {
 		conn.WriteJSON(<-c)
 	}
 }
 
+// Init is the entrypoint of the application. It loads the configuration file and sets-up the routes
 func Init() {
-
 	configuration, _ := LoadConfiguration("conf/configuration.json")
 
 	queryHandler := QueryRequestHandler{Configuration: configuration}
