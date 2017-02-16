@@ -31,17 +31,26 @@ import (
 )
 
 var (
+	// ErrInvalidDomain is the error message that specifies an invalid input domain
 	ErrInvalidDomain       = errors.New("You have sent an invalid domain. Please check your input.")
+
+	// ErrInvalidRecord is the error message that specifies that an invalid DNS record type was used
 	ErrInvalidRecord       = errors.New("You have specified an invalid DNS record type. Please check your input.")
+
+	// ErrInvalidHost is the error message that specified that an invalid host was set in the Origin Header
 	ErrInvalidHost         = errors.New("You have made your request from an unknown Origin.")
+
+	// ErrMissingOriginHeader is the error message that specified that an empty/missing origin header was sent
 	ErrMissingOriginHeader = errors.New("Missing 'Origin' HTTP header")
 )
 
+// WebsocketRequest is the structure that holds the values passed as JSON from the frontend app through the WebSocket
 type WebsocketRequest struct {
 	Domain     string `json:"domain"`
 	RecordType string `json:"type"`
 }
 
+// Validate performs the validation of the client-side values sent through the WebSocket
 func (r *WebsocketRequest) Validate() error {
 	// TODO Improve domain validation!
 	if len(r.Domain) == 0 {
@@ -55,6 +64,7 @@ func (r *WebsocketRequest) Validate() error {
 	return nil
 }
 
+// ValidateOrigin validates the origin header sent by the browser/client that is using the application
 func ValidateOrigin(origin string) (bool, error) {
 	if len(origin) == 0 {
 		return false, ErrMissingOriginHeader
@@ -79,6 +89,8 @@ func ValidateOrigin(origin string) (bool, error) {
 	return true, nil
 }
 
+// CheckOrigin takes the original not-upgraded HTTP request and validates the origin header. It was created mostly as
+// convinience to avoid having inline functions in the struct declaration.
 func CheckOrigin(req *http.Request) bool {
 	validated, err := ValidateOrigin(req.Header.Get("Origin"))
 
