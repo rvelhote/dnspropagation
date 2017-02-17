@@ -24,9 +24,17 @@ package main
  */
 import (
 	"github.com/rvelhote/dnspropagation/application"
+	"net/http"
+	"log"
 )
 
 // This is the main entry point of the webapp. All the actual application code is under the application directory.
 func main() {
-	application.Init()
+	configuration, _ := application.LoadConfiguration("conf/configuration.json")
+	mux := http.NewServeMux()
+
+	application.Init(mux, configuration)
+
+	log.Println("Ready to server requests!")
+	http.ListenAndServe(":8080", mux)
 }

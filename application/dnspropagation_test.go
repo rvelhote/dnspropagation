@@ -134,3 +134,9 @@ func TestWebsocketHandlerBadOrigin(t *testing.T) {
 		t.Errorf("The server returned HTTP Status Code -- %d -- but it should have returned a 403", response.StatusCode)
 	}
 }
+
+func TestInit(t *testing.T) {
+	configuration, _ := LoadConfiguration("../conf/configuration.json")
+	mux := http.NewServeMux()
+	Init(mux, configuration)
+}

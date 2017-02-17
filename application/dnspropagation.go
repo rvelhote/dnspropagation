@@ -85,21 +85,11 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 }
 
 // Init is the entrypoint of the application. It loads the configuration file and sets-up the routes
-func Init() {
-	configuration, _ := LoadConfiguration("conf/configuration.json")
-
+func Init(mux *http.ServeMux, configuration Configuration) {
 	queryHandler := QueryRequestHandler{Configuration: configuration}
 	captchaHandler := RecaptchaMiddleware{Configuration: configuration}
 
-	log.Println("Server list loaded!")
-
-	fs := http.FileServer(http.Dir("assets"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
-
-	http.HandleFunc("/", index)
-
-	http.Handle("/api/v1/query", captchaHandler.Middleware(queryHandler))
-
-	log.Println("Ready to server requests!")
-	http.ListenAndServe(":8080", nil)
+	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	mux.HandleFunc("/", index)
+	mux.Handle("/api/v1/query", captchaHandler.Middleware(queryHandler))
 }
