@@ -23,8 +23,8 @@ package application
  * SOFTWARE.
  */
 import (
-	"testing"
 	"net/http"
+	"testing"
 )
 
 const testEmptyOrigin = ""

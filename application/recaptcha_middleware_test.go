@@ -23,50 +23,50 @@ package application
  * SOFTWARE.
  */
 import (
-    "testing"
-    "net/http"
-    "net/http/httptest"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 const reCaptchaTestResponse = "03AHJ_VutING-ky641XG-W15BMWlC31rMqgdxuAFji7Pqk1o6jqBF20CfKSTknHDlXLQlVgleevn5HTHsldBinf78xGvNYAX-gIXSzOX7aQBBTvNAY7o4SlLzUzEEC3AXNTqxz76ueA4bx2-0BHN5gfTG2vUBpktWKa7BOsJLPgAS9b2IidWB41UUccQl7pEs9H28qUKXGYRnKZFECk23jcjqMPkvDVTFASctPXC3a40YtiYB2bzY7LfqDeaqYH0_nJf0BcY_SZfhQJetE6KPhL9bocIOgcWRoZQ8b0eXKHClMfbHRTCfu10k0Eu1gzx3T992KoQ643C_YPPj2VasIDiNx1FEX_5Yvs2jzSYjRy2jyAtVtNEUSKhFoEd3pwGJJtx7eh6FbYcbAWZKZTuWejmGzpAQaB6fMuD5ykY1AIFYiYjFFXjks_K3ZICH4pmU6WFUDUDVUxiT28-OVWCtYr7X_s0Ce9fQ6L9tZINVaaZeqazzuxfeNxYI66PEV2nMVUjcBTwrLdVtaWjoH9S3Cpc9xoXZZe3dtfXkw2nyhK6CFehEoKOBi96HepA5cY1YWUbAeJMIYoEp-lla6OmENGhrkLN28mUHF-iH68fe2LxwkhCGMic09GVOOXE5TUFhspvIHfgoOBE4-s1j4AWezUP2hniuJClPsO6xxiAQgIqA2dy0_NNKLI3Cyb3dTIFd8yv26U7kSJUGxmjI4BHlRxoNXniBuf854UX820VpIFr-oXkJj0GoqBAcrlgucq8PsjuPOCdHoh8u2zTYFitxppqDR1NP4wzdVoKuZ-BVhQkJ1C3IsfrAkLyesFfF5y8KQFo1smzhMnHmEiMLRDWe9y9hhd3CpkNdofvedcaE6PJ_l-dH8hdmhS_PgSaZPHGM3Wym2U3xICD2Yde1BWp1Imik6eM43OkYJfP6sh_IdX38cWi74B3RfCA_Na1Tci3_24cuEs8IfBHeQnxgN7V5FGL204ZLFffeGIxmXlbInAeZgFEqJw3YjQfu4lbddYXTKOE6WJZcKmRSjXazt8ZXaxKJ_0SefI7udyg"
 
 // NoopHTTPHandler exists only to satisfy the reCAPTCHA middleware passing the request
-type NoopHTTPHandler struct { }
+type NoopHTTPHandler struct{}
 
 func (f NoopHTTPHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-    w.WriteHeader(200)
+	w.WriteHeader(200)
 }
 
 func TestRecaptchaMiddlewareForbiddenStatus(t *testing.T) {
-    config, _ := LoadConfiguration("../conf/configuration.json")
-    middleware := RecaptchaMiddleware{ Configuration: config }
+	config, _ := LoadConfiguration("../conf/configuration.json")
+	middleware := RecaptchaMiddleware{Configuration: config}
 
-    req, err := http.NewRequest("GET", "/", nil)
-    if err != nil {
-        t.Fatal(err)
-    }
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-    rr := httptest.NewRecorder()
-    handler := http.Handler(middleware.Middleware(nil))
+	rr := httptest.NewRecorder()
+	handler := http.Handler(middleware.Middleware(nil))
 
-    handler.ServeHTTP(rr, req)
+	handler.ServeHTTP(rr, req)
 
-    if status := rr.Code; status != http.StatusForbidden {
-        t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusForbidden)
-    }
+	if status := rr.Code; status != http.StatusForbidden {
+		t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusForbidden)
+	}
 }
 
 func TestRecaptchaMiddleware200Status(t *testing.T) {
-    configuration, _ := LoadConfiguration("../conf/configuration.json")
-    middleware := RecaptchaMiddleware{ Configuration: configuration }
+	configuration, _ := LoadConfiguration("../conf/configuration.json")
+	middleware := RecaptchaMiddleware{Configuration: configuration}
 
-    req, _ := http.NewRequest("GET", "/?c=" + reCaptchaTestResponse, nil)
-    handler := http.Handler(middleware.Middleware(NoopHTTPHandler{}))
+	req, _ := http.NewRequest("GET", "/?c="+reCaptchaTestResponse, nil)
+	handler := http.Handler(middleware.Middleware(NoopHTTPHandler{}))
 
-    rr := httptest.NewRecorder()
-    handler.ServeHTTP(rr, req)
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
 
-    if status := rr.Code; status != http.StatusOK {
-        t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusOK)
-    }
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusOK)
+	}
 }

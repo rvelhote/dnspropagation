@@ -24,8 +24,8 @@ package main
  */
 import (
 	"github.com/rvelhote/dnspropagation/application"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 // This is the main entry point of the webapp. All the actual application code is under the application directory.
