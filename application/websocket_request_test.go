@@ -24,14 +24,14 @@ package application
  */
 import (
 	"testing"
+	"net/http"
 )
 
 const testEmptyOrigin = ""
-const testBadOrigin = "...golang.org"
-const testBadOriginSplit = "http://127.0.0.1::8080"
-const testUnauthorizedOrigin = "golang.org"
+const testBadOrigin = ":80"
+const testUnauthorizedOrigin = "http://golang.org"
 const testValidAndAuthorizedOriginURL = "http://127.0.0.1:80/"
-const testValidAndAuthorizedOriginDomain = "http://127.0.0.1:80"
+const testValidAndAuthorizedOriginDomain = "http://127.0.0.1"
 
 func TestWebsocketRequest_Validate(t *testing.T) {
 	request := WebsocketRequest{Domain: "golang.org", RecordType: "a"}
@@ -78,10 +78,6 @@ func TestWebsocketRequestOriginValidation(t *testing.T) {
 		t.Error("An invalid URL should result in an error")
 	}
 
-	if ok, _ := ValidateOrigin(testBadOriginSplit); ok != false {
-		t.Error("A poorly formatted hostname")
-	}
-
 	if ok, _ := ValidateOrigin(testUnauthorizedOrigin); ok != false {
 		t.Error("An unauthorized origin should result in an error")
 	}
@@ -94,5 +90,18 @@ func TestWebsocketRequestOriginValidation(t *testing.T) {
 	if ok, err := ValidateOrigin(testValidAndAuthorizedOriginDomain); ok != true {
 		t.Log(err)
 		t.Error("A valid and authorized domain should not result in an error")
+	}
+}
+
+func TestWebsocketOriginHeader(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/", nil)
+	req.Header.Add("Origin", "http://127.0.0.1:8080")
+	if CheckOrigin(req) != true {
+		t.Error("The Origin header is set and is valid so it should not be invalid")
+	}
+
+	req2, _ := http.NewRequest("GET", "/", nil)
+	if CheckOrigin(req2) != false {
+		t.Error("The Origin was not set so it shouldn't be a valid request")
 	}
 }

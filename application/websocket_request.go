@@ -24,10 +24,9 @@ package application
  */
 import (
 	"errors"
-	"log"
-	"net"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 var (
@@ -65,6 +64,8 @@ func (r *WebsocketRequest) Validate() error {
 }
 
 // ValidateOrigin validates the origin header sent by the browser/client that is using the application
+// TODO Make the valid origin host (or hosts) configurable in the configuration file
+// FIXME This function does not please me yet. Validate the URL more thoroughly (although it can be faked so might not matter)
 func ValidateOrigin(origin string) (bool, error) {
 	if len(origin) == 0 {
 		return false, ErrMissingOriginHeader
@@ -75,14 +76,7 @@ func ValidateOrigin(origin string) (bool, error) {
 		return false, parserr
 	}
 
-	host, _, spliterr := net.SplitHostPort(parsedURL.Host)
-
-	if spliterr != nil {
-		return false, spliterr
-	}
-
-	// TODO Make this value configurable in a file or something!
-	if host != "127.0.0.1" {
+	if !strings.Contains(parsedURL.Host, "127.0.0.1") {
 		return false, ErrInvalidHost
 	}
 
@@ -92,11 +86,6 @@ func ValidateOrigin(origin string) (bool, error) {
 // CheckOrigin takes the original not-upgraded HTTP request and validates the origin header. It was created mostly as
 // convinience to avoid having inline functions in the struct declaration.
 func CheckOrigin(req *http.Request) bool {
-	validated, err := ValidateOrigin(req.Header.Get("Origin"))
-
-	if err != nil {
-		log.Println(err)
-	}
-
+	validated, _ := ValidateOrigin(req.Header.Get("Origin"))
 	return validated
 }
