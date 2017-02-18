@@ -53,5 +53,11 @@
   "jest": {
     "verbose": true,
     "collectCoverage": true
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ]
   }
 }
