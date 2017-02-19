@@ -35,6 +35,6 @@ func main() {
 
 	application.Init(mux, configuration)
 
-	log.Println("Ready to server requests!")
+	log.Println("Ready to serve requests!")
 	http.ListenAndServe(":8080", mux)
 }
