@@ -25,7 +25,11 @@ import DnsRecordInformation from './dns-record-information';
 import DnsWebSocket from '../websocket/websocket';
 import DnsMessage from './dns-message';
 import DnsRecaptcha from './dns-recaptcha';
+import DnsProgress from './dns-progress';
 
+/**
+ *
+ */
 class DnsPropagation extends React.Component {
   constructor(props) {
     super(props);
@@ -156,7 +160,7 @@ class DnsPropagation extends React.Component {
               </div>
             </div>
           </div>
-          <progress max="100" value={this.state.percentage} />
+          <DnsProgress max={100} percentage={this.state.percentage} />
         </header>
 
         <div className="container results">

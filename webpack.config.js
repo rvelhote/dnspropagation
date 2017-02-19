@@ -25,6 +25,6 @@ module.exports = {
             query: { presets: ["es2015", "react"] }
         }]
     },
-    devtool: 'eval-source-map',
+    devtool: 'cheap-source-map',
     watch: true
 };
