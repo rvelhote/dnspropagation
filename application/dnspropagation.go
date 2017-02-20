@@ -29,7 +29,22 @@ import (
 	"net/http"
 )
 
-func index(w http.ResponseWriter, req *http.Request) {
+// indexTemplateParams holds various values to be passed to the main template
+type indexTemplateParams struct {
+	Title string
+	PublicKey string
+	ShowRecaptcha bool
+}
+
+// QueryRequestHandler handles the requests to present the main url of the application
+type IndexRequestHandler struct {
+	// Configuration contains the app configuration. In this context only the server list is used.
+	Configuration Configuration
+}
+
+// ServeHTTP handles the request made to the homepage of the app. It will only serve the required files to start
+// the RectJS app as well as some important configuration.
+func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
 	t, err := template.New("index.html").ParseFiles("templates/index.html")
 
@@ -37,7 +52,8 @@ func index(w http.ResponseWriter, req *http.Request) {
 		t, _ = template.New("index.html").ParseFiles("../templates/index.html")
 	}
 
-	t.Execute(w, map[string]string{"Title": "Check DNS Propagation Worldwide"})
+	params := indexTemplateParams{ Title: "Check DNS Propagation Worldwide", ShowRecaptcha: true, PublicKey: i.Configuration.Recaptcha.PublicKey}
+	t.Execute(w, params)
 }
 
 var upgrader = websocket.Upgrader{
@@ -86,10 +102,11 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 
 // Init is the entrypoint of the application. It loads the configuration file and sets-up the routes
 func Init(mux *http.ServeMux, configuration Configuration) {
+	indexHandler := IndexRequestHandler{Configuration: configuration}
 	queryHandler := QueryRequestHandler{Configuration: configuration}
 	captchaHandler := RecaptchaMiddleware{Configuration: configuration}
 
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	mux.HandleFunc("/", index)
+	mux.Handle("/", indexHandler)
 	mux.Handle("/api/v1/query", captchaHandler.Middleware(queryHandler))
 }

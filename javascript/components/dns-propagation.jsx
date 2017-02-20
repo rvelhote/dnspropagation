@@ -170,7 +170,7 @@ class DnsPropagation extends React.Component {
             </div>
 
             <div className="col-lg-12">
-              <DnsRecaptcha publickey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" />
+              <DnsRecaptcha publickey={this.props.publickey} />
             </div>
 
             <div className="col-lg-12">
@@ -186,5 +186,13 @@ class DnsPropagation extends React.Component {
 }
 
 DnsPropagation.displayName = 'DnsPropagation';
+
+DnsPropagation.propTypes = {
+  publickey: React.PropTypes.string
+};
+
+DnsPropagation.defaultProps = {
+  publickey: ''
+};
 
 export default DnsPropagation;
