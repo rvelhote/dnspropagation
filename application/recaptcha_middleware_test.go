@@ -70,3 +70,17 @@ func TestRecaptchaMiddleware200Status(t *testing.T) {
 		t.Errorf("handler did not not return the correct status code -- %v -- vs -- %v --", status, http.StatusOK)
 	}
 }
+
+func TestRecaptchaMiddlewareDisplayRecaptcha(t *testing.T) {
+	req1, _ := http.NewRequest("GET", "/", nil)
+	req1.AddCookie(Cookie)
+
+	if DisplayRecaptcha(req1) != false {
+		t.Error("The reCAPTCHA cookie should be set in this request and the reCATPCHA should not be displayed")
+	}
+
+	req2, _ := http.NewRequest("GET", "/", nil)
+	if DisplayRecaptcha(req2) != true {
+		t.Error("The reCAPTCHA is not set in this request and the reCAPTCHA should be displayed")
+	}
+}

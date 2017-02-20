@@ -37,8 +37,11 @@ func TestIndexHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	configuration, _ := LoadConfiguration("../conf/configuration.json")
+	indexHandler := IndexRequestHandler{Configuration: configuration}
+
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(index)
+	handler := http.Handler(indexHandler)
 
 	handler.ServeHTTP(rr, req)
 
