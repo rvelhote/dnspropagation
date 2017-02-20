@@ -29,7 +29,7 @@ class DnsWebSocket {
   fetch(domain, type, challenge) {
     const params = JSON.stringify({ domain, type });
 
-    this.websocket = new WebSocket(this.address + "?c=" + challenge);
+    this.websocket = new WebSocket(this.address + "?c=" + (challenge == null ? "" : challenge));
     this.websocket.onopen = () => this.websocket.send(params);
     this.websocket.onerror = this.onWebSocketError;
     this.websocket.onmessage = this.onWebSocketReply;

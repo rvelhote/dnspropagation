@@ -50,7 +50,7 @@ class DnsPropagation extends React.Component {
       },
       recatpcha: {
         challenge: '',
-        display: true
+        display: props.recaptcha
       }
     };
 
@@ -82,7 +82,7 @@ class DnsPropagation extends React.Component {
   onDnsQuerySubmit(event) {
     event.preventDefault();
     this.setState({ working: true, percentage: 0, servers: [], message: { message: '', type: 'info' } });
-    this.websocket.fetch(this.state.domain, this.state.type, window.grecaptcha.getResponse());
+    this.websocket.fetch(this.state.domain, this.state.type, this.state.recatpcha.display ? window.grecaptcha.getResponse() : null);
   }
 
   onWebSocketError() {
@@ -116,6 +116,11 @@ class DnsPropagation extends React.Component {
   }
 
   render() {
+    let recaptcha = null;
+    if (this.state.recatpcha.display) {
+      recaptcha = <div className="col-lg-12"><DnsRecaptcha publickey={this.props.publickey} /></div>;
+    }
+
     return (
       <div>
         <header className="navbar navbar-default navbar-fixed-top">
@@ -169,9 +174,7 @@ class DnsPropagation extends React.Component {
               <DnsRecordInformation record={this.state.type} />
             </div>
 
-            <div className="col-lg-12">
-              <DnsRecaptcha publickey={this.props.publickey} />
-            </div>
+            { recaptcha }
 
             <div className="col-lg-12">
               { this.state.message.message.length > 0 ?
@@ -188,11 +191,13 @@ class DnsPropagation extends React.Component {
 DnsPropagation.displayName = 'DnsPropagation';
 
 DnsPropagation.propTypes = {
-  publickey: React.PropTypes.string
+  publickey: React.PropTypes.string,
+  recaptcha: React.PropTypes.bool
 };
 
 DnsPropagation.defaultProps = {
-  publickey: ''
+  publickey: '',
+  recaptcha: true
 };
 
 export default DnsPropagation;

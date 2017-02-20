@@ -62,3 +62,14 @@ func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+// DisplayRecaptcha verifies if the request contains a valid application reCAPTCHA cookie
+func DisplayRecaptcha(req *http.Request) bool {
+	_, err := req.Cookie(cookieName)
+
+	if err != nil {
+		return true;
+	}
+
+	return false;
+}

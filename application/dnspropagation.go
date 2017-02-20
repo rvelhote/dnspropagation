@@ -52,7 +52,7 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		t, _ = template.New("index.html").ParseFiles("../templates/index.html")
 	}
 
-	params := indexTemplateParams{ Title: "Check DNS Propagation Worldwide", ShowRecaptcha: true, PublicKey: i.Configuration.Recaptcha.PublicKey}
+	params := indexTemplateParams{ Title: "Check DNS Propagation Worldwide", ShowRecaptcha: DisplayRecaptcha(req), PublicKey: i.Configuration.Recaptcha.PublicKey}
 	t.Execute(w, params)
 }
 

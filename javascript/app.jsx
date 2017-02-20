@@ -23,6 +23,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import DnsPropagation from './components/dns-propagation';
 
-const App = () => <DnsPropagation publickey={window.config.publickey} />;
+const App = () => <DnsPropagation publickey={window.config.publickey} recaptcha={window.config.recaptcha} />;
 
 ReactDOM.render(<App />, document.getElementById('app'));
