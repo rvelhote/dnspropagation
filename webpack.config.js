@@ -3,7 +3,7 @@ const webpack = require('webpack');
 module.exports = {
     entry: {
         main: './javascript/app.jsx',
-        vendor: ['react', 'react-dom', 'whatwg-fetch']
+        vendor: ['react', 'react-dom', 'react-intl']
     },
     output: {
         path: './assets/javascript',

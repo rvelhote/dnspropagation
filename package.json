@@ -47,6 +47,7 @@
     "flag-icon-css": "^2.8.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-intl": "^2.2.3",
     "react-test-renderer": "^15.4.2"
   },
   "jest": {
