@@ -101,7 +101,11 @@ class DnsPropagation extends React.Component {
     const state = {
       servers: this.state.servers.concat(JSON.parse(event.data)),
       percentage,
-      working: percentage !== 100
+      working: percentage !== 100,
+      recatpcha: {
+        challenge: '',
+        display: false
+      }
     };
 
     this.setState(state);
