@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import DnsServerCollection from './dns-server-collection';
 import DnsRecordInformation from './dns-record-information';
 import DnsWebSocket from '../websocket/websocket';
@@ -132,10 +133,12 @@ class DnsPropagation extends React.Component {
             <div className="row">
               <div className="col-lg-12">
                 <div>
-                  <h1><img alt="DNS Propagation Logo" src="//i.imgur.com/rN1zILE.png" />&nbsp;
-                    dnspropagation</h1>
-                  <small>&nbsp;Check a domain's DNS records. Check the propagation of your record
-                    changes and debug DNS related issues on the Internet.
+                  <h1>
+                    <img alt="DNS Propagation Logo" src="//i.imgur.com/rN1zILE.png" />
+                    <FormattedMessage id="app-name" defaultMessage={'dnspropagation'} />
+                  </h1>
+                  <small>
+                    <FormattedMessage id="app-tagline" defaultMessage={'Check a domain\'s DNS records. Check the propagation of your record changes and debug DNS related issues on the Internet.'} />
                   </small>
                 </div>
 
@@ -161,7 +164,9 @@ class DnsPropagation extends React.Component {
                     <div className="col-lg-2">
                       <button className="btn btn-primary" type="submit" disabled={this.state.working}>
                         <span className="glyphicon glyphicon-search">&nbsp;</span>
-                        <span>Query {this.state.type} Record on {this.state.domain}</span>
+                        <span>
+                          <FormattedMessage id="app-name" defaultMessage={'Query {type} record for {domain}'} values={{ type: this.state.type, domain: this.state.domain }} />
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -187,6 +192,11 @@ class DnsPropagation extends React.Component {
             </div>
           </div>
         </div>
+        <footer className="container main">
+          <small>
+            <FormattedMessage id="app-footer" defaultMessage={'Press {q} to refresh the URL in text box and {a} focus on the textbox. Source Code is available in {link}'} values={{ q: <code>Q</code>, a: <code>A</code>, link: <a target="_blank" rel="noopener noreferrer" href="https://github.com/rvelhote/dnspropagation">GitHub</a> }} />
+          </small>
+        </footer>
       </div>
     );
   }

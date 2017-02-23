@@ -21,8 +21,14 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { IntlProvider } from 'react-intl';
 import DnsPropagation from './components/dns-propagation';
 
-const App = () => <DnsPropagation publickey={window.config.publickey} recaptcha={window.config.recaptcha} />;
+const App = () =>
+  <IntlProvider locale="en">
+    <DnsPropagation publickey={window.config.publickey} recaptcha={window.config.recaptcha} />
+  </IntlProvider>;
 
 ReactDOM.render(<App />, document.getElementById('app'));
+
+export default App;
