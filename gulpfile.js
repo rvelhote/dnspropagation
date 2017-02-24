@@ -24,6 +24,17 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 
+const assets = {
+  source: {
+    flags: 'node_modules/flag-icon-css/flags/**/*',
+    fonts: 'node_modules/bootstrap-sass/assets/fonts/**/*'
+  },
+  dest: {
+    flags: 'assets/flags',
+    fonts: 'assets/fonts'
+  }
+};
+
 const sassOptions = {
   outputStyle: 'compressed',
   includePaths: ['node_modules/flag-icon-css/sass', 'node_modules/bootstrap-sass/assets/stylesheets', 'node_modules/bootswatch']
@@ -36,6 +47,11 @@ gulp.task('sass:development', function() {
     .pipe(autoprefixer())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('assets/css'))
+});
+
+gulp.task('dist:copy', function() {
+  gulp.src(assets.source.flags).pipe(gulp.dest(assets.dest.flags));
+  gulp.src(assets.source.fonts).pipe(gulp.dest(assets.dest.fonts));
 });
 
 gulp.task('default',function() {
