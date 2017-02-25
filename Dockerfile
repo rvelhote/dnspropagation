@@ -17,7 +17,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-FROM golang:1.6-alpine
+FROM golang:1.7-alpine
 MAINTAINER Ricardo Velhote "rvelhote@gmail.com"
 
 RUN apk add --no-cache git && go get github.com/rvelhote/dnspropagation/application-main && apk del git
