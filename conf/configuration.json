@@ -12,10 +12,10 @@
     { "ipaddress": "91.239.100.100", "provider": "Thomas Steen Rasmussen", "country": "Denmark", "city": "Copenhagen", "code": "dk" },
     { "ipaddress": "202.238.58.67", "provider": "Japan Network Information Center", "country": "Japan", "city": "Tokyo", "code": "jp" },
     { "ipaddress": "200.69.193.2", "provider": "Telecom Argentina S.A.", "country": "Argentina", "city": "Río Cuarto", "code": "ar" },
-    { "ipaddress": "196.213.41.107 ", "provider": "Internet Solutions", "country": "South Africa", "city": "Johannesburg", "code": "za" },
+    { "ipaddress": "196.213.41.107", "provider": "Internet Solutions", "country": "South Africa", "city": "Johannesburg", "code": "za" },
     { "ipaddress": "41.67.236.42", "provider": "-", "country": "Cameroon", "city": "--", "code": "cm" },
     { "ipaddress": "200.194.198.76", "provider": "-", "country": "Brasil", "city": "--", "code": "br" },
-    { "ipaddress": "187.174.84.104 ", "provider": "-", "country": "Mexico", "city": "--", "code": "mx" },
+    { "ipaddress": "187.174.84.104", "provider": "-", "country": "Mexico", "city": "--", "code": "mx" },
     { "ipaddress": "114.114.115.110", "provider": "-", "country": "China", "city": "--", "code": "cn" },
     { "ipaddress": "213.130.112.181", "provider": "-", "country": "Qatar", "city": "--", "code": "qa" },
     { "ipaddress": "27.100.36.191", "provider": "-", "country": "Australia", "city": "--", "code": "au" }
