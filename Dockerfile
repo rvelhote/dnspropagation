@@ -17,14 +17,11 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-FROM ubuntu:yakkety
+FROM golang:1.6-alpine
 MAINTAINER Ricardo Velhote "rvelhote@gmail.com"
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV GOPATH /opt
-
-RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade && apt-get install -y golang git && go get github.com/rvelhote/dnspropagation/application-main
-WORKDIR /opt/src/github.com/rvelhote/dnspropagation
+RUN apk add --no-cache git && go get github.com/rvelhote/dnspropagation/application-main && apk del git
+WORKDIR /go/src/github.com/rvelhote/dnspropagation
 
 EXPOSE 8080
 CMD ["go", "run", "application-main/main.go"]
