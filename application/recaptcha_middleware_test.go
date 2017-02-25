@@ -26,6 +26,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"github.com/gorilla/securecookie"
 )
 
 const reCaptchaTestResponse = "03AHJ_VutING-ky641XG-W15BMWlC31rMqgdxuAFji7Pqk1o6jqBF20CfKSTknHDlXLQlVgleevn5HTHsldBinf78xGvNYAX-gIXSzOX7aQBBTvNAY7o4SlLzUzEEC3AXNTqxz76ueA4bx2-0BHN5gfTG2vUBpktWKa7BOsJLPgAS9b2IidWB41UUccQl7pEs9H28qUKXGYRnKZFECk23jcjqMPkvDVTFASctPXC3a40YtiYB2bzY7LfqDeaqYH0_nJf0BcY_SZfhQJetE6KPhL9bocIOgcWRoZQ8b0eXKHClMfbHRTCfu10k0Eu1gzx3T992KoQ643C_YPPj2VasIDiNx1FEX_5Yvs2jzSYjRy2jyAtVtNEUSKhFoEd3pwGJJtx7eh6FbYcbAWZKZTuWejmGzpAQaB6fMuD5ykY1AIFYiYjFFXjks_K3ZICH4pmU6WFUDUDVUxiT28-OVWCtYr7X_s0Ce9fQ6L9tZINVaaZeqazzuxfeNxYI66PEV2nMVUjcBTwrLdVtaWjoH9S3Cpc9xoXZZe3dtfXkw2nyhK6CFehEoKOBi96HepA5cY1YWUbAeJMIYoEp-lla6OmENGhrkLN28mUHF-iH68fe2LxwkhCGMic09GVOOXE5TUFhspvIHfgoOBE4-s1j4AWezUP2hniuJClPsO6xxiAQgIqA2dy0_NNKLI3Cyb3dTIFd8yv26U7kSJUGxmjI4BHlRxoNXniBuf854UX820VpIFr-oXkJj0GoqBAcrlgucq8PsjuPOCdHoh8u2zTYFitxppqDR1NP4wzdVoKuZ-BVhQkJ1C3IsfrAkLyesFfF5y8KQFo1smzhMnHmEiMLRDWe9y9hhd3CpkNdofvedcaE6PJ_l-dH8hdmhS_PgSaZPHGM3Wym2U3xICD2Yde1BWp1Imik6eM43OkYJfP6sh_IdX38cWi74B3RfCA_Na1Tci3_24cuEs8IfBHeQnxgN7V5FGL204ZLFffeGIxmXlbInAeZgFEqJw3YjQfu4lbddYXTKOE6WJZcKmRSjXazt8ZXaxKJ_0SefI7udyg"
@@ -58,7 +59,12 @@ func TestRecaptchaMiddlewareForbiddenStatus(t *testing.T) {
 
 func TestRecaptchaMiddleware200Status(t *testing.T) {
 	configuration, _ := LoadConfiguration("../conf/configuration.json")
-	middleware := RecaptchaMiddleware{Configuration: configuration}
+
+	var hashKey = securecookie.GenerateRandomKey(64)
+	var blockKey = securecookie.GenerateRandomKey(32)
+	var s = securecookie.New(hashKey, blockKey)
+
+	middleware := RecaptchaMiddleware{Configuration: configuration, SecureCookie: s}
 
 	req, _ := http.NewRequest("GET", "/?c="+reCaptchaTestResponse, nil)
 	handler := http.Handler(middleware.Middleware(NoopHTTPHandler{}))
@@ -72,8 +78,10 @@ func TestRecaptchaMiddleware200Status(t *testing.T) {
 }
 
 func TestRecaptchaMiddlewareDisplayRecaptcha(t *testing.T) {
+	c := &http.Cookie{Name: "reCAPTCHA"}
+
 	req1, _ := http.NewRequest("GET", "/", nil)
-	req1.AddCookie(Cookie)
+	req1.AddCookie(c)
 
 	if DisplayRecaptcha(req1) != false {
 		t.Error("The reCAPTCHA cookie should be set in this request and the reCATPCHA should not be displayed")
