@@ -29,14 +29,14 @@ import (
 	"net/http"
 )
 
-// indexTemplateParams holds various values to be passed to the main template
-type indexTemplateParams struct {
-	Title string
-	PublicKey string
+// IndexTemplateParams holds various values to be passed to the main template
+type IndexTemplateParams struct {
+	Title         string
+	PublicKey     string
 	ShowRecaptcha bool
 }
 
-// QueryRequestHandler handles the requests to present the main url of the application
+// IndexRequestHandler handles the requests to present the main url of the application
 type IndexRequestHandler struct {
 	// Configuration contains the app configuration. In this context only the server list is used.
 	Configuration Configuration
@@ -52,7 +52,12 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		t, _ = template.New("index.html").ParseFiles("../templates/index.html")
 	}
 
-	params := indexTemplateParams{ Title: "Check DNS Propagation Worldwide", ShowRecaptcha: DisplayRecaptcha(req), PublicKey: i.Configuration.Recaptcha.PublicKey}
+	params := IndexTemplateParams{
+		Title:         "Check DNS Propagation Worldwide",
+		ShowRecaptcha: DisplayRecaptcha(req),
+		PublicKey:     i.Configuration.Recaptcha.PublicKey,
+	}
+
 	t.Execute(w, params)
 }
 

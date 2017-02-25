@@ -68,8 +68,8 @@ func DisplayRecaptcha(req *http.Request) bool {
 	_, err := req.Cookie(cookieName)
 
 	if err != nil {
-		return true;
+		return true
 	}
 
-	return false;
+	return false
 }
