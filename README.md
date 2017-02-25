@@ -11,7 +11,7 @@ For this project the fabulous [DNS package](https://github.com/miekg/dns) by Mie
 ![http://i.imgur.com/Pg1DqtFl.png](http://i.imgur.com/Pg1DqtF.png)
 
 # Requirements
-- Go 1.6 or superior
+- Go 1.7 or superior
 - NPM
 - Webpack (for Babel and JSX)
 - Gulp (to build the Bootstrap from SASS)
