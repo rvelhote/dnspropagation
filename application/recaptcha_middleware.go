@@ -24,20 +24,26 @@ package application
  */
 import (
 	"github.com/rvelhote/go-recaptcha"
+	"github.com/gorilla/securecookie"
 	"net/http"
+	"time"
+	"context"
 )
 
 // cookieName specifies the cookie name that will hold the verification of wether the reCAPTCHA passed or not.
-const cookieName = "reCAPTCHA"
+//const cookieName = "reCAPTCHA"
 
 // Cookie is a single instance of the reCAPTCHA cookie to avoid instantiation
 // FIXME We will want to set an expire date so clearly this won't work :P
-var Cookie = &http.Cookie{Name: cookieName, Value: "1", HttpOnly: true, Path: "/"}
+//var Cookie = &http.Cookie{Name: cookieName, Value: "1", HttpOnly: true, Path: "/"}
 
 // RecaptchaMiddleware will allow us to chain the reCAPTCHA validation into the request processing
 type RecaptchaMiddleware struct {
 	// Configuration holds the application configuration. In this context only the reCAPTCHA configuration is used
 	Configuration Configuration
+
+	//
+	SecureCookie *securecookie.SecureCookie
 }
 
 // Middleware will perform the validation of reCAPTCHA challenge that the user should solve before passing
@@ -45,9 +51,10 @@ type RecaptchaMiddleware struct {
 // TODO Don't hardcode the IPAddress when verifying the challenge
 func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		recaptchaCookie, _ := r.Cookie(cookieName)
+		// This will read the cookie and validate its contents. Any errors will assume the cookie is invalid
+		recaptchaCookie := middle.ReadCookie(r)
 
-		if recaptchaCookie == nil {
+		if recaptchaCookie != nil {
 			challenge := r.URL.Query().Get("c")
 
 			catpcha := recaptcha.Recaptcha{PrivateKey: middle.Configuration.Recaptcha.PrivateKey}
@@ -59,17 +66,59 @@ func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 			}
 		}
 
-		next.ServeHTTP(w, r)
+		// FIXME We are generating a new cookie per request and thus avoiding a context check in the next function
+		secureRecaptchaCookie := middle.GenerateCookie()
+		ctx := context.WithValue(r.Context(), "recaptcha", secureRecaptchaCookie)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
 // DisplayRecaptcha verifies if the request contains a valid application reCAPTCHA cookie
+// TODO Make this work with ReadCookie in the middleware
 func DisplayRecaptcha(req *http.Request) bool {
-	_, err := req.Cookie(cookieName)
+	_, err := req.Cookie("reCAPTCHA")
 
 	if err != nil {
 		return true
 	}
 
 	return false
+}
+
+// GenerateCookie generates an encoded cookie to validate the user. A new cookie should be generated
+func (recaptcha *RecaptchaMiddleware) GenerateCookie() http.Cookie {
+	var value string = recaptcha.Configuration.RecaptchaCookie.Value
+
+	if encoded, err := recaptcha.SecureCookie.Encode(recaptcha.Configuration.RecaptchaCookie.Name, value); err == nil {
+		cookie := http.Cookie{
+			Name:  recaptcha.Configuration.RecaptchaCookie.Name,
+			Value: encoded,
+			Path:  "/",
+			HttpOnly: true,
+			Expires: time.Now().Add(24 * time.Hour),
+		}
+
+		return cookie
+	}
+
+	return http.Cookie{}
+}
+
+// ReadCookie reads and validates the cookie that was passed as value
+func (m *RecaptchaMiddleware) ReadCookie(r *http.Request) error {
+	cookie, err := r.Cookie(m.Configuration.RecaptchaCookie.Name)
+
+	if err != nil {
+		return err
+	}
+
+	var value string;
+	err = m.SecureCookie.Decode(m.Configuration.RecaptchaCookie.Name, cookie.Value, &value)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

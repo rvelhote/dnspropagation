@@ -27,6 +27,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"github.com/gorilla/securecookie"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template
@@ -78,8 +79,10 @@ type QueryRequestHandler struct {
 // WebSocket, read the request variables, validate them and perform the queries to the list of DNS servers in the
 // configuration file.
 func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// TODO Use context with Go 1.7 to pass the cookie here and upgrade the connection. This is a bit dirty
-	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {Cookie.String()}})
+	// This is called type assertion!! Don't forget!
+	// FIXME Should validate if the type assertion was correct!
+	cookie, _ := req.Context().Value("recaptcha").(http.Cookie)
+	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {cookie.String()}})
 
 	if upgraderr != nil {
 		log.Println(upgraderr)
@@ -107,9 +110,15 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 
 // Init is the entrypoint of the application. It loads the configuration file and sets-up the routes
 func Init(mux *http.ServeMux, configuration Configuration) {
+	// FIXME Get the keys from configuration in
+	var hashKey = securecookie.GenerateRandomKey(64)
+	var blockKey = securecookie.GenerateRandomKey(32)
+	var s = securecookie.New(hashKey, blockKey)
+
+
 	indexHandler := IndexRequestHandler{Configuration: configuration}
 	queryHandler := QueryRequestHandler{Configuration: configuration}
-	captchaHandler := RecaptchaMiddleware{Configuration: configuration}
+	captchaHandler := RecaptchaMiddleware{Configuration: configuration, SecureCookie: s}
 
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.Handle("/", indexHandler)
