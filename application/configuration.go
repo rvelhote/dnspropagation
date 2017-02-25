@@ -29,8 +29,19 @@ import (
 
 // Configuration holds the application configuration settings. Configuration files should be created in the conf folder.
 type Configuration struct {
+	RecaptchaCookie RecaptchaCookie `json:"cookie"`
 	Recaptcha Recaptcha `json:"recaptcha"`
 	Servers   []Server  `json:"servers"`
+}
+
+// RecaptchaCookie holds the application configuration regarding the secure cookie
+type RecaptchaCookie struct {
+	Name string `json:"name"`
+	Value string `json:"value"`
+	HashKey string `json:"hashkey"`
+	BlockKey string `json:"blockkey"`
+	Domain string `json:"domain"`
+	Secure bool `json:"secure"`
 }
 
 // Recaptcha holds the Google reCAPTCHA settings mainly the public and private keys.

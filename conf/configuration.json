@@ -1,4 +1,12 @@
 {
+  "cookie": {
+    "name": "reCATPCHA",
+    "value": "1",
+    "hashkey": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe",
+    "blockkey": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe",
+    "domain": "127.0.0.1",
+    "secure": false
+  },
   "recaptcha": {
     "publickey": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
     "privatekey": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
