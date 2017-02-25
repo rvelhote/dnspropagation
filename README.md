@@ -25,8 +25,7 @@ cd src/github.com/rvelhote/dnspropagation
 npm install
 gulp sass:development
 webpack
-go build
-go run main.go
+go run application-main/main.go
 ```
 
 There is also a docker image that you can build yourself.
