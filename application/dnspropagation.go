@@ -82,8 +82,8 @@ type QueryRequestHandler struct {
 func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// This is called type assertion!! Don't forget!
 	// FIXME Should validate if the type assertion was correct!
-	cookie, _ := req.Context().Value("recaptcha").(http.Cookie)
-	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {cookie.String()}})
+	cookie, _ := req.Context().Value("recaptcha").(string)
+	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {cookie}})
 
 	if upgraderr != nil {
 		log.Println(upgraderr)
