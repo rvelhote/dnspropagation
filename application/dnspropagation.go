@@ -28,6 +28,7 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/securecookie"
+	"encoding/base64"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template
@@ -109,16 +110,17 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 }
 
 // Init is the entrypoint of the application. It loads the configuration file and sets-up the routes
+// TODO Write documentation on how to generate the keys and the need to encode them to Base64
+// TODO Check for error returned by the decoding of Base64 strings
 func Init(mux *http.ServeMux, configuration Configuration) {
-	// FIXME Get the keys from configuration in
-	var hashKey = securecookie.GenerateRandomKey(64)
-	var blockKey = securecookie.GenerateRandomKey(32)
-	var s = securecookie.New(hashKey, blockKey)
+	hashKey, _ := base64.StdEncoding.DecodeString(configuration.RecaptchaCookie.HashKey)
+	blockKey, _ := base64.StdEncoding.DecodeString(configuration.RecaptchaCookie.BlockKey)
 
+	secureCookie := securecookie.New(hashKey, blockKey)
 
 	indexHandler := IndexRequestHandler{Configuration: configuration}
 	queryHandler := QueryRequestHandler{Configuration: configuration}
-	captchaHandler := RecaptchaMiddleware{Configuration: configuration, SecureCookie: s}
+	captchaHandler := RecaptchaMiddleware{Configuration: configuration, SecureCookie: secureCookie}
 
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.Handle("/", indexHandler)
