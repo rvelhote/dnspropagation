@@ -113,8 +113,8 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 // TODO Write documentation on how to generate the keys and the need to encode them to Base64
 // TODO Check for error returned by the decoding of Base64 strings
 func Init(mux *http.ServeMux, configuration Configuration) {
-	hashKey, _ := base64.StdEncoding.DecodeString(configuration.RecaptchaCookie.HashKey)
-	blockKey, _ := base64.StdEncoding.DecodeString(configuration.RecaptchaCookie.BlockKey)
+	hashKey, _ := base64.StdEncoding.DecodeString(configuration.Cookie.HashKey)
+	blockKey, _ := base64.StdEncoding.DecodeString(configuration.Cookie.BlockKey)
 
 	secureCookie := securecookie.New(hashKey, blockKey)
 

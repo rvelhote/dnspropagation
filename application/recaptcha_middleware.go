@@ -48,22 +48,22 @@ type RecaptchaMiddleware struct {
 // Middleware will perform the validation of reCAPTCHA challenge that the user should solve before passing
 // control to the actual function that processes the full request and returns the result.
 // TODO Improve the SecureCookie handling
-func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
+func (m *RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        cookie, cookierr := r.Cookie(middle.Configuration.RecaptchaCookie.Name)
+        cookie, cookierr := r.Cookie(m.Configuration.Cookie.Name)
 
         // Create a SecureCookie instance based on the cookie obtained from the request. If the cookie does not exist
         // yet an "empty" SecureCookie instance will be created instead. Then we can proceed with the process as usual.
         // FIXME This part is a bit confusing. Improve somehow someway.
-        secureCookie := NewSecureCookie(cookie, middle.SecureCookie)
+        secureCookie := NewSecureRecaptchaCookie(cookie, m.SecureCookie)
         if cookierr != nil {
-            secureCookie = MakeSecureCookie(middle.Configuration.RecaptchaCookie.Name, r.UserAgent(), middle.SecureCookie)
+            secureCookie = MakeSecureRecaptchaCookie(m.Configuration.Cookie.Name, r.UserAgent(), m.SecureCookie)
         }
 
 		if !secureCookie.IsValid(r.UserAgent()) {
 			challenge := r.URL.Query().Get("c")
 
-			catpcha := recaptcha.Recaptcha{PrivateKey: middle.Configuration.Recaptcha.PrivateKey}
+			catpcha := recaptcha.Recaptcha{PrivateKey: m.Configuration.Recaptcha.PrivateKey}
 			recaptchaResponse, _ := catpcha.Verify(challenge, r.RemoteAddr)
 
 			if recaptchaResponse.Success == false {

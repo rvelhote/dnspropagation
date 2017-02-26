@@ -29,18 +29,18 @@ import (
 )
 
 // SecureCookie is an extension of the regular http.Cookie struct with value encoding capabilities
-type SecureCookie struct {
+type SecureRecaptchaCookie struct {
     *http.Cookie
     SecureCookie *securecookie.SecureCookie
 }
 
-// NewSecureCookie creates a SecureCookie instance based on a request cookie
-func NewSecureCookie(cookie *http.Cookie, config *securecookie.SecureCookie) *SecureCookie {
-    return &SecureCookie{ Cookie: cookie, SecureCookie: config }
+// NewSecureRecaptchaCookie creates a SecureCookie instance based on a request cookie
+func NewSecureRecaptchaCookie(cookie *http.Cookie, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
+    return &SecureRecaptchaCookie{ Cookie: cookie, SecureCookie: config }
 }
 
-// MakeSecureCookie
-func MakeSecureCookie(name string, value string, config *securecookie.SecureCookie) *SecureCookie {
+// MakeSecureRecaptchaCookie
+func MakeSecureRecaptchaCookie(name string, value string, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
     cookie := &http.Cookie{
         Name: name,
         Path: "/",
@@ -48,17 +48,17 @@ func MakeSecureCookie(name string, value string, config *securecookie.SecureCook
         Expires: time.Now().Add(24 * time.Hour),
     }
 
-    return NewSecureCookie(cookie, config)
+    return NewSecureRecaptchaCookie(cookie, config)
 }
 
 // Encode the value passed as a parameter with the keys present in SecureCookie and returns it
-func (cookie *SecureCookie) Encode(value string) {
+func (cookie *SecureRecaptchaCookie) Encode(value string) {
     encoded, _ := cookie.SecureCookie.Encode(cookie.Name, value)
     cookie.Value = encoded
 }
 
 // IsValid validates the current cookie value (after decoding it) against an expected original value
-func (cookie *SecureCookie) IsValid(original string) bool {
+func (cookie *SecureRecaptchaCookie) IsValid(original string) bool {
     decoded := "";
     err := cookie.SecureCookie.Decode(cookie.Name, cookie.Value, &decoded)
     return err == nil && decoded == original
