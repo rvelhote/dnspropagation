@@ -28,6 +28,7 @@ import (
 	"net/http"
 	"time"
 	"context"
+	"net"
 )
 
 // cookieName specifies the cookie name that will hold the verification of wether the reCAPTCHA passed or not.
@@ -51,14 +52,11 @@ type RecaptchaMiddleware struct {
 // TODO Don't hardcode the IPAddress when verifying the challenge
 func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// This will read the cookie and validate its contents. Any errors will assume the cookie is invalid
-		recaptchaCookie := middle.ReadCookie(r)
-
-		if recaptchaCookie != nil {
+		if middle.ValidateRecaptchaCookie(r) == false {
 			challenge := r.URL.Query().Get("c")
 
 			catpcha := recaptcha.Recaptcha{PrivateKey: middle.Configuration.Recaptcha.PrivateKey}
-			recaptchaResponse, _ := catpcha.Verify(challenge, "127.0.0.1")
+			recaptchaResponse, _ := catpcha.Verify(challenge, r.RemoteAddr)
 
 			if recaptchaResponse.Success == false {
 				w.WriteHeader(403)
@@ -66,8 +64,9 @@ func (middle RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 			}
 		}
 
-		// FIXME We are generating a new cookie per request and thus avoiding a context check in the next function
-		secureRecaptchaCookie := middle.GenerateCookie()
+		// FIXME We are generating a new cookie per request and thus avoiding a context check in the next function.
+		ipAddress, _, _ := net.SplitHostPort(r.RemoteAddr)
+		secureRecaptchaCookie, _ := middle.GenerateCookie(ipAddress + r.UserAgent())
 		ctx := context.WithValue(r.Context(), "recaptcha", secureRecaptchaCookie)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
@@ -86,39 +85,45 @@ func DisplayRecaptcha(req *http.Request) bool {
 	return false
 }
 
-// GenerateCookie generates an encoded cookie to validate the user. A new cookie should be generated
-func (recaptcha *RecaptchaMiddleware) GenerateCookie() http.Cookie {
-	var value string = recaptcha.Configuration.RecaptchaCookie.Value
+// GenerateCookie encodes the value passed as a parameter and returns a cookie with that encoded string as a value
+func (recaptcha *RecaptchaMiddleware) GenerateCookie(value string) (http.Cookie, error) {
+	cookie := http.Cookie{}
+	encoded, err := recaptcha.SecureCookie.Encode(recaptcha.Configuration.RecaptchaCookie.Name, value)
 
-	if encoded, err := recaptcha.SecureCookie.Encode(recaptcha.Configuration.RecaptchaCookie.Name, value); err == nil {
-		cookie := http.Cookie{
-			Name:  recaptcha.Configuration.RecaptchaCookie.Name,
-			Value: encoded,
-			Path:  "/",
-			HttpOnly: true,
-			Expires: time.Now().Add(24 * time.Hour),
-		}
-
-		return cookie
+	if err != nil {
+		return cookie, err
 	}
 
-	return http.Cookie{}
+	cookie.Name = recaptcha.Configuration.RecaptchaCookie.Name
+	cookie.Value = encoded
+	cookie.Path = "/"
+	cookie.HttpOnly = true
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+
+	return cookie, err
 }
 
 // ReadCookie reads and validates the cookie that was passed as value
-func (m *RecaptchaMiddleware) ReadCookie(r *http.Request) error {
+func (m *RecaptchaMiddleware) ReadCookie(r *http.Request) (string, error) {
+	decodedValue := "";
 	cookie, err := r.Cookie(m.Configuration.RecaptchaCookie.Name)
 
 	if err != nil {
-		return err
+		return decodedValue, err
 	}
 
-	var value string;
-	err = m.SecureCookie.Decode(m.Configuration.RecaptchaCookie.Name, cookie.Value, &value)
+	err = m.SecureCookie.Decode(m.Configuration.RecaptchaCookie.Name, cookie.Value, &decodedValue)
 
 	if err != nil {
-		return err
+		return decodedValue, err
 	}
 
-	return nil
+	return decodedValue, nil
+}
+
+// ValidateRecaptchaCookie validates that the cookies's decoded contents contain the correct information and is valid.
+func (m *RecaptchaMiddleware) ValidateRecaptchaCookie(r * http.Request) bool {
+	decoded, _ := m.ReadCookie(r)
+	ipAddress, _, _ := net.SplitHostPort(r.RemoteAddr)
+	return decoded == (ipAddress + r.UserAgent())
 }
