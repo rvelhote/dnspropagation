@@ -2,10 +2,10 @@
 package application
 
 import (
-    "testing"
-    "github.com/gorilla/securecookie"
-    "encoding/base64"
-    "net/http"
+	"encoding/base64"
+	"github.com/gorilla/securecookie"
+	"net/http"
+	"testing"
 )
 
 /*
@@ -34,31 +34,31 @@ const testHashKey = "RovMQmutMbSogUuGQFZYLb37jwgwFNuMR7wrEz9EILQ9W039UHCFlCfkpX1
 const testBlockKey = "+sSXCAbwswiYNqHx4zCuJJTD3hmRQp4f4uJKy+aFL70="
 
 func generateGorillaSecureCookie() *securecookie.SecureCookie {
-    hashKey, _ := base64.StdEncoding.DecodeString(testHashKey)
-    blockKey, _ := base64.StdEncoding.DecodeString(testBlockKey)
-    return securecookie.New(hashKey, blockKey)
+	hashKey, _ := base64.StdEncoding.DecodeString(testHashKey)
+	blockKey, _ := base64.StdEncoding.DecodeString(testBlockKey)
+	return securecookie.New(hashKey, blockKey)
 }
 
 func TestNewSecureRecaptchaCookie(t *testing.T) {
-    secureRecaptchaCookie1 := NewSecureRecaptchaCookie(cookieName, nil, generateGorillaSecureCookie())
-    if secureRecaptchaCookie1.Name != cookieName || len(secureRecaptchaCookie1.Value) != 0 {
-        t.Error("The new secure cookie based on an empty cookie should have no value")
-    }
+	secureRecaptchaCookie1 := NewSecureRecaptchaCookie(cookieName, nil, generateGorillaSecureCookie())
+	if secureRecaptchaCookie1.Name != cookieName || len(secureRecaptchaCookie1.Value) != 0 {
+		t.Error("The new secure cookie based on an empty cookie should have no value")
+	}
 
-    validCookie := &http.Cookie{Value: "Some Value"}
-    secureRecaptchaCookie2 := NewSecureRecaptchaCookie(cookieName, validCookie, generateGorillaSecureCookie())
-    if secureRecaptchaCookie2.Name != cookieName || len(secureRecaptchaCookie2.Value) == 0 {
-        t.Error("The new secure cookie based on a valid cookie should have a value")
-    }
+	validCookie := &http.Cookie{Value: "Some Value"}
+	secureRecaptchaCookie2 := NewSecureRecaptchaCookie(cookieName, validCookie, generateGorillaSecureCookie())
+	if secureRecaptchaCookie2.Name != cookieName || len(secureRecaptchaCookie2.Value) == 0 {
+		t.Error("The new secure cookie based on a valid cookie should have a value")
+	}
 }
 
 func TestSecureRecaptchaCookie_Encode(t *testing.T) {
-    validCookie := &http.Cookie{Value: "Some Value"}
+	validCookie := &http.Cookie{Value: "Some Value"}
 
-    secureRecaptchaCookie := NewSecureRecaptchaCookie(cookieName, validCookie, generateGorillaSecureCookie())
-    secureRecaptchaCookie.Value = secureRecaptchaCookie.Encode(validCookie.Value)
+	secureRecaptchaCookie := NewSecureRecaptchaCookie(cookieName, validCookie, generateGorillaSecureCookie())
+	secureRecaptchaCookie.Value = secureRecaptchaCookie.Encode(validCookie.Value)
 
-    if secureRecaptchaCookie.IsValid(validCookie.Value) != true {
-        t.Error("The cookie value should have been encoded and decoded correctly")
-    }
+	if secureRecaptchaCookie.IsValid(validCookie.Value) != true {
+		t.Error("The cookie value should have been encoded and decoded correctly")
+	}
 }
