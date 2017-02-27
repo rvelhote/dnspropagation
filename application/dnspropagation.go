@@ -23,12 +23,12 @@ package application
  * SOFTWARE.
  */
 import (
+	"encoding/base64"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/websocket"
 	"html/template"
 	"log"
 	"net/http"
-	"github.com/gorilla/securecookie"
-	"encoding/base64"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template

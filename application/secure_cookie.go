@@ -23,43 +23,43 @@ package application
  * SOFTWARE.
  */
 import (
-    "net/http"
-    "github.com/gorilla/securecookie"
-    "time"
+	"github.com/gorilla/securecookie"
+	"net/http"
+	"time"
 )
 
 // SecureCookie is an extension of the regular http.Cookie struct with value encoding capabilities
 type SecureRecaptchaCookie struct {
-    *http.Cookie
-    SecureCookie *securecookie.SecureCookie
+	*http.Cookie
+	SecureCookie *securecookie.SecureCookie
 }
 
 // NewSecureRecaptchaCookie creates a SecureCookie instance based on a request cookie
 func NewSecureRecaptchaCookie(cookie *http.Cookie, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
-    return &SecureRecaptchaCookie{ Cookie: cookie, SecureCookie: config }
+	return &SecureRecaptchaCookie{Cookie: cookie, SecureCookie: config}
 }
 
-// MakeSecureRecaptchaCookie
+// MakeSecureCookie
 func MakeSecureRecaptchaCookie(name string, value string, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
-    cookie := &http.Cookie{
-        Name: name,
-        Path: "/",
-        HttpOnly: true,
-        Expires: time.Now().Add(24 * time.Hour),
-    }
+	cookie := &http.Cookie{
+		Name:     name,
+		Path:     "/",
+		HttpOnly: true,
+		Expires:  time.Now().Add(24 * time.Hour),
+	}
 
-    return NewSecureRecaptchaCookie(cookie, config)
+	return NewSecureRecaptchaCookie(cookie, config)
 }
 
 // Encode the value passed as a parameter with the keys present in SecureCookie and returns it
 func (cookie *SecureRecaptchaCookie) Encode(value string) {
-    encoded, _ := cookie.SecureCookie.Encode(cookie.Name, value)
-    cookie.Value = encoded
+	encoded, _ := cookie.SecureCookie.Encode(cookie.Name, value)
+	cookie.Value = encoded
 }
 
 // IsValid validates the current cookie value (after decoding it) against an expected original value
 func (cookie *SecureRecaptchaCookie) IsValid(original string) bool {
-    decoded := "";
-    err := cookie.SecureCookie.Decode(cookie.Name, cookie.Value, &decoded)
-    return err == nil && decoded == original
+	decoded := ""
+	err := cookie.SecureCookie.Decode(cookie.Name, cookie.Value, &decoded)
+	return err == nil && decoded == original
 }
