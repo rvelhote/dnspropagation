@@ -34,7 +34,7 @@ type Configuration struct {
 	Servers   []Server            `json:"servers"`
 }
 
-// RecaptchaCookie holds the application configuration regarding the secure cookie
+// CookieConfiguration holds the application configuration regarding the secure cookie
 type CookieConfiguration struct {
 	Name     string `json:"name"`
 	Value    string `json:"value"`

@@ -28,7 +28,7 @@ import (
 	"time"
 )
 
-// SecureCookie is an extension of the regular http.Cookie struct with value encoding capabilities
+// SecureRecaptchaCookie is an extension of the regular http.Cookie struct with value encoding capabilities
 type SecureRecaptchaCookie struct {
 	*http.Cookie
 	SecureCookie *securecookie.SecureCookie
