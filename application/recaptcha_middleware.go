@@ -77,7 +77,7 @@ func (m *RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 // DisplayRecaptcha verifies if the request contains a valid application reCAPTCHA cookie
 // TODO Make this work with ReadCookie in the middleware
 func DisplayRecaptcha(req *http.Request) bool {
-	_, err := req.Cookie("reCATPCHA")
+	_, err := req.Cookie("reCAPTCHA")
 
 	if err != nil {
 		return true
