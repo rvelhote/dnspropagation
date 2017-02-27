@@ -23,7 +23,6 @@ package application
  * SOFTWARE.
  */
 import (
-	"github.com/gorilla/securecookie"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -40,7 +39,7 @@ func (f NoopHTTPHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 func TestRecaptchaMiddlewareForbiddenStatus(t *testing.T) {
 	config, _ := LoadConfiguration("../conf/configuration.json")
-	middleware := RecaptchaMiddleware{Configuration: config}
+	middleware := RecaptchaMiddleware{Configuration: config, SecureCookie: generateGorillaSecureCookie()}
 
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
@@ -59,12 +58,7 @@ func TestRecaptchaMiddlewareForbiddenStatus(t *testing.T) {
 
 func TestRecaptchaMiddleware200Status(t *testing.T) {
 	configuration, _ := LoadConfiguration("../conf/configuration.json")
-
-	var hashKey = securecookie.GenerateRandomKey(64)
-	var blockKey = securecookie.GenerateRandomKey(32)
-	var s = securecookie.New(hashKey, blockKey)
-
-	middleware := RecaptchaMiddleware{Configuration: configuration, SecureCookie: s}
+	middleware := RecaptchaMiddleware{Configuration: configuration, SecureCookie: generateGorillaSecureCookie()}
 
 	req, _ := http.NewRequest("GET", "/?c="+reCaptchaTestResponse, nil)
 	handler := http.Handler(middleware.Middleware(NoopHTTPHandler{}))
@@ -78,7 +72,8 @@ func TestRecaptchaMiddleware200Status(t *testing.T) {
 }
 
 func TestRecaptchaMiddlewareDisplayRecaptcha(t *testing.T) {
-	c := &http.Cookie{Name: "reCAPTCHA"}
+	configuration, _ := LoadConfiguration("../conf/configuration.json")
+	c := &http.Cookie{Name: configuration.Cookie.Name}
 
 	req1, _ := http.NewRequest("GET", "/", nil)
 	req1.AddCookie(c)
