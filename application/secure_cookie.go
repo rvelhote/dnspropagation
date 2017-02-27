@@ -34,27 +34,27 @@ type SecureRecaptchaCookie struct {
 	SecureCookie *securecookie.SecureCookie
 }
 
-// NewSecureRecaptchaCookie creates a SecureCookie instance based on a request cookie
-func NewSecureRecaptchaCookie(cookie *http.Cookie, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
-	return &SecureRecaptchaCookie{Cookie: cookie, SecureCookie: config}
-}
-
-// MakeSecureCookie
-func MakeSecureRecaptchaCookie(name string, value string, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
-	cookie := &http.Cookie{
+// NewSecureRecaptchaCookie creates a SecureCookie instance based on a request cookie. If the cookie already exists
+// its value is set in the SecureRecaptchaCookie struct otherwise it gets an empty value (which will fail verification)
+func NewSecureRecaptchaCookie(name string, cookie *http.Cookie, config *securecookie.SecureCookie) *SecureRecaptchaCookie {
+	secure := &http.Cookie{
 		Name:     name,
 		Path:     "/",
 		HttpOnly: true,
 		Expires:  time.Now().Add(24 * time.Hour),
 	}
 
-	return NewSecureRecaptchaCookie(cookie, config)
+	if cookie != nil {
+		secure.Value = cookie.Value
+	}
+
+	return &SecureRecaptchaCookie{Cookie: secure, SecureCookie: config}
 }
 
 // Encode the value passed as a parameter with the keys present in SecureCookie and returns it
-func (cookie *SecureRecaptchaCookie) Encode(value string) {
+func (cookie *SecureRecaptchaCookie) Encode(value string) string {
 	encoded, _ := cookie.SecureCookie.Encode(cookie.Name, value)
-	cookie.Value = encoded
+	return encoded
 }
 
 // IsValid validates the current cookie value (after decoding it) against an expected original value

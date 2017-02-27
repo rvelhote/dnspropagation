@@ -50,15 +50,8 @@ type RecaptchaMiddleware struct {
 // TODO Improve the SecureCookie handling
 func (m *RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, cookierr := r.Cookie(m.Configuration.Cookie.Name)
-
-		// Create a SecureCookie instance based on the cookie obtained from the request. If the cookie does not exist
-		// yet an "empty" SecureCookie instance will be created instead. Then we can proceed with the process as usual.
-		// FIXME This part is a bit confusing. Improve somehow someway.
-		secureCookie := NewSecureRecaptchaCookie(cookie, m.SecureCookie)
-		if cookierr != nil {
-			secureCookie = MakeSecureRecaptchaCookie(m.Configuration.Cookie.Name, "", m.SecureCookie)
-		}
+		cookie, _ := r.Cookie(m.Configuration.Cookie.Name)
+		secureCookie := NewSecureRecaptchaCookie(m.Configuration.Cookie.Name, cookie, m.SecureCookie)
 
 		if !secureCookie.IsValid(r.UserAgent()) {
 			challenge := r.URL.Query().Get("c")
@@ -74,7 +67,7 @@ func (m *RecaptchaMiddleware) Middleware(next http.Handler) http.Handler {
 
 		// FIXME We are generating a new cookie per request and thus avoiding a context check in the next function.
 		// FIXME Perhaps the encoding could be done automatically?
-		secureCookie.Encode(r.UserAgent())
+		secureCookie.Value = secureCookie.Encode(r.UserAgent())
 
 		ctx := context.WithValue(r.Context(), "recaptcha", secureCookie.String())
 		next.ServeHTTP(w, r.WithContext(ctx))
