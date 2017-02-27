@@ -187,7 +187,7 @@ func TestQueryAllAsync(t *testing.T) {
 
 	total := 0
 
-	for _ = range testAsyncServers {
+	for range testAsyncServers {
 		<-responses
 		total = total + 1
 	}
