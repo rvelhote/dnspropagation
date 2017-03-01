@@ -27,6 +27,7 @@ import DnsWebSocket from '../websocket/websocket';
 import DnsMessage from './dns-message';
 import DnsRecaptcha from './dns-recaptcha';
 import DnsProgress from './dns-progress';
+import DnsForm from './dns-form';
 
 /**
  *
@@ -141,36 +142,7 @@ class DnsPropagation extends React.Component {
                     <FormattedMessage id="app-tagline" defaultMessage={'Check a domain\'s DNS records. Check the propagation of your record changes and debug DNS related issues on the Internet.'} />
                   </small>
                 </div>
-
-                <form onSubmit={this.onDnsQuerySubmit} method="post" action="/api/v1/query">
-                  <div className="row">
-                    <div className="col-lg-4">
-                      <input id="domain" placeholder="What is the domain you want to check?" className="form-control" type="text" value={this.state.domain} onChange={this.handleDomainChange} required />
-                    </div>
-                    <div className="col-lg-2">
-                      <select className="form-control" value={this.state.type} onChange={this.handleTypeChange} required>
-                        <option value="a">A</option>
-                        <option value="aaaa">AAAA</option>
-                        <option value="caa">CAA</option>
-                        <option value="cname">CNAME</option>
-                        <option value="mx">MX</option>
-                        <option value="ns">NS</option>
-                        <option value="ptr">PTR</option>
-                        <option value="soa">SOA</option>
-                        <option value="srv">SRV</option>
-                        <option value="txt">TXT</option>
-                      </select>
-                    </div>
-                    <div className="col-lg-2">
-                      <button className="btn btn-primary" type="submit" disabled={this.state.working}>
-                        <span className="glyphicon glyphicon-search">&nbsp;</span>
-                        <span>
-                          <FormattedMessage id="app-name" defaultMessage={'Query {type} record for {domain}'} values={{ type: this.state.type, domain: this.state.domain }} />
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                <DnsForm submit={this.onDnsQuerySubmit} working={this.state.working} type={this.state.type} domain={this.state.domain} changeType={this.handleTypeChange} changeDomain={this.handleDomainChange} />
               </div>
             </div>
           </div>
