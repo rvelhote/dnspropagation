@@ -20,7 +20,7 @@
 FROM golang:1.7-alpine
 MAINTAINER Ricardo Velhote "rvelhote@gmail.com"
 
-RUN apk add --no-cache git && go get github.com/rvelhote/dnspropagation/application-main && apk del git
+RUN apk add --no-cache git && go get github.com/rvelhote/dnspropagation/application-main && apk del git && tar xvvf /go/src/github.com/rvelhote/dnspropagation/assets/assets.tar.gz -C /go/src/github.com/rvelhote/dnspropagation/assets/
 WORKDIR /go/src/github.com/rvelhote/dnspropagation
 
 EXPOSE 8080
