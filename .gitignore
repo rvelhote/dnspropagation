@@ -74,3 +74,6 @@ jspm_packages
 
 # Yarn Integrity file
 .yarn-integrity
+
+assets/javascript
+assets/css
