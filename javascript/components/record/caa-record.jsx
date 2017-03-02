@@ -29,7 +29,9 @@ const CaaRecord = props =>
 CaaRecord.displayName = 'CaaRecord';
 
 CaaRecord.propTypes = {
-  record: React.PropTypes.shape
+  record: React.PropTypes.shape({
+    Value: React.PropTypes.string
+  })
 };
 
 CaaRecord.defaultProps = {
