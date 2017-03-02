@@ -1,4 +1,4 @@
-exports[`test props should contain an a record 1`] = `
+exports[`test props should contain an aaaa record 1`] = `
 <div
   className="dns-record">
   <div

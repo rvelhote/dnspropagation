@@ -23,7 +23,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import AAAARecord from './aaaa-record';
 
-test('props should contain an a record', () => {
+test('props should contain an aaaa record', () => {
   const record = { AAAA: '2607:f8b0:4009:811::2011' };
   const component = renderer.create(<AAAARecord record={record} />);
 
