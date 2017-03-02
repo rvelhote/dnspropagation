@@ -21,18 +21,22 @@
  */
 import React from 'react';
 
+const types = [
+  { key: 'a', value: 'A' },
+  { key: 'aaaa', value: 'AAAA' },
+  { key: 'caa', value: 'CAA' },
+  { key: 'cname', value: 'CNAME' },
+  { key: 'mx', value: 'MX' },
+  { key: 'ns', value: 'NS' },
+  { key: 'ptr', value: 'PTR' },
+  { key: 'soa', value: 'SOA' },
+  { key: 'srv', value: 'SRV' },
+  { key: 'txt', value: 'TXT' },
+];
+
 const DnsSelectRecord = props =>
   <select className="form-control" value={props.value} onChange={props.onChange} required>
-    <option value="a">A</option>
-    <option value="aaaa">AAAA</option>
-    <option value="caa">CAA</option>
-    <option value="cname">CNAME</option>
-    <option value="mx">MX</option>
-    <option value="ns">NS</option>
-    <option value="ptr">PTR</option>
-    <option value="soa">SOA</option>
-    <option value="srv">SRV</option>
-    <option value="txt">TXT</option>
+    { types.map(record => <option key={record.value} value={record.key}>{record.value}</option>) }
   </select>;
 
 DnsSelectRecord.displayName = 'DnsSelectRecord';
