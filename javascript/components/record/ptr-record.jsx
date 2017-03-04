@@ -26,10 +26,16 @@ const PtrRecord = props =>
     <div className="dns-record__ptr-record">{props.record.Ptr}</div>
   </div>;
 
-PtrRecord.displayName = 'PtrRecord';
-
 PtrRecord.propTypes = {
+  record: React.PropTypes.shape({
+    Ptr: React.PropTypes.string
+  })
+};
 
+PtrRecord.defaultProps = {
+  record: {
+    Ptr: ''
+  }
 };
 
 export default PtrRecord;
