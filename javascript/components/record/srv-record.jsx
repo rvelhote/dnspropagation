@@ -26,10 +26,16 @@ const SrvRecord = props =>
     <div className="dns-record__soa-record">{props.record.Soa}</div>
   </div>;
 
-SrvRecord.displayName = 'SrvRecord';
-
 SrvRecord.propTypes = {
+  record: React.PropTypes.shape({
+    Soa: React.PropTypes.string
+  })
+};
 
+SrvRecord.defaultProps = {
+  record: {
+    Soa: ''
+  }
 };
 
 export default SrvRecord;
