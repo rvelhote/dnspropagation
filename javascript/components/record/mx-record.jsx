@@ -29,17 +29,18 @@ const MxRecord = props =>
 
 MxRecord.displayName = 'MxRecord';
 
+// TODO Create a custom proptype to validate numeric input and make sure it's at least a number
 MxRecord.propTypes = {
   record: React.PropTypes.shape({
     Mx: React.PropTypes.string,
-    Preference: React.PropTypes.number
+    Preference: React.PropTypes.string
   })
 };
 
 MxRecord.defaultProps = {
   record: {
     Mx: '',
-    Preference: 10
+    Preference: '0'
   }
 };
 
