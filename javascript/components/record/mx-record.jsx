@@ -23,8 +23,14 @@ import React from 'react';
 
 const MxRecord = props =>
   <div className="dns-record">
-    <div className="dns-record__mx-record">{props.record.Mx}</div>
-    <div className="dns-record__preference">{props.record.Preference}</div>
+    <div className="row">
+      <div className="col-lg-2 dns-record--mx__preference">
+        <span className="label label-default dns-record--mx__preference">{props.record.Preference}</span>
+      </div>
+      <div className="col-lg-10 dns-record--mx__mx">
+        <span className="dns-record--mx__mx">{props.record.Mx}</span>
+      </div>
+    </div>
   </div>;
 
 MxRecord.displayName = 'MxRecord';
