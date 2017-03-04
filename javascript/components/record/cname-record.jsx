@@ -29,7 +29,15 @@ const CnameRecord = props =>
 CnameRecord.displayName = 'CnameRecord';
 
 CnameRecord.propTypes = {
+  record: React.PropTypes.shape({
+    Target: React.PropTypes.string
+  })
+};
 
+CnameRecord.defaultProps = {
+  record: {
+    Target: ''
+  }
 };
 
 export default CnameRecord;
