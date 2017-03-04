@@ -30,12 +30,16 @@ const MxRecord = props =>
 MxRecord.displayName = 'MxRecord';
 
 MxRecord.propTypes = {
-  record: React.PropTypes.object
+  record: React.PropTypes.shape({
+    Mx: React.PropTypes.string,
+    Preference: React.PropTypes.number
+  })
 };
 
 MxRecord.defaultProps = {
   record: {
-    Mx: ''
+    Mx: '',
+    Preference: 10
   }
 };
 
