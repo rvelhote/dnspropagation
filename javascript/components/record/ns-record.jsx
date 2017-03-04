@@ -29,7 +29,15 @@ const NsRecord = props =>
 NsRecord.displayName = 'NsRecord';
 
 NsRecord.propTypes = {
+  record: React.PropTypes.shape({
+    Ns: React.PropTypes.string
+  })
+};
 
+NsRecord.defaultProps = {
+  record: {
+    Ns: ''
+  }
 };
 
 export default NsRecord;
