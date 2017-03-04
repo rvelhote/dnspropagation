@@ -29,7 +29,9 @@ const ARecord = props =>
 ARecord.displayName = 'ARecord';
 
 ARecord.propTypes = {
-  record: React.PropTypes.object
+  record: React.PropTypes.shape({
+    A: React.PropTypes.string
+  })
 };
 
 ARecord.defaultProps = {
