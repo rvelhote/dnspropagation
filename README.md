@@ -65,10 +65,9 @@ The supported records are:
 There is lots of work to to and I will continue working little by little to implement them:
 - Javascript Test Suite
 - Need a SASS review and to move the styles to the JSX files
-- XSRF tokens and secure cookies (https://github.com/gorilla/securecookie, SameSite, Secure flag, Domain)
+- XSRF tokens
 - Let the user insert an email with the expected DNS records and receive an email when they are propagated
 - Have history of DNS queries and their result (store them in a server database or on localStorage?)
 - Keep WebSocket connections open for some time instead of opening to make the query and closing when the query is done
 - Load the configuration from the server during page load (perhaps when WebSocket connections are kept open)
 - Automated DNS server health check. Replace servers when connections fail
-- Better build and run system 
