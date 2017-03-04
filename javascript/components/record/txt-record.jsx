@@ -26,10 +26,16 @@ const TxtRecord = props =>
     {props.record.Txt.map(r => <div className="dns-record__txt-record">{ r }</div>)}
   </div>;
 
-TxtRecord.displayName = 'TxtRecord';
-
 TxtRecord.propTypes = {
+  record: React.PropTypes.shape({
+    Txt: React.PropTypes.arrayOf(React.PropTypes.string)
+  })
+};
 
+TxtRecord.defaultProps = {
+  record: {
+    Txt: []
+  }
 };
 
 export default TxtRecord;
