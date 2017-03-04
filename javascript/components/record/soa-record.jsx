@@ -30,7 +30,17 @@ const SoaRecord = props =>
 SoaRecord.displayName = 'SoaRecord';
 
 SoaRecord.propTypes = {
+  record: React.PropTypes.shape({
+    Ns: React.PropTypes.string,
+    Mbox: React.PropTypes.string
+  })
+};
 
+SoaRecord.defaultProps = {
+  record: {
+    Ns: '',
+    Mbox: ''
+  }
 };
 
 export default SoaRecord;
