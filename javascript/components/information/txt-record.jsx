@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const TxRecord = () =>
   <blockquote>
-    <p>A TXT record (short for text record) is a type of resource record in the Domain Name System (DNS) used to provide the ability to associate some arbitrary and unformatted text with a host or other name, such as human readable information about a server, network, data center, and other accounting information.</p>
+    <p><FormattedMessage id="txt-record-desc" defaultMessage={'A TXT record (short for text record) is a type of resource record in the Domain Name System (DNS) used to provide the ability to associate some arbitrary and unformatted text with a host or other name, such as human readable information about a server, network, data center, and other accounting information.'} /></p>
     <footer>https://en.wikipedia.org/wiki/TXT_record</footer>
   </blockquote>;
 

@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const NsRecord = () =>
   <blockquote>
-    <p>An NS record is used to delegate a subdomain to a set of name servers. Whenever you delegate a domain to DNSimple the TLD authorities place NS records for your domain in the TLD name servers pointing to us</p>
+    <p><FormattedMessage id="ns-record-desc" defaultMessage={'An NS record is used to delegate a subdomain to a set of name servers. Whenever you delegate a domain to DNSimple the TLD authorities place NS records for your domain in the TLD name servers pointing to us.'} /></p>
     <footer>https://support.dnsimple.com/articles/ns-record</footer>
   </blockquote>;
 

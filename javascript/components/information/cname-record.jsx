@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const CnameRecord = () =>
   <blockquote>
-    <p>CNAME stands for Canonical Name. CNAME records can be used to alias one name to another.</p>
+    <p><FormattedMessage id="cname-record-desc" defaultMessage={'CNAME stands for Canonical Name. CNAME records can be used to alias one name to another.'} /></p>
     <footer>https://support.dnsimple.com/articles/cname-record</footer>
   </blockquote>;
 

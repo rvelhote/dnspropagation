@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const PtrRecord = () =>
   <blockquote>
-    <p>You can think of the PTR record as an opposite of the A record. While the A record points a domain name to an IP address, the PTR record resolves the IP address to a domain/hostname. PTR records are used for the reverse DNS (Domain Name System) lookup. Using the IP address you can get the associated domain/hostname. An A record should exist for every PTR record.</p>
+    <p><FormattedMessage id="ptr-record-desc" defaultMessage={'You can think of the PTR record as an opposite of the A record. While the A record points a domain name to an IP address, the PTR record resolves the IP address to a domain/hostname. PTR records are used for the reverse DNS (Domain Name System) lookup. Using the IP address you can get the associated domain/hostname. An A record should exist for every PTR record.'} /></p>
     <footer>https://www.siteground.com/kb/what_is_a_ptr_record_and_how_to_add_one</footer>
   </blockquote>;
 

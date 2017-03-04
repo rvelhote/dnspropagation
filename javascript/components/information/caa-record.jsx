@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const CaaRecord = () =>
   <blockquote>
-    <p>A Certification Authority Authorization (CAA) record is used to specify which certificate authorities (CAs) are allowed to issue certificates for a domain.</p>
+    <p><FormattedMessage id="caa-record-desc" defaultMessage={'A Certification Authority Authorization (CAA) record is used to specify which certificate authorities (CAs) are allowed to issue certificates for a domain.'} /></p>
     <footer>https://support.dnsimple.com/articles/caa-record</footer>
   </blockquote>;
 

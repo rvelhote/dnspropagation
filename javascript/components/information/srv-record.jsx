@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const SrvRecord = () =>
   <blockquote>
-    <p>SRV records are often used to help with service discovery. For example, SRV records are used in Internet Telephony for defining where a SIP service may be found. An SRV record typically defines a symbolic name and the transport protocol used as part of the domain name, and defines the priority, weight, port and target for the service in the record content.</p>
+    <p><FormattedMessage id="srv-record-desc" defaultMessage={'SRV records are often used to help with service discovery. For example, SRV records are used in Internet Telephony for defining where a SIP service may be found. An SRV record typically defines a symbolic name and the transport protocol used as part of the domain name, and defines the priority, weight, port and target for the service in the record content.'} /></p>
     <footer>https://support.dnsimple.com/articles/srv-record</footer>
   </blockquote>;
 

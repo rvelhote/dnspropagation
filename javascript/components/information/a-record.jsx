@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const ARecord = () =>
   <blockquote>
-    <p>An A record maps a domain name to the IP address (IPv4) of the computer hosting the domain. Simply put, an A record is used to find the IPv4 address of a computer connected to the internet from a name. The A in A record stands for Address.</p>
+    <p><FormattedMessage id="a-record-desc" defaultMessage={'An A record maps a domain name to the IP address (IPv4) of the computer hosting the domain. Simply put, an A record is used to find the IPv4 address of a computer connected to the internet from a name. The A in A record stands for Address.'} /></p>
     <footer>https://support.dnsimple.com/articles/a-record</footer>
   </blockquote>;
 

@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const AaaaRecord = () =>
   <blockquote>
-    <p>An AAAA record maps a domain name to the IP address (IPv6) of the computer hosting the domain. Simply put, an AAAA record is used to find the IPv6 address of a computer connected to the internet from a name.</p>
+    <p><FormattedMessage id="aaaa-record-desc" defaultMessage={'An AAAA record maps a domain name to the IP address (IPv6) of the computer hosting the domain. Simply put, an AAAA record is used to find the IPv6 address of a computer connected to the internet from a name.'} /></p>
     <footer>https://support.dnsimple.com/articles/a-record</footer>
   </blockquote>;
 

@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const SoaRecord = () =>
   <blockquote>
-    <p>An SOA record is a Start of Authority. Every domain must have a Start of Authority record at the cutover point where the domain is delegated from its parent domain.</p>
+    <p><FormattedMessage id="soa-record-desc" defaultMessage={'An SOA record is a Start of Authority. Every domain must have a Start of Authority record at the cutover point where the domain is delegated from its parent domain.'} /></p>
     <footer>https://support.dnsimple.com/articles/soa-record</footer>
   </blockquote>;
 
