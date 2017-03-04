@@ -23,7 +23,7 @@ import React from 'react';
 
 const TxtRecord = props =>
   <div className="dns-record">
-    {props.record.Txt.map(r => <div className="dns-record__txt-record">{ r }</div>)}
+    {props.record.Txt.map(r => <div key={r} className="dns-record__txt-record">{ r }</div>)}
   </div>;
 
 TxtRecord.propTypes = {
