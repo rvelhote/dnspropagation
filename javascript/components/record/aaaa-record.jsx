@@ -29,7 +29,15 @@ const AAAARecord = props =>
 AAAARecord.displayName = 'AAAARecord';
 
 AAAARecord.propTypes = {
-  record: React.PropTypes.object
+  record: React.PropTypes.shape({
+    AAAA: React.PropTypes.string
+  })
+};
+
+AAAARecord.defaultProps = {
+  record: {
+    AAAA: ''
+  }
 };
 
 export default AAAARecord;
