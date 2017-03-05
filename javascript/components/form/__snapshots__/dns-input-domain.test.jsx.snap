@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`domain input should render and match snapshot 1`] = `
+<input
+  className="form-control"
+  id="domain"
+  onChange={[Function]}
+  placeholder="What is the domain you want to check?"
+  required={true}
+  type="text"
+  value="golang.org"
+/>
+`;
