@@ -52,13 +52,13 @@ const DnsRecord = (props) => {
 DnsRecord.displayName = 'DnsRecord';
 
 DnsRecord.propTypes = {
-//  recordType: React.PropTypes.string,
-//  record: React.PropTypes.object
+  type: React.PropTypes.string,
+  record: React.PropTypes.shape()
 };
 
 DnsRecord.defaultProps = {
-//  recordType: '',
-//  record: {}
+  type: 'A',
+  record: {}
 };
 
 export default DnsRecord;
