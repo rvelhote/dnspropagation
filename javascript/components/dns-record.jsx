@@ -44,12 +44,10 @@ const RecordTypes = {
   txt: TxtRecord,
 };
 
-class DnsRecord extends React.Component {
-  render() {
-    const RecordType = RecordTypes[this.props.type];
-    return <RecordType record={this.props.record} />;
-  }
-}
+const DnsRecord = (props) => {
+  const RecordType = RecordTypes[props.type];
+  return <RecordType record={props.record} />;
+};
 
 DnsRecord.displayName = 'DnsRecord';
 
