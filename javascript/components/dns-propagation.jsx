@@ -29,6 +29,8 @@ import DnsRecaptcha from './dns-recaptcha';
 import DnsProgress from './dns-progress';
 import DnsForm from './dns-form';
 
+const websocketURL = `ws://${document.location.hostname}:${document.location.port}/api/v1/query`;
+
 /**
  *
  */
@@ -56,7 +58,7 @@ class DnsPropagation extends React.Component {
       }
     };
 
-    this.websocket = new DnsWebSocket('ws://127.0.0.1:8080/api/v1/query');
+    this.websocket = new DnsWebSocket(websocketURL);
     this.websocket.onWebSocketReply = this.onWebSocketReply.bind(this);
     this.websocket.onWebSocketError = this.onWebSocketError.bind(this);
   }
