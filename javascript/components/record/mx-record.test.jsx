@@ -24,7 +24,7 @@ import renderer from 'react-test-renderer';
 import MxRecord from './mx-record';
 
 test('props should contain an a record', () => {
-  const record = { Mx: 'alt3.aspmx.l.google.com.', Preference: '2' };
+  const record = { Mx: 'alt3.aspmx.l.google.com.', Preference: 2 };
   const component = renderer.create(<MxRecord record={record} />);
 
   const tree = component.toJSON();

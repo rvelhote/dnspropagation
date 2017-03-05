@@ -25,7 +25,9 @@ const MxRecord = props =>
   <div className="dns-record">
     <div className="row">
       <div className="col-lg-2 dns-record--mx__preference">
-        <span className="label label-default dns-record--mx__preference">{props.record.Preference}</span>
+        <span className="label label-default dns-record--mx__preference">
+          {props.record.Preference}
+        </span>
       </div>
       <div className="col-lg-10 dns-record--mx__mx">
         <span className="dns-record--mx__mx">{props.record.Mx}</span>
@@ -35,18 +37,17 @@ const MxRecord = props =>
 
 MxRecord.displayName = 'MxRecord';
 
-// TODO Create a custom proptype to validate numeric input and make sure it's at least a number
 MxRecord.propTypes = {
   record: React.PropTypes.shape({
     Mx: React.PropTypes.string,
-    Preference: React.PropTypes.string
+    Preference: React.PropTypes.number
   })
 };
 
 MxRecord.defaultProps = {
   record: {
     Mx: '',
-    Preference: '0'
+    Preference: 0
   }
 };
 

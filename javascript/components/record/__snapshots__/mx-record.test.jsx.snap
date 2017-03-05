@@ -2,12 +2,21 @@ exports[`test props should contain an a record 1`] = `
 <div
   className="dns-record">
   <div
-    className="dns-record__mx-record">
-    alt3.aspmx.l.google.com.
-  </div>
-  <div
-    className="dns-record__preference">
-    2
+    className="row">
+    <div
+      className="col-lg-2 dns-record--mx__preference">
+      <span
+        className="label label-default dns-record--mx__preference">
+        2
+      </span>
+    </div>
+    <div
+      className="col-lg-10 dns-record--mx__mx">
+      <span
+        className="dns-record--mx__mx">
+        alt3.aspmx.l.google.com.
+      </span>
+    </div>
   </div>
 </div>
 `;
