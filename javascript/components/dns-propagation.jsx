@@ -58,9 +58,11 @@ class DnsPropagation extends React.Component {
       }
     };
 
-    this.websocket = new DnsWebSocket(websocketURL);
-    this.websocket.onWebSocketReply = this.onWebSocketReply.bind(this);
-    this.websocket.onWebSocketError = this.onWebSocketError.bind(this);
+    this.websocket = new DnsWebSocket(
+      websocketURL,
+      this.onWebSocketReply.bind(this),
+      this.onWebSocketError.bind(this)
+    );
   }
 
   componentDidMount() {

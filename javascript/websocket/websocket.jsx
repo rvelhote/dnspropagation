@@ -20,12 +20,28 @@
  * SOFTWARE.
  */
 class DnsWebSocket {
-  constructor(address) {
+  /**
+   * Construct a DnsWebSocket object so we can encapsulate the WebSocket implementation.
+   * @param address The URL that we want to connect to
+   * @param onMessage The function to be called when we receive a reply from the server
+   * @param onError The function to be called when we receive a fatal error from the server
+   */
+  constructor(address, onMessage, onError) {
     this.address = address;
-    this.onWebSocketReply = null;
-    this.onWebSocketError = null;
+    this.onWebSocketReply = onMessage;
+    this.onWebSocketError = onError;
   }
 
+  /**
+   * Connects to the WebSocket address and requests all DNS information about a certain domain and
+   * of a certain record type.
+   *
+   * @param domain The domain we want to check for DNS Record information
+   * @param type The type of DNS record we want to check
+   * @param challenge The anti-spam/anti-bot/anti-* challenge response that the user must solve
+   * to be able to perform requests. If the user already authenticated (i.e. he has the right
+   * cookie) before it can be sent as null or empty.
+   */
   fetch(domain, type, challenge) {
     const params = JSON.stringify({ domain, type });
     const address = `${this.address}?c=${challenge === null ? '' : challenge}`;
