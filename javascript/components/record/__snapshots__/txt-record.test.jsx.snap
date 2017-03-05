@@ -1,12 +1,17 @@
-exports[`test props should contain a list of TXT records 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain a list of TXT records 1`] = `
 <div
-  className="dns-record">
+  className="dns-record"
+>
   <div
-    className="dns-record__txt-record">
+    className="dns-record__txt-record"
+  >
     txt1
   </div>
   <div
-    className="dns-record__txt-record">
+    className="dns-record__txt-record"
+  >
     txt2
   </div>
 </div>

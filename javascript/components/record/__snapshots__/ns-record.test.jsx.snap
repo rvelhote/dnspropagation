@@ -1,8 +1,12 @@
-exports[`test props should contain a ns record 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain a ns record 1`] = `
 <div
-  className="dns-record">
+  className="dns-record"
+>
   <div
-    className="dns-record__ns-record">
+    className="dns-record__ns-record"
+  >
     ns4.google.com.
   </div>
 </div>

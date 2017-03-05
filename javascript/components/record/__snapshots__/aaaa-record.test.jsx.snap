@@ -1,8 +1,12 @@
-exports[`test props should contain an aaaa record 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain an aaaa record 1`] = `
 <div
-  className="dns-record">
+  className="dns-record"
+>
   <div
-    className="dns-record__aaaa-record">
+    className="dns-record__aaaa-record"
+  >
     2607:f8b0:4009:811::2011
   </div>
 </div>

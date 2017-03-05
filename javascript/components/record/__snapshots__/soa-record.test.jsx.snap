@@ -1,12 +1,17 @@
-exports[`test props should contain an soa record 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain an soa record 1`] = `
 <div
-  className="dns-record">
+  className="dns-record"
+>
   <div
-    className="dns-record__soa-record">
+    className="dns-record__soa-record"
+  >
     ns3.google.com.
   </div>
   <div
-    className="dns-record__mbox-record">
+    className="dns-record__mbox-record"
+  >
     dns-admin.google.com.
   </div>
 </div>

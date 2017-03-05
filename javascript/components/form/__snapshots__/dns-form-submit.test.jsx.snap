@@ -1,10 +1,14 @@
-exports[`test submit button should render and be disabled 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`submit button should render and be disabled 1`] = `
 <button
   className="btn btn-primary"
   disabled={false}
-  type="submit">
+  type="submit"
+>
   <span
-    className="glyphicon glyphicon-search">
+    className="glyphicon glyphicon-search"
+  >
      
   </span>
   <span>
@@ -15,13 +19,15 @@ exports[`test submit button should render and be disabled 1`] = `
 </button>
 `;
 
-exports[`test submit button should render and be enabled 1`] = `
+exports[`submit button should render and be enabled 1`] = `
 <button
   className="btn btn-primary"
   disabled={false}
-  type="submit">
+  type="submit"
+>
   <span
-    className="glyphicon glyphicon-search">
+    className="glyphicon glyphicon-search"
+  >
      
   </span>
   <span>

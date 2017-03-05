@@ -1,19 +1,27 @@
-exports[`test props should contain an a record 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain an a record 1`] = `
 <div
-  className="dns-record">
+  className="dns-record"
+>
   <div
-    className="row">
+    className="row"
+  >
     <div
-      className="col-lg-2 dns-record--mx__preference">
+      className="col-lg-2 dns-record--mx__preference"
+    >
       <span
-        className="label label-default dns-record--mx__preference">
+        className="label label-default dns-record--mx__preference"
+      >
         2
       </span>
     </div>
     <div
-      className="col-lg-10 dns-record--mx__mx">
+      className="col-lg-10 dns-record--mx__mx"
+    >
       <span
-        className="dns-record--mx__mx">
+        className="dns-record--mx__mx"
+      >
         alt3.aspmx.l.google.com.
       </span>
     </div>

@@ -1,8 +1,12 @@
-exports[`test props should contain a ptr record 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain a ptr record 1`] = `
 <div
-  className="dns-record">
+  className="dns-record"
+>
   <div
-    className="dns-record__ptr-record">
+    className="dns-record__ptr-record"
+  >
     mad06s25-in-f145.1e100.net.
   </div>
 </div>
