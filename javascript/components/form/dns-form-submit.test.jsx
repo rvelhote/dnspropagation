@@ -20,30 +20,21 @@
  * SOFTWARE.
  */
 import React from 'react';
-import renderer from 'react-test-renderer';
-import { IntlProvider } from 'react-intl';
 import DnsFormSubmit from './dns-form-submit';
+import createComponentWithIntl from '../../helpers/createComponentWithIntl';
 
 const params = { domain: 'golang.org', type: 'a' };
 
 test('submit button should render and be enabled', () => {
-  const component = renderer.create(
-    <IntlProvider locale="en">
-      <DnsFormSubmit domain={params.domain} type={params.type} />
-    </IntlProvider>
-  );
-
-  const tree = component.toJSON();
+  const tree = createComponentWithIntl(
+    <DnsFormSubmit domain={params.domain} type={params.type} />
+  ).toJSON();
   expect(tree).toMatchSnapshot();
 });
 
 test('submit button should render and be disabled', () => {
-  const component = renderer.create(
-    <IntlProvider locale="en">
-      <DnsFormSubmit working={false} domain={params.domain} type={params.type} />
-    </IntlProvider>
-  );
-
-  const tree = component.toJSON();
+  const tree = createComponentWithIntl(
+    <DnsFormSubmit working={false} domain={params.domain} type={params.type} />
+  ).toJSON();
   expect(tree).toMatchSnapshot();
 });

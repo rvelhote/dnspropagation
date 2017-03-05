@@ -27,7 +27,6 @@ import DnsInputDomain from './dns-input-domain';
 const params = { value: 'golang.org', type: 'a' };
 const onChange = jest.fn();
 
-
 test('domain input should render and match snapshot', () => {
   const tree = createComponentWithIntl(
     <DnsInputDomain value={params.value} onChange={onChange} />
