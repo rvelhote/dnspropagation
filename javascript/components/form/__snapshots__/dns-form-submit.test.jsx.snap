@@ -1,0 +1,33 @@
+exports[`test submit button should render and be disabled 1`] = `
+<button
+  className="btn btn-primary"
+  disabled={false}
+  type="submit">
+  <span
+    className="glyphicon glyphicon-search">
+     
+  </span>
+  <span>
+    <span>
+      Query a record for golang.org
+    </span>
+  </span>
+</button>
+`;
+
+exports[`test submit button should render and be enabled 1`] = `
+<button
+  className="btn btn-primary"
+  disabled={false}
+  type="submit">
+  <span
+    className="glyphicon glyphicon-search">
+     
+  </span>
+  <span>
+    <span>
+      Query a record for golang.org
+    </span>
+  </span>
+</button>
+`;
