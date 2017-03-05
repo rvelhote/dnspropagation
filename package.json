@@ -54,7 +54,7 @@
     "enzyme": "^2.7.1"
   },
   "jest": {
-    "verbose": true,
+    "verbose": false,
     "collectCoverage": true
   },
   "babel": {

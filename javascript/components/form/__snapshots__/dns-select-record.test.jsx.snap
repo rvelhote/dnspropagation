@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`record type select element should render correctly 1`] = `
+<select
+  className="form-control"
+  onChange={[Function]}
+  required={true}
+  value="a"
+>
+  <option
+    value="a"
+  >
+    A
+  </option>
+  <option
+    value="aaaa"
+  >
+    AAAA
+  </option>
+  <option
+    value="caa"
+  >
+    CAA
+  </option>
+  <option
+    value="cname"
+  >
+    CNAME
+  </option>
+  <option
+    value="mx"
+  >
+    MX
+  </option>
+  <option
+    value="ns"
+  >
+    NS
+  </option>
+  <option
+    value="ptr"
+  >
+    PTR
+  </option>
+  <option
+    value="soa"
+  >
+    SOA
+  </option>
+  <option
+    value="srv"
+  >
+    SRV
+  </option>
+  <option
+    value="txt"
+  >
+    TXT
+  </option>
+</select>
+`;
