@@ -35,6 +35,7 @@ import (
 
 // LoadNameservers will check if current nameservers CSV file modification date is still within the configured cache
 // period. If it's not, a new fresh version will be loaded from public-dns.info and its contents dumped into the DB.
+// TODO Make the source URL configurable
 func LoadNameservers(db *sql.DB, cacheUntil time.Duration) error {
 	fileinfo, err := os.Stat("conf/nameservers.csv")
 
@@ -49,7 +50,7 @@ func LoadNameservers(db *sql.DB, cacheUntil time.Duration) error {
 		nameservers, err = publicdns.LoadFromFile("conf/nameservers.csv")
 	} else {
 		log.Println("Loading the nameservers from the remote source")
-		nameservers, err = publicdns.LoadFromURL("http://public-dns.info/nameservers.csv")
+		nameservers, err = publicdns.LoadFromURL("http://public-dns.info/nameservers.csv", "conf/nameservers.csv")
 	}
 
 	if err != nil {
