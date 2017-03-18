@@ -24,7 +24,7 @@ import React from 'react';
 const DnsServer = props => (
   <div className="server">
     <div className="server__flag">
-      <span className={`flag-icon flag-icon-${props.server.code}`}>&nbsp;</span>
+      <span className={`flag-icon flag-icon-${props.server.Country.toLowerCase()}`}>&nbsp;</span>
     </div>
     <div className="server__country">{props.server.country} <small>({props.duration})</small></div>
   </div>
