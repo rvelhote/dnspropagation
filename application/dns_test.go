@@ -24,6 +24,7 @@ package application
  */
 import (
 	"github.com/miekg/dns"
+	"github.com/rvelhote/go-public-dns"
 	"testing"
 )
 
@@ -36,10 +37,10 @@ const testPTR = "ptr"
 const testPTRIPv4Address = "1.0.0.127.in-addr.arpa."
 const testPTRIPv6Address = "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.f.2.1.b.0.a.0.8.b.d.0.1.0.0.2.ip6.arpa."
 
-var testBadServer = Server{IPAddress: "127.0.0.1"}
-var testServer = Server{IPAddress: "8.8.4.4"}
-var testServers = []Server{testServer}
-var testAsyncServers = []Server{testServer, testServer}
+var testBadServer = &publicdns.Nameserver{IPAddress: "127.0.0.1"}
+var testServer = &publicdns.Nameserver{IPAddress: "8.8.4.4"}
+var testServers = []*publicdns.Nameserver{testServer}
+var testAsyncServers = []*publicdns.Nameserver{testServer, testServer}
 
 // TODO Mock the DNS requests!
 // TODO Test for the content of the DNS answer

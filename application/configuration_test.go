@@ -33,7 +33,7 @@ func TestLoadConfigurationSuccess(t *testing.T) {
 		t.Errorf("Loading the configuration file caused the error: %s", err.Error())
 	}
 
-	if len(configuration.Servers) != 15 {
+	if len(configuration.Countries) != 15 {
 		t.Errorf("The configuration file should have %d servers but it only has %d", 15, len(configuration.Servers))
 	}
 }

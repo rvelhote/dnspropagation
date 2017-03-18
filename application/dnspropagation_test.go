@@ -24,6 +24,7 @@ package application
  */
 import (
 	"github.com/gorilla/websocket"
+	"github.com/rvelhote/go-public-dns"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -60,7 +61,7 @@ func makeWebSocketRequest(path string, withOrigin bool) (*websocket.Conn, *http.
 	//
 	dialer := websocket.Dialer{}
 
-	config := Configuration{Servers: []Server{testServer}}
+	config := Configuration{Servers: []*publicdns.Nameserver{testServer}}
 	queryHandler := QueryRequestHandler{Configuration: config}
 
 	http.Handle(path, queryHandler)
