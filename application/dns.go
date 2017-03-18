@@ -26,6 +26,7 @@ import (
 	"errors"
 	"github.com/miekg/dns"
 	"github.com/miekg/dns/idn"
+	"github.com/rvelhote/go-public-dns"
 	"net"
 	"strings"
 	"time"
@@ -73,7 +74,7 @@ type ResponseError struct {
 // It contains all the information about the server that was used in the query, the records returned, the duration
 // and also an optional message which is usually an error message.
 type Response struct {
-	Server   Server
+	Server   *publicdns.Nameserver
 	Duration string
 	Message  string
 	Records  DNSRecord
@@ -81,7 +82,7 @@ type Response struct {
 
 // DNSQuery allows us to query multiple DNS servers at the same time. It currently supports Sync and Async requests.
 type DNSQuery struct {
-	Servers []Server
+	Servers []*publicdns.Nameserver
 }
 
 // normalizeRecord normalizes a DNS record type (i.e. trims spaces and forces lowercase)
@@ -122,7 +123,7 @@ func normalizeDomain(domain string, record string) string {
 // rawQuery abstracts the github.com/miekg/dns library and queries the specified DNS server for information about
 // a domain and a record type. It will return all the answers from the server, the duration of the request and
 // sometimes an error message.
-func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Duration, error) {
+func rawQuery(domain string, record string, server *publicdns.Nameserver) ([]dns.RR, time.Duration, error) {
 	if !IsRecordValid(record) {
 		return []dns.RR{}, time.Second, ErrBadRecordType
 	}
@@ -148,7 +149,7 @@ func rawQuery(domain string, record string, server Server) ([]dns.RR, time.Durat
 
 // Query uses rawQuery obtain the raw data but returns a Response struct ready to send to the frontend.
 // This func will only query a single server! To query multiple servers use QueryAllAsync or QueryAll
-func Query(domain string, record string, server Server) Response {
+func Query(domain string, record string, server *publicdns.Nameserver) Response {
 	answers, duration, err := rawQuery(domain, record, server)
 
 	response := Response{Server: server, Duration: duration.String()}
@@ -174,7 +175,7 @@ func (d *DNSQuery) QueryAllAsync(domain string, record string) <-chan Response {
 	queryChannel := make(chan Response, len(d.Servers))
 
 	for _, server := range d.Servers {
-		go func(qc chan Response, server Server) {
+		go func(qc chan Response, server *publicdns.Nameserver) {
 			qc <- Query(domain, record, server)
 		}(queryChannel, server)
 	}

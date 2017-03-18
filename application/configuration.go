@@ -24,6 +24,7 @@ package application
  */
 import (
 	"encoding/json"
+	"github.com/rvelhote/go-public-dns"
 	"io/ioutil"
 )
 
@@ -31,7 +32,8 @@ import (
 type Configuration struct {
 	Cookie    CookieConfiguration `json:"cookie"`
 	Recaptcha Recaptcha           `json:"recaptcha"`
-	Servers   []Server            `json:"servers"`
+	Countries []interface{}       `json:"countries"`
+	Servers   []*publicdns.Nameserver
 }
 
 // CookieConfiguration holds the application configuration regarding the secure cookie
@@ -48,15 +50,6 @@ type CookieConfiguration struct {
 type Recaptcha struct {
 	PublicKey  string `json:"publickey"`
 	PrivateKey string `json:"privatekey"`
-}
-
-// Server holds the list of DNS servers that the application is allowed to query.
-type Server struct {
-	IPAddress string `json:"ipaddress"`
-	Provider  string `json:"provider"`
-	Country   string `json:"country"`
-	City      string `json:"city"`
-	Code      string `json:"code"`
 }
 
 // LoadConfiguration loads a configuration file from the specified path. It will return the configuration in the JSON

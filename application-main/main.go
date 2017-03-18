@@ -23,16 +23,28 @@ package main
  * SOFTWARE.
  */
 import (
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/rvelhote/dnspropagation/application"
+	"github.com/rvelhote/go-public-dns"
 	"log"
 	"net/http"
 )
 
 // This is the main entry point of the webapp. All the actual application code is under the application directory.
+// TODO Setup a caching configuration for the nameservers list and database contents
+// TODO Load from the public-dns.info URL to allow up-to-date information (right now it's using a copy)
 func main() {
 	configuration, _ := application.LoadConfiguration("conf/configuration.json")
-	mux := http.NewServeMux()
 
+	db, _ := sql.Open("sqlite3", "conf/nameservers.db")
+
+	dnsinfo := publicdns.PublicDNS{DB: db}
+	configuration.Servers, _ = dnsinfo.GetBestFromCountries(configuration.Countries)
+
+	db.Close()
+
+	mux := http.NewServeMux()
 	application.Init(mux, configuration)
 
 	log.Println("Ready to serve requests!")
