@@ -29,15 +29,57 @@ import (
 	"github.com/rvelhote/go-public-dns"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
+// LoadNameservers will check if current nameservers CSV file modification date is still within the configured cache
+// period. If it's not, a new fresh version will be loaded from public-dns.info and its contents dumped into the DB.
+func LoadNameservers(db *sql.DB, cacheUntil time.Duration) error {
+	fileinfo, err := os.Stat("conf/nameservers.csv")
+
+	if err != nil {
+		return err
+	}
+
+	var nameservers []*publicdns.Nameserver
+
+	if fileinfo.ModTime().Add(cacheUntil).After(time.Now()) {
+		log.Println("Loading the nameservers from current cached copy")
+		nameservers, err = publicdns.LoadFromFile("conf/nameservers.csv")
+	} else {
+		log.Println("Loading the nameservers from the remote source")
+		nameservers, err = publicdns.LoadFromURL("http://public-dns.info/nameservers.csv")
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = publicdns.DumpToDatabase(db, nameservers)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // This is the main entry point of the webapp. All the actual application code is under the application directory.
-// TODO Setup a caching configuration for the nameservers list and database contents
-// TODO Load from the public-dns.info URL to allow up-to-date information (right now it's using a copy)
 func main() {
 	configuration, _ := application.LoadConfiguration("conf/configuration.json")
 
+	// FIXME JSON loading does not parse the duration correctly. Find out why!
+	until, _ := time.ParseDuration(configuration.CacheUntil)
+
 	db, _ := sql.Open("sqlite3", "conf/nameservers.db")
+
+	err := LoadNameservers(db, until)
+
+	// TODO Try to load from a cached copy anyway in case of error (what if the table doesn't exist?)
+	if err != nil {
+		log.Println("Could not load the nameservers from any source. Aborting startup!")
+		log.Fatal(err)
+	}
 
 	dnsinfo := publicdns.PublicDNS{DB: db}
 	configuration.Servers, _ = dnsinfo.GetBestFromCountries(configuration.Countries)

@@ -11,6 +11,7 @@
     "publickey": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
     "privatekey": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
   },
+  "cache_until": "24h",
   "countries": ["US", "PT", "RU", "ES", "DK", "JP", "AR", "ZA", "CM", "BR", "MX", "CN", "QA", "AU", "FI"]
 }
 

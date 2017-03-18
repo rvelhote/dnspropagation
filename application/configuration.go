@@ -30,10 +30,11 @@ import (
 
 // Configuration holds the application configuration settings. Configuration files should be created in the conf folder.
 type Configuration struct {
-	Cookie    CookieConfiguration `json:"cookie"`
-	Recaptcha Recaptcha           `json:"recaptcha"`
-	Countries []interface{}       `json:"countries"`
-	Servers   []*publicdns.Nameserver
+	Cookie     CookieConfiguration `json:"cookie"`
+	Recaptcha  Recaptcha           `json:"recaptcha"`
+	Countries  []interface{}       `json:"countries"`
+	CacheUntil string              `json:"cache_until"`
+	Servers    []*publicdns.Nameserver
 }
 
 // CookieConfiguration holds the application configuration regarding the secure cookie
