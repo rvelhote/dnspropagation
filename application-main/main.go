@@ -36,7 +36,7 @@ import (
 // LoadNameservers will check if current nameservers CSV file modification date is still within the configured cache
 // period. If it's not, a new fresh version will be loaded from public-dns.info and its contents dumped into the DB.
 // TODO Make the source URL configurable
-func LoadNameservers(db *sql.DB, cacheUntil time.Duration) error {
+func LoadNameservers(db *sql.DB, conf application.Configuration) error {
 	fileinfo, err := os.Stat("conf/nameservers.csv")
 
 	if err != nil {
@@ -45,12 +45,15 @@ func LoadNameservers(db *sql.DB, cacheUntil time.Duration) error {
 
 	var nameservers []*publicdns.Nameserver
 
+	// FIXME JSON loading does not parse the duration correctly. Find out why!
+	cacheUntil, _ := time.ParseDuration(conf.CacheUntil)
+
 	if fileinfo.ModTime().Add(cacheUntil).After(time.Now()) {
 		log.Println("Loading the nameservers from current cached copy")
 		nameservers, err = publicdns.LoadFromFile("conf/nameservers.csv")
 	} else {
 		log.Println("Loading the nameservers from the remote source")
-		nameservers, err = publicdns.LoadFromURL("http://public-dns.info/nameservers.csv", "conf/nameservers.csv")
+		nameservers, err = publicdns.LoadFromURL(conf.RemoteSource, "conf/nameservers.csv")
 	}
 
 	if err != nil {
@@ -69,12 +72,9 @@ func LoadNameservers(db *sql.DB, cacheUntil time.Duration) error {
 func main() {
 	configuration, _ := application.LoadConfiguration("conf/configuration.json")
 
-	// FIXME JSON loading does not parse the duration correctly. Find out why!
-	until, _ := time.ParseDuration(configuration.CacheUntil)
-
+	//
 	db, _ := sql.Open("sqlite3", "conf/nameservers.db")
-
-	err := LoadNameservers(db, until)
+	err := LoadNameservers(db, configuration)
 
 	// TODO Try to load from a cached copy anyway in case of error (what if the table doesn't exist?)
 	if err != nil {

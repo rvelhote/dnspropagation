@@ -26,7 +26,11 @@ const DnsServer = props => (
     <div className="server__flag">
       <span className={`flag-icon flag-icon-${props.server.Country.toLowerCase()}`}>&nbsp;</span>
     </div>
-    <div className="server__country">{props.server.country} <small>({props.duration})</small></div>
+    <div className="server__country">
+      <span>{ props.server.City.length > 0 ? `${props.server.City}, ` : '' }</span>
+      <span>{ props.server.Country }</span>
+      &nbsp;<small>({ props.duration })</small>
+    </div>
   </div>
 );
 
