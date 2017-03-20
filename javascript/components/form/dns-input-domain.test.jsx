@@ -34,13 +34,10 @@ test('domain input should render and match snapshot', () => {
   expect(tree).toMatchSnapshot();
 });
 
-test('domain input should render and the onChange called when changed value', () => {
+test('domain input should call the onChange event when changed', () => {
   const component = mountWithIntl(
     <DnsInputDomain value={params.value} onChange={onChange} />
   );
-
-  component.setProps({ value: 'golang.com' });
-  expect(component.prop('value')).toBe('golang.com');
 
   component.find('input').simulate('change');
   expect(onChange).toBeCalled();
