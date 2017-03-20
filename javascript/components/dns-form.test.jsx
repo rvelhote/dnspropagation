@@ -21,7 +21,29 @@
  */
 import React from 'react';
 import DnsForm from './dns-form';
+import createComponentWithIntl from '../helpers/createComponentWithIntl';
 
-test('should pass', () => {
+const params = {
+  domain: 'golang.org',
+  working: false,
+  type: 'a',
+  changeType: jest.fn(),
+  changeDomain: jest.fn(),
+  onDnsQuerySubmit: jest.fn()
+};
 
+test('it should render the component', () => {
+  const component = createComponentWithIntl(
+    <DnsForm
+      submit={params.onDnsQuerySubmit}
+      working={params.working}
+      type={params.type}
+      domain={params.domain}
+      changeType={params.handleTypeChange}
+      changeDomain={params.handleDomainChange}
+    />
+  );
+
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 });
