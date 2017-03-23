@@ -21,8 +21,12 @@
  */
 const gulp = require('gulp');
 const sass = require('gulp-sass');
+const webpack = require('webpack');
+const gulpWebpack = require('webpack-stream');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
+
+
 
 const assets = {
   source: {
@@ -52,6 +56,13 @@ gulp.task('sass:development', function() {
 gulp.task('dist:copy', function() {
   gulp.src(assets.source.flags).pipe(gulp.dest(assets.dest.flags));
   gulp.src(assets.source.fonts).pipe(gulp.dest(assets.dest.fonts));
+});
+
+gulp.task('react:development', function() {
+  const config = require('./webpack.config.js');
+  config.watch = true;
+
+  gulp.src('./javascript/app.jsx').pipe(gulpWebpack(config, webpack));
 });
 
 gulp.task('default',function() {

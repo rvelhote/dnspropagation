@@ -41,17 +41,18 @@
     "jest": "^19.0.2",
     "react-addons-test-utils": "^15.4.2",
     "react-test-renderer": "^15.4.2",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-stream": "^3.2.0"
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "bootswatch": "^3.3.7",
+    "enzyme": "^2.7.1",
     "flag-icon-css": "^2.8.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-intl": "^2.2.3",
-    "react-test-renderer": "^15.4.2",
-    "enzyme": "^2.7.1"
+    "react-test-renderer": "^15.4.2"
   },
   "jest": {
     "verbose": false,
