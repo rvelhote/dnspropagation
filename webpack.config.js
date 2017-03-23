@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
     entry: {
@@ -6,7 +7,7 @@ module.exports = {
         vendor: ['react', 'react-dom', 'react-intl']
     },
     output: {
-        path: './assets/javascript',
+        path: path.resolve('assets/javascript'),
         filename: '[name].js'
     },
     resolve: {
