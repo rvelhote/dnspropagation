@@ -12,6 +12,6 @@
     "privatekey": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
   },
   "cache_until": "96h",
-  "remote_source": "http://public-dns.info/nameservers.csv",
+  "remote_source": "https://www.dropbox.com/s/2u3qm31fzy0j3e4/nameservers.csv?dl=1",
   "countries": ["US", "PT", "RU", "ES", "DK", "JP", "AR", "ZA", "CM", "BR", "MX", "CN", "QA", "AU", "FI"]
 }
