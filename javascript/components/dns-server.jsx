@@ -37,11 +37,19 @@ const DnsServer = props => (
 DnsServer.displayName = 'DnsServer';
 
 DnsServer.propTypes = {
-  server: React.PropTypes.object
+  server: React.PropTypes.shape({
+    Country: React.PropTypes.string,
+    City: React.PropTypes.string
+  }),
+  duration: React.PropTypes.string
 };
 
 DnsServer.defaultProps = {
-  server: {}
+  server: {
+    Country: '',
+    City: ''
+  },
+  duration: '0ms'
 };
 
 export default DnsServer;
