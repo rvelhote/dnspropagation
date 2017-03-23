@@ -31,6 +31,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"fmt"
 )
 
 // LoadNameservers will check if current nameservers CSV file modification date is still within the configured cache
@@ -86,6 +87,10 @@ func main() {
 	configuration.Servers, _ = dnsinfo.GetBestFromCountries(configuration.Countries)
 
 	db.Close()
+
+	for i, server := range configuration.Servers  {
+		log.Println(fmt.Sprintf("%d. %s in %s (%s)", i, server.IPAddress, server.City, server.Country))
+	}
 
 	mux := http.NewServeMux()
 	application.Init(mux, configuration)
