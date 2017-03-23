@@ -20,8 +20,20 @@
  * SOFTWARE.
  */
 import React from 'react';
+import renderer from 'react-test-renderer';
 import DnsServer from './dns-server';
 
-test('should pass', () => {
+const params = {
+  server: {
+    City: 'Warsaw',
+    Country: 'PL'
+  },
+  duration: '123.456789ms'
+};
 
+test('it should render the component', () => {
+  const tree = renderer.create(
+    <DnsServer server={params.server} duration={params.duration} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });

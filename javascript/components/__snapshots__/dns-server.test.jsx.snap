@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it should render the component 1`] = `
+<div
+  className="server"
+>
+  <div
+    className="server__flag"
+  >
+    <span
+      className="flag-icon flag-icon-pl"
+    >
+       
+    </span>
+  </div>
+  <div
+    className="server__country"
+  >
+    <span>
+      Warsaw, 
+    </span>
+    <span>
+      PL
+    </span>
+     
+    <small>
+      (
+      123.456789ms
+      )
+    </small>
+  </div>
+</div>
+`;
