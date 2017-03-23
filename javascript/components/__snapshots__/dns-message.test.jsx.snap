@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render a success message 1`] = `
+<div
+  className="alert alert-success"
+>
+  This is a sample message
+</div>
+`;
+
+exports[`should render an alert danger message 1`] = `
+<div
+  className="alert alert-danger"
+>
+  This is a sample message
+</div>
+`;

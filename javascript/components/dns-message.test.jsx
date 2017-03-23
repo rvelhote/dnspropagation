@@ -21,7 +21,30 @@
  */
 import React from 'react';
 import DnsMessage from './dns-message';
+import createComponentWithIntl from '../helpers/createComponentWithIntl';
 
-test('should pass', () => {
+const params = {
+  message: 'This is a sample message',
+  typeDanger: 'danger',
+  typeSuccess: 'success'
+};
 
+test('should render an alert danger message', () => {
+  const tree = createComponentWithIntl(
+    <DnsMessage
+      message={params.message}
+      type={params.typeDanger}
+    />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+test('should render a success message', () => {
+  const tree = createComponentWithIntl(
+    <DnsMessage
+      message={params.message}
+      type={params.typeSuccess}
+    />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
