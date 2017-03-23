@@ -39,7 +39,7 @@ import (
 func LoadNameservers(db *sql.DB, conf application.Configuration) error {
 	fileinfo, err := os.Stat("conf/nameservers.csv")
 
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
 
@@ -48,7 +48,7 @@ func LoadNameservers(db *sql.DB, conf application.Configuration) error {
 	// FIXME JSON loading does not parse the duration correctly. Find out why!
 	cacheUntil, _ := time.ParseDuration(conf.CacheUntil)
 
-	if fileinfo.ModTime().Add(cacheUntil).After(time.Now()) {
+	if err == nil && fileinfo != nil && fileinfo.ModTime().Add(cacheUntil).After(time.Now()) {
 		log.Println("Loading the nameservers from current cached copy")
 		nameservers, err = publicdns.LoadFromFile("conf/nameservers.csv")
 	} else {
