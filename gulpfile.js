@@ -62,7 +62,9 @@ gulp.task('react:development', function() {
   const config = require('./webpack.config.js');
   config.watch = true;
 
-  gulp.src('./javascript/app.jsx').pipe(gulpWebpack(config, webpack));
+  gulp.src('./javascript/app.jsx')
+    .pipe(gulpWebpack(config, webpack))
+    .pipe(gulp.dest(config.output.path));
 });
 
 gulp.task('default',function() {
