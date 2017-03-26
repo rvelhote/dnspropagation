@@ -103,7 +103,7 @@ class DnsPropagation extends React.Component {
       return;
     }
 
-    const percentage = ((this.state.servers.length + 1) / 15) * 100;
+    const percentage = ((this.state.servers.length + 1) / 24) * 100;
     const state = {
       servers: this.state.servers.concat(JSON.parse(event.data)),
       percentage,

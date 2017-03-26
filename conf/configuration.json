@@ -13,5 +13,30 @@
   },
   "cache_until": "99999h",
   "remote_source": "https://www.dropbox.com/s/2u3qm31fzy0j3e4/nameservers.csv?dl=1",
-  "countries": ["US", "PT", "KZ", "ES", "DK", "JP", "AR", "AO", "NG", "BR", "MX", "CN", "QA", "AU", "SE"]
+  "countries": [
+    "AO",
+    "AR",
+    "AU",
+    "BR",
+    "CA",
+    "CN",
+    "DE",
+    "DK",
+    "ES",
+    "GB",
+    "HR",
+    "JP",
+    "KZ",
+    "MA",
+    "MX",
+    "NG",
+    "NZ",
+    "PK",
+    "PL",
+    "PT",
+    "QA",
+    "RU",
+    "SE",
+    "US"
+  ]
 }
