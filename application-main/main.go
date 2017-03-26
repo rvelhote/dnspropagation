@@ -51,11 +51,11 @@ func LoadNameservers(db *sql.DB, conf application.Configuration) error {
 
 	if err == nil && fileinfo != nil && fileinfo.ModTime().Add(cacheUntil).After(time.Now()) {
 		log.Println("Loading the nameservers from current cached copy")
-		nameservers, err = publicdns.LoadFromFile("conf/nameservers.csv")
-	} else {
-		log.Println("Loading the nameservers from the remote source")
-		nameservers, err = publicdns.LoadFromURL(conf.RemoteSource, "conf/nameservers.csv")
+		return nil
 	}
+
+	log.Println("Loading the nameservers from the remote source")
+	nameservers, err = publicdns.LoadFromURL(conf.RemoteSource, "conf/nameservers.csv")
 
 	if err != nil {
 		return err
