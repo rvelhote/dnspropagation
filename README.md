@@ -35,7 +35,12 @@ docker build -t dnspropagation .
 docker run -p 8080:8080 -ti dnspropagation
 ```
 
-The image will be optimized to take up less space in the future (it occupies about 675MB at the moment).
+And a docker image hosted over at Docker Hub
+
+```
+docker pull rvelhote/dnspropagation
+docker run -p 8080:8080 -ti rvelhote/dnspropagation
+```
 
 A server will be created on port `8080` and you are now able to access the application in `http://127.0.0.1:8080/`. For now I am only testing in Firefox so support for other browsers in not guaranteed.
 
