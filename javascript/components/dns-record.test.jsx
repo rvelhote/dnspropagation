@@ -20,8 +20,27 @@
  * SOFTWARE.
  */
 import React from 'react';
+import renderer from 'react-test-renderer';
 import DnsRecord from './dns-record';
 
-test('should pass', () => {
+const params = {
+  type: 'a',
+  typeUpper: 'A',
+  record: {
+    A: '127.0.0.1'
+  }
+};
 
+test('it should render the component', () => {
+  const tree = renderer.create(
+    <DnsRecord type={params.type} record={params.record} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+test('it should still render the component', () => {
+  const tree = renderer.create(
+    <DnsRecord type={params.typeUpper} record={params.record} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });

@@ -45,7 +45,7 @@ const RecordTypes = {
 };
 
 const DnsRecord = (props) => {
-  const RecordType = RecordTypes[props.type];
+  const RecordType = RecordTypes[props.type.trim().toLowerCase()];
   return <RecordType record={props.record} />;
 };
 
