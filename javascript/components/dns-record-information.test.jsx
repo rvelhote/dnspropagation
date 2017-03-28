@@ -24,12 +24,20 @@ import DnsRecordInformation from './dns-record-information';
 import createComponentWithIntl from '../helpers/createComponentWithIntl';
 
 const params = {
-  record: 'a'
+  record: 'a',
+  recordUpper: 'A'
 };
 
 test('it should render the component', () => {
   const tree = createComponentWithIntl(
     <DnsRecordInformation record={params.record} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+test('it should still render the component', () => {
+  const tree = createComponentWithIntl(
+    <DnsRecordInformation record={params.recordUpper} />
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });
