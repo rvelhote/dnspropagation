@@ -20,8 +20,17 @@
  * SOFTWARE.
  */
 import React from 'react';
+import renderer from 'react-test-renderer';
 import DnsProgress from './dns-progress';
 
-test('should pass', () => {
+const params = {
+  percentage: 50,
+  max: 100
+};
 
+test('it should render the component', () => {
+  const tree = renderer.create(
+    <DnsProgress percentage={params.percentage} max={params.max} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
