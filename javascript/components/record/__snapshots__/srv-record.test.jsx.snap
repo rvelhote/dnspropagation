@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props should contain an SRV record 1`] = `
+<div
+  className="dns-record"
+>
+  <div
+    className="dns-record__src-record"
+  >
+    <div
+      className="dns-record__src-record__target"
+    >
+      <span
+        className="label label-default"
+      >
+        Priority
+      </span>
+       
+    </div>
+    <div
+      className="dns-record__src-record__target"
+    >
+      <span
+        className="label label-default"
+      >
+        Port:
+      </span>
+       
+      443
+    </div>
+    <div
+      className="dns-record__src-record__target"
+    >
+      sipdir.online.lync.com.
+    </div>
+  </div>
+</div>
+`;
