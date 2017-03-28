@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it should render the component 1`] = `
+<div
+  className="block__dns-record-information"
+>
+  <blockquote>
+    <p>
+      <span>
+        An A record maps a domain name to the IP address (IPv4) of the computer hosting the domain. Simply put, an A record is used to find the IPv4 address of a computer connected to the internet from a name. The A in A record stands for Address.
+      </span>
+    </p>
+    <footer>
+      https://support.dnsimple.com/articles/a-record
+    </footer>
+  </blockquote>
+</div>
+`;

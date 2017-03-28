@@ -60,7 +60,7 @@ DnsRecordInformation.propTypes = {
 };
 
 DnsRecordInformation.defaultProps = {
-  record: 'A'
+  record: 'a'
 };
 
 export default DnsRecordInformation;

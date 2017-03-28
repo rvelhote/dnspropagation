@@ -21,7 +21,15 @@
  */
 import React from 'react';
 import DnsRecordInformation from './dns-record-information';
+import createComponentWithIntl from '../helpers/createComponentWithIntl';
 
-test('should pass', () => {
+const params = {
+  record: 'a'
+};
 
+test('it should render the component', () => {
+  const tree = createComponentWithIntl(
+    <DnsRecordInformation record={params.record} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
