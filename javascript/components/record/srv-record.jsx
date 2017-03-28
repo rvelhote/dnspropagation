@@ -23,18 +23,30 @@ import React from 'react';
 
 const SrvRecord = props =>
   <div className="dns-record">
-    <div className="dns-record__soa-record">{props.record.Soa}</div>
+    <div className="dns-record__src-record">
+      <div className="dns-record__src-record__target">
+        <span className="label label-default">Priority</span> {props.record.Priority}
+      </div>
+      <div className="dns-record__src-record__target">
+        <span className="label label-default">Port:</span> {props.record.Port}
+      </div>
+      <div className="dns-record__src-record__target">{props.record.Target}</div>
+    </div>
   </div>;
 
 SrvRecord.propTypes = {
   record: React.PropTypes.shape({
-    Soa: React.PropTypes.string
+    Target: React.PropTypes.string,
+    Priority: React.PropTypes.number,
+    Port: React.PropTypes.number
   })
 };
 
 SrvRecord.defaultProps = {
   record: {
-    Soa: ''
+    Target: '',
+    Priority: 0,
+    Port: 0
   }
 };
 
