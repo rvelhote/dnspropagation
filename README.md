@@ -68,7 +68,6 @@ The supported records are:
 
 # Plans and Improvements
 There is lots of work to to and I will continue working little by little to implement them:
-- Javascript Test Suite
 - Need a SASS review and to move the styles to the JSX files
 - XSRF tokens
 - Let the user insert an email with the expected DNS records and receive an email when they are propagated
