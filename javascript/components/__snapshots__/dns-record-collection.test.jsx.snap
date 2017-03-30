@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it should render a message when it doesn not have data 1`] = `
+<div>
+  Empty data
+</div>
+`;
+
+exports[`it should render the component 1`] = `
+<ul
+  className="dns-record-collection"
+>
+   
+  <li
+    className="dns-record-collection__dns-record"
+  >
+    <div
+      className="dns-record"
+    >
+      <div
+        className="dns-record__a-record"
+      >
+        216.58.211.145
+      </div>
+    </div>
+  </li>
+  <li
+    className="dns-record-collection__dns-record"
+  >
+    <div
+      className="dns-record"
+    >
+      <div
+        className="dns-record__a-record"
+      >
+        216.58.211.145
+      </div>
+    </div>
+  </li>
+</ul>
+`;

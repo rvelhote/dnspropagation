@@ -20,8 +20,48 @@
  * SOFTWARE.
  */
 import React from 'react';
+import renderer from 'react-test-renderer';
 import DnsRecordCollection from './dns-record-collection';
 
-test('should pass', () => {
+const params = {
+  Type: 'a',
+  Data: [{
+    Hdr: {
+      Name: 'golang.org.',
+      Rrtype: 1,
+      Class: 1,
+      Ttl: 298,
+      Rdlength: 4
+    },
+    A: '216.58.211.145'
+  },
+  {
+    Hdr: {
+      Name: 'golang.org.',
+      Rrtype: 1,
+      Class: 1,
+      Ttl: 298,
+      Rdlength: 4
+    },
+    A: '216.58.211.145'
+  }]
+};
 
+const emptyParams = {
+  Type: 'a',
+  Data: []
+};
+
+test('it should render the component', () => {
+  const tree = renderer.create(
+    <DnsRecordCollection records={params} />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+test('it should render a message when it doesn not have data', () => {
+  const tree = renderer.create(
+    <DnsRecordCollection records={emptyParams} message="Empty data" />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
