@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should pass 1`] = `
+<ul
+  className="row"
+>
+   
+  <li
+    className="col-lg-4"
+  >
+    <div
+      className="panel panel-default"
+    >
+      <div
+        className="panel-heading"
+      >
+        <div
+          className="server"
+        >
+          <div
+            className="server__flag"
+          >
+            <span
+              className="flag-icon flag-icon-se"
+            >
+               
+            </span>
+          </div>
+          <div
+            className="server__country"
+          >
+            <span>
+              Karlstad, 
+            </span>
+            <span>
+              SE
+            </span>
+             
+            <small>
+              (
+              137.1729ms
+              )
+            </small>
+          </div>
+        </div>
+      </div>
+      <div
+        className="panel-body"
+      >
+        <ul
+          className="dns-record-collection"
+        >
+           
+          <li
+            className="dns-record-collection__dns-record"
+          >
+            <div
+              className="dns-record"
+            >
+              <div
+                className="dns-record__a-record"
+              >
+                216.58.211.145
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </li>
+</ul>
+`;
