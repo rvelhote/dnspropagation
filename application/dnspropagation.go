@@ -105,7 +105,7 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	}
 
 	// FIXME Just a prototype of what will happen. Configuration will serve as default and may be overrided by request
-	q.Configuration.Servers, _ = q.DNSInfo.GetBestFromCountries(q.Configuration.Countries)
+	//q.Configuration.Servers, _ = q.DNSInfo.GetBestFromCountries(q.Configuration.Countries)
 	query := DNSQuery{Servers: q.Configuration.Servers}
 
 	// TODO This loop could check the status of the requests and set an error flag to those that fail or take too long

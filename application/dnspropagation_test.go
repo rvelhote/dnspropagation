@@ -143,6 +143,9 @@ func TestWebsocketHandlerBadOrigin(t *testing.T) {
 func TestInit(t *testing.T) {
 	configuration, _ := LoadConfiguration("../conf/configuration.json")
 	mux := http.NewServeMux()
-	db, _ := sql.Open("sqlite3", "conf/nameservers.db")
-	Init(mux, db, configuration)
+
+	db, _ := sql.Open("sqlite3", "../conf/nameservers.db")
+	dnsinfo := publicdns.PublicDNS{DB: db}
+
+	Init(mux, &dnsinfo, configuration)
 }
