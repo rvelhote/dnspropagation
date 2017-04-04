@@ -47,6 +47,7 @@ var (
 type WebsocketRequest struct {
 	Domain     string `json:"domain"`
 	RecordType string `json:"type"`
+	Countries  []interface{} `json:"countries"`
 }
 
 // Validate performs the validation of the client-side values sent through the WebSocket

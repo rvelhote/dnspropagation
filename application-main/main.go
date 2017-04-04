@@ -86,14 +86,14 @@ func main() {
 	dnsinfo := publicdns.PublicDNS{DB: db}
 	configuration.Servers, _ = dnsinfo.GetBestFromCountries(configuration.Countries)
 
-	db.Close()
+	defer db.Close()
 
 	for i, server := range configuration.Servers  {
 		log.Println(fmt.Sprintf("%d. %s in %s (%s)", i, server.IPAddress, server.City, server.Country))
 	}
 
 	mux := http.NewServeMux()
-	application.Init(mux, configuration)
+	application.Init(mux, &dnsinfo, configuration)
 
 	log.Println("Ready to serve requests!")
 	http.ListenAndServe(":8080", mux)

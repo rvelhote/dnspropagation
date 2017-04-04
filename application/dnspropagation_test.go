@@ -30,6 +30,7 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"database/sql"
 )
 
 func TestIndexHandler(t *testing.T) {
@@ -142,5 +143,6 @@ func TestWebsocketHandlerBadOrigin(t *testing.T) {
 func TestInit(t *testing.T) {
 	configuration, _ := LoadConfiguration("../conf/configuration.json")
 	mux := http.NewServeMux()
-	Init(mux, configuration)
+	db, _ := sql.Open("sqlite3", "conf/nameservers.db")
+	Init(mux, db, configuration)
 }

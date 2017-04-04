@@ -29,6 +29,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"github.com/rvelhote/go-public-dns"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template
@@ -74,13 +75,15 @@ var upgrader = websocket.Upgrader{
 type QueryRequestHandler struct {
 	// Configuration contains the app configuration. In this context only the server list is used.
 	Configuration Configuration
+
+	// DNSInfo contains a reference to the Public DNS Info package that allows us to query the database for servers.
+	DNSInfo *publicdns.PublicDNS
 }
 
 // ServeHTTP handles the request made by the user through the WebSocket. It will upgrade the connection from HTTP to
 // WebSocket, read the request variables, validate them and perform the queries to the list of DNS servers in the
 // configuration file.
 func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// This is called type assertion!! Don't forget!
 	// FIXME Should validate if the type assertion was correct!
 	cookie, _ := req.Context().Value("recaptcha").(string)
 	conn, upgraderr := upgrader.Upgrade(w, req, http.Header{"Set-Cookie": {cookie}})
@@ -101,8 +104,11 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	// FIXME Just a prototype of what will happen. Configuration will serve as default and may be overrided by request
+	q.Configuration.Servers, _ = q.DNSInfo.GetBestFromCountries(q.Configuration.Countries)
 	query := DNSQuery{Servers: q.Configuration.Servers}
 
+	// TODO This loop could check the status of the requests and set an error flag to those that fail or take too long
 	c := query.QueryAllAsync(websocketreq.Domain, websocketreq.RecordType)
 	for range q.Configuration.Servers {
 		conn.WriteJSON(<-c)
@@ -112,14 +118,14 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 // Init is the entrypoint of the application. It loads the configuration file and sets-up the routes
 // TODO Write documentation on how to generate the keys and the need to encode them to Base64
 // TODO Check for error returned by the decoding of Base64 strings
-func Init(mux *http.ServeMux, configuration Configuration) {
+func Init(mux *http.ServeMux, dnsinfo *publicdns.PublicDNS, configuration Configuration) {
 	hashKey, _ := base64.StdEncoding.DecodeString(configuration.Cookie.HashKey)
 	blockKey, _ := base64.StdEncoding.DecodeString(configuration.Cookie.BlockKey)
 
 	secureCookie := securecookie.New(hashKey, blockKey)
 
 	indexHandler := IndexRequestHandler{Configuration: configuration}
-	queryHandler := QueryRequestHandler{Configuration: configuration}
+	queryHandler := QueryRequestHandler{Configuration: configuration, DNSInfo: dnsinfo}
 	captchaHandler := RecaptchaMiddleware{Configuration: configuration, SecureCookie: secureCookie}
 
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))

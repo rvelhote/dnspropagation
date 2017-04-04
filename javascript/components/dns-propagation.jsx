@@ -28,6 +28,7 @@ import DnsMessage from './dns-message';
 import DnsRecaptcha from './dns-recaptcha';
 import DnsProgress from './dns-progress';
 import DnsForm from './dns-form';
+import DnsCountries from './dns-countries';
 
 const websocketURL = `ws://${document.location.hostname}:${document.location.port}/api/v1/query`;
 
@@ -55,7 +56,8 @@ class DnsPropagation extends React.Component {
       recatpcha: {
         challenge: '',
         display: props.recaptcha
-      }
+      },
+      countries: ['AO', 'AR', 'AU', 'BR', 'CA', 'CN', 'DE', 'DK', 'ES', 'GB', 'HR', 'JP', 'KZ', 'MA', 'MX', 'NG', 'NZ', 'PK', 'PL', 'PT', 'QA', 'RU', 'SE', 'US']
     };
 
     this.websocket = new DnsWebSocket(
@@ -160,6 +162,8 @@ class DnsPropagation extends React.Component {
             </div>
 
             { recaptcha }
+
+            <DnsCountries countries={this.state.countries} />
 
             <div className="col-lg-12">
               { this.state.message.message.length > 0 ?
