@@ -75,3 +75,4 @@ There is lots of work to to and I will continue working little by little to impl
 - Keep WebSocket connections open for some time instead of opening to make the query and closing when the query is done
 - Load the configuration from the server during page load (perhaps when WebSocket connections are kept open)
 - Automated DNS server health check. Replace servers when connections fail
+- Let the users choose which countries they want to search
