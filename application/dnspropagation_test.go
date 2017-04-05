@@ -23,6 +23,7 @@ package application
  * SOFTWARE.
  */
 import (
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/gorilla/websocket"
 	"github.com/rvelhote/go-public-dns"
 	"net/http"
@@ -62,8 +63,11 @@ func makeWebSocketRequest(path string, withOrigin bool) (*websocket.Conn, *http.
 	//
 	dialer := websocket.Dialer{}
 
-	config := Configuration{Servers: []*publicdns.Nameserver{testServer}}
-	queryHandler := QueryRequestHandler{Configuration: config}
+	db, _ := sql.Open("sqlite3", "../conf/nameservers.db")
+	dnsinfo := &publicdns.PublicDNS{DB: db}
+
+	config := Configuration{Servers: []*publicdns.Nameserver{testServer}, Countries: []interface{}{"US"}}
+	queryHandler := QueryRequestHandler{Configuration: config, DNSInfo: dnsinfo}
 
 	http.Handle(path, queryHandler)
 	server := httptest.NewServer(nil)
