@@ -42,6 +42,7 @@ class DnsPropagation extends React.Component {
     this.onDnsQuerySubmit = this.onDnsQuerySubmit.bind(this);
     this.handleDomainChange = this.handleDomainChange.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handleCountrySelection = this.handleCountrySelection.bind(this);
 
     this.state = {
       domain: 'golang.org',
@@ -57,7 +58,32 @@ class DnsPropagation extends React.Component {
         challenge: '',
         display: props.recaptcha
       },
-      countries: ['AO', 'AR', 'AU', 'BR', 'CA', 'CN', 'DE', 'DK', 'ES', 'GB', 'HR', 'JP', 'KZ', 'MA', 'MX', 'NG', 'NZ', 'PK', 'PL', 'PT', 'QA', 'RU', 'SE', 'US']
+      countries: {
+        AO: true,
+        AR: true,
+        AU: true,
+        BR: true,
+        CA: true,
+        CN: true,
+        DE: true,
+        DK: true,
+        ES: true,
+        GB: true,
+        HR: true,
+        JP: true,
+        KZ: true,
+        MA: true,
+        MX: true,
+        NG: true,
+        NZ: true,
+        PK: true,
+        PL: true,
+        PT: true,
+        QA: true,
+        RU: true,
+        SE: true,
+        US: true
+      }
     };
 
     this.websocket = new DnsWebSocket(
@@ -119,6 +145,11 @@ class DnsPropagation extends React.Component {
     this.setState(state);
   }
 
+  handleCountrySelection(event) {
+    const updated = Object.assign({}, this.state.countries, { [event.target.value]: !this.state.countries[event.target.value] });
+    this.setState({ countries: updated });
+  }
+
   handleDomainChange(event) {
     this.setState({ domain: event.target.value });
   }
@@ -130,7 +161,11 @@ class DnsPropagation extends React.Component {
   render() {
     let recaptcha = null;
     if (this.state.recatpcha.display) {
-      recaptcha = <div className="col-lg-12"><DnsRecaptcha publickey={this.props.publickey} /></div>;
+      recaptcha = (
+        <div className="col-lg-12">
+          <DnsRecaptcha publickey={this.props.publickey} />
+        </div>
+      );
     }
 
     return (
@@ -163,7 +198,7 @@ class DnsPropagation extends React.Component {
 
             { recaptcha }
 
-            <DnsCountries countries={this.state.countries} />
+            <DnsCountries onChange={this.handleCountrySelection} countries={this.state.countries} />
 
             <div className="col-lg-12">
               { this.state.message.message.length > 0 ?

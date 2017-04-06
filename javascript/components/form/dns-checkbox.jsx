@@ -25,6 +25,7 @@ const DnsFormCheckbox = props =>
   <div className="checkbox">
     <label htmlFor={props.label}>
       <input
+        onChange={props.onChange}
         type="checkbox"
         value={props.label}
         checked={props.checked}
@@ -38,12 +39,14 @@ DnsFormCheckbox.displayName = 'DnsFormCheckbox';
 
 DnsFormCheckbox.propTypes = {
   label: React.PropTypes.string,
-  checked: React.PropTypes.bool
+  checked: React.PropTypes.bool,
+  onChange: React.PropTypes.func
 };
 
 DnsFormCheckbox.defaultProps = {
   label: '',
-  checked: true
+  checked: true,
+  onChange: () => {}
 };
 
 export default DnsFormCheckbox;

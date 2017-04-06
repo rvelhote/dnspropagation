@@ -22,16 +22,30 @@
 import React from 'react';
 import DnsFormCheckbox from './form/dns-checkbox';
 
-const DnsCountries = props => <div>{props.countries.map(c => <DnsFormCheckbox label={c} />)}</div>;
+const DnsCountries = props =>
+  <div>{
+    Object.keys(props.countries).map(
+      k =>
+        <DnsFormCheckbox
+          key={k}
+          label={k}
+          value={k}
+          checked={props.countries[k]}
+          onChange={props.onChange}
+        />)
+  }
+  </div>;
 
 DnsCountries.displayName = 'DnsCountries';
 
 DnsCountries.propTypes = {
-  countries: React.PropTypes.arrayOf(React.PropTypes.string)
+  countries: React.PropTypes.shape(),
+  onChange: React.PropTypes.func,
 };
 
 DnsCountries.defaultProps = {
-  countries: []
+  countries: {},
+  onChange: () => {}
 };
 
 export default DnsCountries;
