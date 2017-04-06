@@ -89,7 +89,7 @@ func TestWebsocketHandler(t *testing.T) {
 	defer conn.Close()
 	defer server.Close()
 
-	conn.WriteJSON(WebsocketRequest{Domain: "golang.org", RecordType: "a"})
+	conn.WriteJSON(WebsocketRequest{Domain: "golang.org", RecordType: "a", Countries: []interface{}{}})
 
 	response := Response{}
 	conn.ReadJSON(&response)

@@ -115,12 +115,34 @@ class DnsPropagation extends React.Component {
 
   onDnsQuerySubmit(event) {
     event.preventDefault();
-    this.setState({ working: true, percentage: 0, servers: [], message: { message: '', type: 'info' } });
-    this.websocket.fetch(this.state.domain, this.state.type, this.state.recatpcha.display ? window.grecaptcha.getResponse() : null);
+
+    this.setState({
+      working: true,
+      percentage: 0,
+      servers: [],
+      message: {
+        message: '',
+        type: 'info'
+      }
+    });
+
+    const countries = Object.keys(this.state.countries).filter(k => this.state.countries[k]);
+    this.websocket.fetch(
+      this.state.domain,
+      this.state.type,
+      countries,
+      this.state.recatpcha.display ? window.grecaptcha.getResponse() : null
+    );
   }
 
   onWebSocketError() {
-    this.setState({ working: false, message: { message: 'Connection error. Please try again!', type: 'danger' } });
+    this.setState({
+      working: false,
+      message: {
+        message: 'Connection error. Please try again!',
+        type: 'danger'
+      }
+    });
   }
 
   onWebSocketReply(event) {
@@ -131,7 +153,8 @@ class DnsPropagation extends React.Component {
       return;
     }
 
-    const percentage = ((this.state.servers.length + 1) / 24) * 100;
+    const selectedCountries = Object.keys(this.state.countries).filter(k => this.state.countries[k]);
+    const percentage = ((this.state.servers.length + 1) / selectedCountries.length) * 100;
     const state = {
       servers: this.state.servers.concat(JSON.parse(event.data)),
       percentage,

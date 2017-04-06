@@ -38,12 +38,13 @@ class DnsWebSocket {
    *
    * @param domain The domain we want to check for DNS Record information
    * @param type The type of DNS record we want to check
+   * @param countries The list of countries that the user wants to get DNS checks from.
    * @param challenge The anti-spam/anti-bot/anti-* challenge response that the user must solve
    * to be able to perform requests. If the user already authenticated (i.e. he has the right
    * cookie) before it can be sent as null or empty.
    */
-  fetch(domain, type, challenge) {
-    const params = JSON.stringify({ domain, type });
+  fetch(domain, type, countries, challenge) {
+    const params = JSON.stringify({ domain, type, countries });
     const address = `${this.address}?c=${challenge === null ? '' : challenge}`;
 
     this.websocket = new WebSocket(address);
