@@ -93,29 +93,37 @@ func (q QueryRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	websocketreq := WebsocketRequest{}
-	conn.ReadJSON(&websocketreq)
+	log.Println("Client connected " + req.RemoteAddr)
 
-	defer conn.Close()
+	go func(c *websocket.Conn) {
+		for {
+			websocketreq := WebsocketRequest{}
+			conn.ReadJSON(&websocketreq)
 
-	err := websocketreq.Validate()
-	if err != nil {
-		conn.WriteJSON(ResponseError{Error: err.Error()})
-		return
-	}
+			log.Println("Client requested info on " + websocketreq.Domain)
 
-	// FIXME Just a prototype of what will happen. Configuration will serve as default and may be overrided by request
-	if len(websocketreq.Countries) > 0 {
-		q.Configuration.Servers, _ = q.DNSInfo.GetBestFromCountries(websocketreq.Countries)
-	}
+			err := websocketreq.Validate()
+			if err != nil {
+				conn.WriteJSON(ResponseError{Error: err.Error()})
+				return
+			}
 
-	query := DNSQuery{Servers: q.Configuration.Servers}
+			// FIXME Just a prototype of what will happen. Configuration will serve as default and may be overrided by request
+			if len(websocketreq.Countries) > 0 {
+				q.Configuration.Servers, _ = q.DNSInfo.GetBestFromCountries(websocketreq.Countries)
+			}
 
-	// TODO This loop could check the status of the requests and set an error flag to those that fail or take too long
-	c := query.QueryAllAsync(websocketreq.Domain, websocketreq.RecordType)
-	for range q.Configuration.Servers {
-		conn.WriteJSON(<-c)
-	}
+			query := DNSQuery{Servers: q.Configuration.Servers}
+
+			// TODO This loop could check the status of the requests and set an error flag to those that fail or take too long
+			c := query.QueryAllAsync(websocketreq.Domain, websocketreq.RecordType)
+			for range q.Configuration.Servers {
+				conn.WriteJSON(<-c)
+			}
+
+			log.Println("Blocked waiting for next message")
+		}
+	}(conn)
 }
 
 // Init is the entrypoint of the application. It loads the configuration file and sets-up the routes

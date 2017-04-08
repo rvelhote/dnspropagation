@@ -30,6 +30,7 @@ class DnsWebSocket {
     this.address = address;
     this.onWebSocketReply = onMessage;
     this.onWebSocketError = onError;
+    this.websocket = null;
   }
 
   /**
@@ -47,10 +48,14 @@ class DnsWebSocket {
     const params = JSON.stringify({ domain, type, countries });
     const address = `${this.address}?c=${challenge === null ? '' : challenge}`;
 
-    this.websocket = new WebSocket(address);
-    this.websocket.onopen = () => this.websocket.send(params);
-    this.websocket.onerror = this.onWebSocketError;
-    this.websocket.onmessage = this.onWebSocketReply;
+    if (this.websocket === null || this.websocket.readyState !== 1) {
+      this.websocket = new WebSocket(address);
+      this.websocket.onopen = () => this.websocket.send(params);
+      this.websocket.onerror = this.onWebSocketError;
+      this.websocket.onmessage = this.onWebSocketReply;
+    } else {
+      this.websocket.send(params);
+    }
   }
 }
 
