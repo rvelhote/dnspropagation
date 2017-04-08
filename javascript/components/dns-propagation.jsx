@@ -221,7 +221,9 @@ class DnsPropagation extends React.Component {
 
             { recaptcha }
 
-            <DnsCountries onChange={this.handleCountrySelection} countries={this.state.countries} />
+            <div className="col-lg-12">
+              <DnsCountries onChange={this.handleCountrySelection} countries={this.state.countries} />
+            </div>
 
             <div className="col-lg-12">
               { this.state.message.message.length > 0 ?
