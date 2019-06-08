@@ -37,6 +37,14 @@ func (f NoopHTTPHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(200)
 }
 
+// NoopHTTPForbiddenHandler exists only to satisfy the reCAPTCHA middleware passing the request
+type NoopHTTPForbiddenHandler struct{}
+
+func (f NoopHTTPForbiddenHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(403)
+}
+
+// FIXME This test will likely never fail because the Recaptcha API will always return
 func TestRecaptchaMiddlewareForbiddenStatus(t *testing.T) {
 	config, _ := LoadConfiguration("../conf/configuration.json")
 	middleware := RecaptchaMiddleware{Configuration: config, SecureCookie: generateGorillaSecureCookie()}
@@ -47,7 +55,7 @@ func TestRecaptchaMiddlewareForbiddenStatus(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.Handler(middleware.Middleware(nil))
+	handler := http.Handler(middleware.Middleware(NoopHTTPForbiddenHandler{}))
 
 	handler.ServeHTTP(rr, req)
 
