@@ -26,10 +26,10 @@ import (
 	"encoding/base64"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/websocket"
+	"github.com/rvelhote/go-public-dns"
 	"html/template"
 	"log"
 	"net/http"
-	"github.com/rvelhote/go-public-dns"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template

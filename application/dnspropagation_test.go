@@ -23,15 +23,15 @@ package application
  * SOFTWARE.
  */
 import (
-	_ "github.com/mattn/go-sqlite3"
+	"database/sql"
 	"github.com/gorilla/websocket"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/rvelhote/go-public-dns"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
-	"database/sql"
 )
 
 func TestIndexHandler(t *testing.T) {

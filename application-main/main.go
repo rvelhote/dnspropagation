@@ -24,6 +24,7 @@ package main
  */
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rvelhote/dnspropagation/application"
 	"github.com/rvelhote/go-public-dns"
@@ -31,7 +32,6 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"fmt"
 )
 
 // LoadNameservers will check if current nameservers CSV file modification date is still within the configured cache
@@ -88,7 +88,7 @@ func main() {
 
 	defer db.Close()
 
-	for i, server := range configuration.Servers  {
+	for i, server := range configuration.Servers {
 		log.Println(fmt.Sprintf("%d. %s in %s (%s)", i, server.IPAddress, server.City, server.Country))
 	}
 
