@@ -25,8 +25,8 @@ package application
 import (
 	"errors"
 	"github.com/miekg/dns"
-	"github.com/miekg/dns/idn"
 	"github.com/rvelhote/go-public-dns"
+	"golang.org/x/net/idna"
 	"net"
 	"strings"
 	"time"
@@ -111,7 +111,7 @@ func normalizeDomain(domain string, record string) string {
 
 	domain = strings.TrimSpace(domain)
 	domain = strings.ToLower(domain)
-	domain = idn.ToPunycode(domain)
+	domain, _ = idna.Punycode.ToASCII(domain)
 
 	if record == "ptr" {
 		domain, _ = dns.ReverseAddr(domain)
