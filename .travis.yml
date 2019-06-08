@@ -3,6 +3,7 @@ language: go
 go:
   - 1.7
   - 1.8
+  - 1.12
 
 script:
   - go test github.com/rvelhote/dnspropagation/application -race -coverprofile=coverage.txt -covermode=atomic

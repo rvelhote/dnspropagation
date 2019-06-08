@@ -4,7 +4,7 @@
   "description": "Javascript for the DNS Propagation Checker Webapp",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --config webpack.config.js",
+    "watch": "parcel watch javascript/app.jsx -d assets/javascript --out-file main.js  --public-url /assets/javascript/",
     "test": "jest"
   },
   "repository": {
@@ -21,47 +21,22 @@
     "url": "https://github.com/rvelhote/dnspropagation/issues"
   },
   "homepage": "https://github.com/rvelhote/dnspropagation#readme",
-  "devDependencies": {
-    "babel-core": "^6.21.0",
-    "babel-jest": "^19.0.0",
-    "babel-loader": "^6.2.10",
-    "babel-preset-env": "^1.1.8",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-react": "^6.23.0",
-    "eslint": "^3.13.1",
-    "eslint-config-airbnb": "^14.0.0",
-    "eslint-loader": "^1.6.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.9.0",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.4.0",
-    "jest": "^19.0.2",
-    "react-addons-test-utils": "^15.4.2",
-    "react-test-renderer": "^15.4.2",
-    "webpack": "^2.2.1",
-    "webpack-stream": "^3.2.0"
-  },
   "dependencies": {
-    "bootstrap-sass": "^3.3.7",
-    "bootswatch": "^3.3.7",
-    "enzyme": "^2.7.1",
-    "flag-icon-css": "^2.8.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-intl": "^2.2.3",
-    "react-test-renderer": "^15.4.2"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-intl": "^2.9.0",
+    "prop-types": "latest"
   },
-  "jest": {
-    "verbose": false,
-    "collectCoverage": true
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react"
-    ]
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "parcel-bundler": "^1.12.3"
   }
 }
