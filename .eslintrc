@@ -2,6 +2,7 @@
   "extends": "airbnb",
   "parser": "babel-eslint",
   "rules": {
+    "react/destructuring-assignment": 0,
     "comma-dangle": 0,
     "linebreak-style": 0
   },
