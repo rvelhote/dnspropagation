@@ -59,12 +59,11 @@ class DnsPropagation extends React.Component {
         display: props.recaptcha
       },
       countries: {
-        AO: false,
+        AD: false,
         AR: false,
         AU: false,
         BR: false,
         CA: false,
-        CN: false,
         DE: false,
         DK: false,
         ES: false,
