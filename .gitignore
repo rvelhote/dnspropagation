@@ -79,3 +79,4 @@ assets/javascript
 assets/css
 conf/nameservers.csv
 conf/nameservers.db
+.cache
