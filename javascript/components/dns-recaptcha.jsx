@@ -20,14 +20,15 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DnsRecaptcha = props => <div className="g-recaptcha" data-sitekey={props.publickey} />;
 
 DnsRecaptcha.displayName = 'DnsRecaptcha';
 
 DnsRecaptcha.propTypes = {
-  publickey: React.PropTypes.string,
-  recaptchaCallback: React.PropTypes.func
+  publickey: PropTypes.string,
+  recaptchaCallback: PropTypes.func
 };
 
 DnsRecaptcha.defaultProps = {

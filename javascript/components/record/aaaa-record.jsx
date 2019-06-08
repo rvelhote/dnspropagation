@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const AAAARecord = props =>
   <div className="dns-record">
@@ -29,8 +30,8 @@ const AAAARecord = props =>
 AAAARecord.displayName = 'AAAARecord';
 
 AAAARecord.propTypes = {
-  record: React.PropTypes.shape({
-    AAAA: React.PropTypes.string
+  record: PropTypes.shape({
+    AAAA: PropTypes.string
   })
 };
 

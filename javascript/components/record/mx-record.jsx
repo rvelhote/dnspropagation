@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const MxRecord = props =>
   <div className="dns-record">
@@ -38,9 +39,9 @@ const MxRecord = props =>
 MxRecord.displayName = 'MxRecord';
 
 MxRecord.propTypes = {
-  record: React.PropTypes.shape({
-    Mx: React.PropTypes.string,
-    Preference: React.PropTypes.number
+  record: PropTypes.shape({
+    Mx: PropTypes.string,
+    Preference: PropTypes.number
   })
 };
 

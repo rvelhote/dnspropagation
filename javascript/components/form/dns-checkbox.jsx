@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DnsFormCheckbox = props =>
   <div className="checkbox">
@@ -38,9 +39,9 @@ const DnsFormCheckbox = props =>
 DnsFormCheckbox.displayName = 'DnsFormCheckbox';
 
 DnsFormCheckbox.propTypes = {
-  label: React.PropTypes.string,
-  checked: React.PropTypes.bool,
-  onChange: React.PropTypes.func
+  label: PropTypes.string,
+  checked: PropTypes.bool,
+  onChange: PropTypes.func
 };
 
 DnsFormCheckbox.defaultProps = {

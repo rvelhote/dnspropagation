@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import DnsServerCollection from './dns-server-collection';
 import DnsRecordInformation from './dns-record-information';
@@ -244,8 +245,8 @@ class DnsPropagation extends React.Component {
 DnsPropagation.displayName = 'DnsPropagation';
 
 DnsPropagation.propTypes = {
-  publickey: React.PropTypes.string,
-  recaptcha: React.PropTypes.bool
+  publickey: PropTypes.string,
+  recaptcha: PropTypes.bool
 };
 
 DnsPropagation.defaultProps = {

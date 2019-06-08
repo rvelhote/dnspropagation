@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const TxtRecord = props =>
   <div className="dns-record">
@@ -27,8 +28,8 @@ const TxtRecord = props =>
   </div>;
 
 TxtRecord.propTypes = {
-  record: React.PropTypes.shape({
-    Txt: React.PropTypes.arrayOf(React.PropTypes.string)
+  record: PropTypes.shape({
+    Txt: PropTypes.arrayOf(PropTypes.string)
   })
 };
 

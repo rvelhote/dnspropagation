@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 const DnsFormSubmit = props =>
@@ -31,9 +32,9 @@ const DnsFormSubmit = props =>
 DnsFormSubmit.displayName = 'DnsFormSubmit';
 
 DnsFormSubmit.propTypes = {
-  working: React.PropTypes.bool,
-  type: React.PropTypes.string,
-  domain: React.PropTypes.string
+  working: PropTypes.bool,
+  type: PropTypes.string,
+  domain: PropTypes.string
 };
 
 DnsFormSubmit.defaultProps = {

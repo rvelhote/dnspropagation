@@ -20,14 +20,15 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DnsProgress = props => <progress max={props.max} value={props.percentage} />;
 
 DnsProgress.displayName = 'DnsProgress';
 
 DnsProgress.propTypes = {
-  percentage: React.PropTypes.number,
-  max: React.PropTypes.number
+  percentage: PropTypes.number,
+  max: PropTypes.number
 };
 
 DnsProgress.defaultProps = {

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DnsServer = props => (
   <div className="server">
@@ -37,11 +38,11 @@ const DnsServer = props => (
 DnsServer.displayName = 'DnsServer';
 
 DnsServer.propTypes = {
-  server: React.PropTypes.shape({
-    Country: React.PropTypes.string,
-    City: React.PropTypes.string
+  server: PropTypes.shape({
+    Country: PropTypes.string,
+    City: PropTypes.string
   }),
-  duration: React.PropTypes.string
+  duration: PropTypes.string
 };
 
 DnsServer.defaultProps = {

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
@@ -34,8 +35,8 @@ const DnsInputDomain = props => <input id="domain" placeholder={props.intl.forma
 DnsInputDomain.displayName = 'DnsInputDomain';
 
 DnsInputDomain.propTypes = {
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
   intl: intlShape.isRequired,
 };
 

@@ -20,14 +20,15 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DnsMessage = props => <div className={`alert alert-${props.type}`}>{props.message}</div>;
 
 DnsMessage.displayName = 'DnsMessage';
 
 DnsMessage.propTypes = {
-  message: React.PropTypes.string,
-  type: React.PropTypes.string
+  message: PropTypes.string,
+  type: PropTypes.string
 };
 
 DnsMessage.defaultProps = {

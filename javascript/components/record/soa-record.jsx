@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const SoaRecord = props =>
   <div className="dns-record">
@@ -30,9 +31,9 @@ const SoaRecord = props =>
 SoaRecord.displayName = 'SoaRecord';
 
 SoaRecord.propTypes = {
-  record: React.PropTypes.shape({
-    Ns: React.PropTypes.string,
-    Mbox: React.PropTypes.string
+  record: PropTypes.shape({
+    Ns: PropTypes.string,
+    Mbox: PropTypes.string
   })
 };
 

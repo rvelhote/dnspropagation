@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const types = [
   { key: 'a', value: 'A' },
@@ -42,8 +43,8 @@ const DnsSelectRecord = props =>
 DnsSelectRecord.displayName = 'DnsSelectRecord';
 
 DnsSelectRecord.propTypes = {
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.func
+  value: PropTypes.string,
+  onChange: PropTypes.func
 };
 
 DnsSelectRecord.defaultProps = {

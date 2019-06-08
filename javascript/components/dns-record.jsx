@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import ARecord from './record/a-record';
 import AAAARecord from './record/aaaa-record';
 import CaaRecord from './record/caa-record';
@@ -52,8 +53,8 @@ const DnsRecord = (props) => {
 DnsRecord.displayName = 'DnsRecord';
 
 DnsRecord.propTypes = {
-  type: React.PropTypes.string,
-  record: React.PropTypes.shape()
+  type: PropTypes.string,
+  record: PropTypes.shape()
 };
 
 DnsRecord.defaultProps = {

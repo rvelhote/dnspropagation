@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const SrvRecord = props =>
   <div className="dns-record">
@@ -35,10 +36,10 @@ const SrvRecord = props =>
   </div>;
 
 SrvRecord.propTypes = {
-  record: React.PropTypes.shape({
-    Target: React.PropTypes.string,
-    Priority: React.PropTypes.number,
-    Port: React.PropTypes.number
+  record: PropTypes.shape({
+    Target: PropTypes.string,
+    Priority: PropTypes.number,
+    Port: PropTypes.number
   })
 };
 

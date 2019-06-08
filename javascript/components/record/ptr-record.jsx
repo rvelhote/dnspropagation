@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const PtrRecord = props =>
   <div className="dns-record">
@@ -27,8 +28,8 @@ const PtrRecord = props =>
   </div>;
 
 PtrRecord.propTypes = {
-  record: React.PropTypes.shape({
-    Ptr: React.PropTypes.string
+  record: PropTypes.shape({
+    Ptr: PropTypes.string
   })
 };
 

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import DnsFormCheckbox from './form/dns-checkbox';
 
 const DnsCountries = props =>
@@ -39,8 +40,8 @@ const DnsCountries = props =>
 DnsCountries.displayName = 'DnsCountries';
 
 DnsCountries.propTypes = {
-  countries: React.PropTypes.shape(),
-  onChange: React.PropTypes.func,
+  countries: PropTypes.shape(),
+  onChange: PropTypes.func,
 };
 
 DnsCountries.defaultProps = {

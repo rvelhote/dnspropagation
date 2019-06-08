@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import DnsServer from './dns-server';
 import DnsRecordCollection from './dns-record-collection';
 
@@ -47,7 +48,7 @@ const DnsServerCollection = props =>
 DnsServerCollection.displayName = 'DnsServerCollection';
 
 DnsServerCollection.propTypes = {
-  servers: React.PropTypes.arrayOf(React.PropTypes.object)
+  servers: PropTypes.arrayOf(PropTypes.object)
 };
 
 DnsServerCollection.defaultProps = {

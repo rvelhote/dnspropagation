@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import DnsSelectRecord from './form/dns-select-record';
 import DnsInputDomain from './form/dns-input-domain';
@@ -43,12 +44,12 @@ const DnsForm = props =>
 DnsForm.displayName = 'DnsForm';
 
 DnsForm.propTypes = {
-  submit: React.PropTypes.func,
-  changeDomain: React.PropTypes.func,
-  changeType: React.PropTypes.func,
-  working: React.PropTypes.bool,
-  type: React.PropTypes.string,
-  domain: React.PropTypes.string
+  submit: PropTypes.func,
+  changeDomain: PropTypes.func,
+  changeType: PropTypes.func,
+  working: PropTypes.bool,
+  type: PropTypes.string,
+  domain: PropTypes.string
 };
 
 DnsForm.defaultProps = {
@@ -57,7 +58,7 @@ DnsForm.defaultProps = {
   changeType: () => {},
   working: false,
   type: '',
-  domain: ''
+  domain: 'golang.org'
 };
 
 export default DnsForm;
