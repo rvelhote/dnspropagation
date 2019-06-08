@@ -89,7 +89,8 @@ func main() {
 	defer db.Close()
 
 	for i, server := range configuration.Servers {
-		log.Println(fmt.Sprintf("%d. %s in %s (%s)", i, server.IPAddress, server.City, server.Country))
+		format := "%d. %s in %s (%s) > %s"
+		log.Println(fmt.Sprintf(format, i, server.IPAddress, server.City, server.Country, server.Reliability))
 	}
 
 	mux := http.NewServeMux()
