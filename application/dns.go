@@ -133,7 +133,7 @@ func rawQuery(domain string, record string, server *publicdns.Nameserver) ([]dns
 	message := dns.Msg{}
 	message.SetQuestion(domain, GetRecordType(record))
 
-	client := dns.Client{Timeout: time.Second * 10}
+	client := dns.Client{Timeout: time.Second * 2}
 	response, duration, err := client.Exchange(&message, net.JoinHostPort(server.IPAddress, port))
 
 	if err != nil {
